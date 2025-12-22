@@ -9,8 +9,8 @@
 
     <style>
         :root {
-            --primary: #00f2ff; /* Cyan neón */
-            --secondary: #7000ff; /* Morado eléctrico */
+            --primary: #00f2ff;
+            --secondary: #7000ff;
             --bg: #050505;
             --card-bg: rgba(255, 255, 255, 0.03);
             --text: #e2e8f0;
@@ -21,7 +21,26 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            cursor: none;
+        }
+
+        /* Cursor oculto solo en dispositivos con puntero (PC) */
+        @media (pointer: fine) {
+            * { cursor: none; }
+            #cursor {
+                width: 20px;
+                height: 20px;
+                border: 2px solid var(--primary);
+                border-radius: 50%;
+                position: fixed;
+                pointer-events: none;
+                z-index: 9999;
+                transition: transform 0.1s ease-out;
+            }
+        }
+
+        /* En móviles ocultamos el cursor de JS */
+        @media (pointer: coarse) {
+            #cursor { display: none; }
         }
 
         body {
@@ -36,23 +55,10 @@
             font-family: 'Space Grotesk', sans-serif;
         }
 
-        /* --- Custom Cursor --- */
-        #cursor {
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--primary);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            transition: transform 0.1s ease-out;
-        }
-
-        /* --- Background Glow --- */
         .bg-glow {
             position: fixed;
-            width: 60vw;
-            height: 60vw;
+            width: 100vw;
+            height: 100vw;
             background: radial-gradient(circle, rgba(112, 0, 255, 0.08) 0%, transparent 70%);
             top: -10%;
             right: -10%;
@@ -70,12 +76,11 @@
             z-index: 1001;
         }
 
-        /* --- Header --- */
         header {
             position: fixed;
             top: 0;
             width: 100%;
-            padding: 25px 10%;
+            padding: 20px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -84,35 +89,32 @@
         }
 
         header.scrolled {
-            background: rgba(5, 5, 5, 0.85);
+            background: rgba(5, 5, 5, 0.9);
             backdrop-filter: blur(15px);
-            padding: 15px 10%;
+            padding: 12px 5%;
             border-bottom: 1px solid var(--border);
         }
 
         .logo {
-            font-size: 1.4rem;
+            font-size: 1.1rem;
             font-weight: 700;
             color: #fff;
             letter-spacing: 1px;
         }
-
         .logo span { color: var(--primary); }
 
         nav ul { display: flex; list-style: none; }
-        nav ul li { margin-left: 30px; }
+        nav ul li { margin-left: 20px; }
         nav ul li a {
             text-decoration: none;
             color: var(--text);
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            transition: 0.3s;
             opacity: 0.7;
         }
-        nav ul li a:hover { color: var(--primary); opacity: 1; }
 
-        /* --- Hero & Academic Section --- */
+        /* Hero */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -120,178 +122,155 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 120px 10% 60px;
+            padding: 100px 5% 40px;
         }
 
         .hero h1 {
-            font-size: clamp(3rem, 8vw, 5.5rem);
-            line-height: 1;
-            margin-bottom: 20px;
+            font-size: clamp(2.2rem, 10vw, 5.5rem);
+            line-height: 1.1;
+            margin-bottom: 15px;
             background: linear-gradient(180deg, #fff 0%, #aaa 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .typewriter {
-            font-size: 1.4rem;
+            font-size: 1rem;
             color: var(--primary);
-            height: 30px;
-            margin-bottom: 50px;
+            min-height: 40px;
+            margin-bottom: 30px;
             font-weight: 500;
-            letter-spacing: 1px;
+            max-width: 90%;
         }
 
-        /* Nueva Estructura Académica */
         .academic-container {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
             width: 100%;
-            max-width: 850px;
-            margin: 40px auto;
+            max-width: 600px;
+            margin: 20px auto;
         }
 
         .academic-badge {
-            background: rgba(255, 255, 255, 0.02);
+            background: var(--card-bg);
             border: 1px solid var(--border);
-            padding: 30px;
-            border-radius: 20px;
+            padding: 20px;
+            border-radius: 15px;
             display: flex;
             align-items: center;
-            gap: 25px;
-            position: relative;
-            overflow: hidden;
-            transition: 0.4s;
+            gap: 15px;
             text-align: left;
         }
 
-        .academic-badge:hover {
-            border-color: var(--primary);
-            background: rgba(0, 242, 255, 0.02);
-            transform: scale(1.02);
-        }
-
-        .academic-badge i { font-size: 2.5rem; }
-
-        .academic-info h4 {
-            color: var(--primary);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 0.8rem;
-            margin-bottom: 5px;
-        }
-
-        .academic-info h2 { font-size: 1.5rem; margin-bottom: 5px; color: #fff; }
-        .academic-info p { opacity: 0.7; font-size: 1rem; }
+        .academic-badge i { font-size: 1.8rem; }
+        .academic-info h4 { color: var(--primary); font-size: 0.7rem; text-transform: uppercase; }
+        .academic-info h2 { font-size: 1.2rem; color: #fff; }
+        .academic-info p { opacity: 0.7; font-size: 0.85rem; }
 
         .path-connector {
             width: 2px;
-            height: 30px;
-            background: linear-gradient(var(--primary), var(--secondary));
+            height: 20px;
+            background: var(--primary);
             margin: -10px auto;
-            opacity: 0.5;
+            opacity: 0.3;
         }
 
-        /* --- Stats --- */
+        /* Stats */
         .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(2, 1fr);
             gap: 20px;
-            padding: 80px 10%;
+            padding: 60px 5%;
             background: rgba(255,255,255,0.01);
             border-top: 1px solid var(--border);
         }
 
-        .stat-item { text-align: center; }
-        .stat-item h2 { font-size: 3.5rem; color: var(--primary); margin-bottom: 5px; }
-        .stat-item p { text-transform: uppercase; font-size: 0.75rem; letter-spacing: 2px; opacity: 0.6; }
+        .stat-item h2 { font-size: 2.2rem; color: var(--primary); }
+        .stat-item p { font-size: 0.65rem; text-transform: uppercase; opacity: 0.6; }
 
-        /* --- Services --- */
-        .services { padding: 100px 10%; }
-        .section-header { margin-bottom: 60px; text-align: center; }
-        .section-header h2 { font-size: 3rem; margin-bottom: 15px; }
-        .accent-line { width: 60px; height: 4px; background: var(--primary); margin: 0 auto; }
+        /* Services */
+        .services { padding: 80px 5%; }
+        .section-header h2 { font-size: 2rem; margin-bottom: 10px; text-align: center;}
+        .accent-line { width: 50px; height: 3px; background: var(--primary); margin: 0 auto 40px; }
 
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
+            grid-template-columns: 1fr; /* Una columna por defecto en móvil */
+            gap: 20px;
         }
 
         .service-card {
             background: var(--card-bg);
-            padding: 50px 40px;
-            border-radius: 25px;
+            padding: 30px 20px;
+            border-radius: 20px;
             border: 1px solid var(--border);
-            transition: 0.5s cubic-bezier(0.2, 1, 0.3, 1);
         }
 
-        .service-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--primary);
-            background: rgba(0, 242, 255, 0.02);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        }
+        .service-card i { font-size: 2rem; color: var(--primary); margin-bottom: 15px; display: block; }
+        .service-card h3 { font-size: 1.2rem; margin-bottom: 10px; }
+        .service-card p { font-size: 0.9rem; opacity: 0.7; line-height: 1.4; }
 
-        .service-card i {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 25px;
-            display: block;
-            font-style: normal;
-        }
-
-        /* --- Contact --- */
-        .contact { padding: 100px 10%; background: #080808; }
-        .contact-container { text-align: center; max-width: 800px; margin: 0 auto; }
-        
+        /* Contact */
+        .contact { padding: 80px 5%; background: #080808; }
         .contact-box {
             background: var(--card-bg);
-            padding: 40px;
-            border-radius: 24px;
+            padding: 30px 20px;
+            border-radius: 20px;
             border: 1px solid var(--border);
-            margin-top: 40px;
+            margin-top: 30px;
+            word-wrap: break-word; /* Para correos largos */
         }
 
         .contact-link {
             display: block;
             color: var(--primary);
             text-decoration: none;
-            font-size: 1.2rem;
-            margin: 15px 0;
+            font-size: 1rem;
+            margin: 10px 0;
             font-weight: 600;
-            transition: 0.3s;
         }
-
-        .contact-link:hover { color: #fff; transform: translateX(10px); }
 
         footer {
-            padding: 40px 10%;
+            padding: 30px 5%;
             border-top: 1px solid var(--border);
+            text-align: center;
+            font-size: 0.7rem;
             display: flex;
-            justify-content: space-between;
-            font-size: 0.75rem;
-            letter-spacing: 1px;
-            opacity: 0.5;
+            flex-direction: column;
+            gap: 10px;
+            opacity: 0.6;
         }
 
-        /* --- Animations --- */
+        /* Animations */
         .reveal {
             opacity: 0;
-            transform: translateY(30px);
-            transition: 0.8s all ease-out;
+            transform: translateY(20px);
+            transition: 0.6s all ease-out;
         }
-
         .reveal.active {
             opacity: 1;
             transform: translateY(0);
         }
 
-        @media (max-width: 768px) {
-            header { padding: 20px 5%; }
-            nav { display: none; }
-            .academic-badge { flex-direction: column; text-align: center; }
-            .hero h1 { font-size: 2.8rem; }
+        /* Desktop Adaptations */
+        @media (min-width: 768px) {
+            header { padding: 25px 10%; }
+            .logo { font-size: 1.4rem; }
+            .services-grid { grid-template-columns: repeat(2, 1fr); }
+            .stats { grid-template-columns: repeat(4, 1fr); padding: 80px 10%; }
+            .hero p { font-size: 1.1rem; }
+            .academic-container { flex-direction: column; }
+            footer { flex-direction: row; justify-content: space-between; text-align: left; }
+        }
+
+        @media (min-width: 1024px) {
+            .services-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        /* Esconder nav en pantallas muy pequeñas si es necesario, o dejarlo simple */
+        @media (max-width: 480px) {
+            nav { display: none; } /* Opcional: esconder menú en móviles muy pequeños */
         }
     </style>
 </head>
@@ -306,7 +285,6 @@
         <nav>
             <ul>
                 <li><a href="#home">Inicio</a></li>
-                <li><a href="#about">Formación</a></li>
                 <li><a href="#services">Servicios</a></li>
                 <li><a href="#contact">Contacto</a></li>
             </ul>
@@ -323,7 +301,7 @@
                 <div class="academic-info">
                     <h4>Educación Técnica</h4>
                     <h2>CBTis No. 213</h2>
-                    <p>Centro de Bachillerato Tecnologico Industrial y de Servicios NO.213</p>
+                    <p>Programación</p>
                 </div>
             </div>
 
@@ -334,28 +312,28 @@
                 <div class="academic-info">
                     <h4>Educación Superior</h4>
                     <h2>FCC - BUAP</h2>
-                    <p>Ingeniería en Tecnologías de la Información</p>
+                    <p>Ingeniería en T.I.</p>
                 </div>
             </div>
         </div>
 
-        <p class="reveal" style="max-width: 700px; opacity: 0.6; margin-top: 20px;">
-            Combinando la excelencia académica de la Benemérita Universidad Autónoma de Puebla con el Centro de Bachillerato Tecnologico Industrial y de Servicios NO.213 y la visión tecnológica para el mundo real.
+        <p class="reveal" style="max-width: 600px; opacity: 0.6; margin-top: 20px; font-size: 0.85rem;">
+            Combinando la excelencia académica de la BUAP con la formación técnica del CBTis 213 para el mundo real.
         </p>
     </section>
 
     <section class="stats">
         <div class="stat-item">
             <h2 class="count" data-target="4">0</h2>
-            <p>Años de Trayectoria</p>
+            <p>Trayectoria</p>
         </div>
         <div class="stat-item">
             <h2 class="count" data-target="9">0</h2>
-            <p>Sistemas Desplegados</p>
+            <p>Sistemas</p>
         </div>
         <div class="stat-item">
             <h2 class="count" data-target="25">0</h2>
-            <p>Tecnologías Dominadas</p>
+            <p>Tecnologías</p>
         </div>
         <div class="stat-item">
             <h2 class="count" data-target="100">0</h2>
@@ -372,13 +350,13 @@
         <div class="services-grid">
             <div class="service-card reveal">
                 <i>🌐</i>
-                <h3>Desarrollo Web </h3>
-                <p>Sitios web de alto impacto, responsivos y optimizados bajo estándares modernos de la industria IT.</p>
+                <h3>Desarrollo Web</h3>
+                <p>Sitios web de alto impacto, responsivos y optimizados bajo estándares modernos.</p>
             </div>
             <div class="service-card reveal">
                 <i>🛡️</i>
                 <h3>Ciberseguridad</h3>
-                <p>Análisis de vulnerabilidades y protección de datos aplicando protocolos avanzados de seguridad.</p>
+                <p>Análisis de vulnerabilidades y protección de datos aplicando protocolos avanzados.</p>
             </div>
             <div class="service-card reveal">
                 <i>🤖</i>
@@ -388,31 +366,31 @@
             <div class="service-card reveal">
                 <i>📱</i>
                 <h3>Marketing Digital IT</h3>
-                <p>Estrategias de crecimiento para empresas tecnológicas basadas en analítica avanzada.</p>
+                <p>Estrategias de crecimiento basadas en analítica avanzada para el sector tech.</p>
             </div>
             <div class="service-card reveal">
                 <i>📊</i>
-                <h3>PROXIMAMENTE</h3>
-                <p></p>
+                <h3>PRÓXIMAMENTE</h3>
+                <p>Nuevas soluciones en desarrollo.</p>
             </div>
             <div class="service-card reveal">
                 <i>🚀</i>
-                <h3>PROXIMAMENTE</h3>
-                <p></p>
+                <h3>PRÓXIMAMENTE</h3>
+                <p>Nuevas fronteras tecnológicas.</p>
             </div>
         </div>
     </section>
 
     <section class="contact" id="contact">
         <div class="contact-container reveal">
-            <h2 style="font-size: 2.5rem; margin-bottom: 20px;">Hablemos de tu próximo gran paso.</h2>
-            <p style="opacity: 0.7;">Disponible para consultorías, proyectos de ingeniería y colaboraciones tecnológicas.</p>
+            <h2 style="font-size: 1.8rem; margin-bottom: 15px;">Hablemos de tu próximo paso.</h2>
+            <p style="opacity: 0.7; font-size: 0.9rem;">Disponible para consultorías y proyectos de ingeniería.</p>
             
             <div class="contact-box">
-                <span style="text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; color: var(--primary);">Correo Electrónico</span>
-              <a target="_blank" class="contact-link">victormedina1467@gmail.com</a>
+                <span style="text-transform: uppercase; letter-spacing: 2px; font-size: 0.7rem; color: var(--primary);">Correo Electrónico</span>
+                <a href="mailto:victormedina1467@gmail.com" class="contact-link">victormedina1467@gmail.com</a>
                 <hr style="opacity: 0.1; margin: 20px 0;">
-                <span style="text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; color: var(--primary);">Instagram</span>
+                <span style="text-transform: uppercase; letter-spacing: 2px; font-size: 0.7rem; color: var(--primary);">Instagram</span>
                 <a href="https://instagram.com/vic_.samm_" target="_blank" class="contact-link">vic_.samm_</a>
             </div>
         </div>
@@ -420,15 +398,17 @@
 
     <footer>
         <div>© 2026 TRUJILLO DIGITAL HUB</div>
-        <div>FCC BUAP | INGENIERÍA EN TECNOLOGÍAS DE LA INFORMACIÓN</div>
+        <div>FCC BUAP | INGENIERÍA EN T.I.</div>
     </footer>
 
     <script>
-        // 1. Cursor Custom
+        // 1. Cursor Custom (Solo PC)
         const cursor = document.querySelector('#cursor');
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.transform = `translate(${e.clientX - 10}px, ${e.clientY - 10}px)`;
-        });
+        if (window.matchMedia("(pointer: fine)").matches) {
+            document.addEventListener('mousemove', (e) => {
+                cursor.style.transform = `translate(${e.clientX - 10}px, ${e.clientY - 10}px)`;
+            });
+        }
 
         // 2. Scroll Progress & Header
         window.onscroll = () => {
@@ -438,18 +418,17 @@
             document.getElementById("progress").style.width = scrolled + "%";
 
             const header = document.getElementById('header');
-            if(window.scrollY > 50) header.classList.add('scrolled');
+            if(window.scrollY > 30) header.classList.add('scrolled');
             else header.classList.remove('scrolled');
         };
 
         // 3. Typewriter
         const textElement = document.getElementById('typewriter');
         const phrases = [
-            "Tecnico en Programación",
-            "Ingeniería en Tecnologías de la Información",
+            "Técnico en Programación",
+            "Ingeniería en T.I.",
             "Estudiante FCC - BUAP",
             "Constructor de Soluciones Web",
-            "Especialista en Ciberseguridad",
             "Entusiasta de la IA"
         ];
         let phraseIdx = 0, charIdx = 0, isDeleting = false;
@@ -462,13 +441,13 @@
 
             if (!isDeleting && charIdx > currentPhrase.length) {
                 isDeleting = true;
-                setTimeout(type, 1800);
+                setTimeout(type, 1500);
             } else if (isDeleting && charIdx === 0) {
                 isDeleting = false;
                 phraseIdx = (phraseIdx + 1) % phrases.length;
                 setTimeout(type, 400);
             } else {
-                setTimeout(type, isDeleting ? 40 : 80);
+                setTimeout(type, isDeleting ? 30 : 60);
             }
         }
         type();
@@ -478,9 +457,7 @@
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('active');
-                    if(entry.target.classList.contains('count')) {
-                        startCounter(entry.target);
-                    }
+                    if(entry.target.classList.contains('count')) startCounter(entry.target);
                 }
             });
         }, { threshold: 0.1 });
@@ -491,7 +468,7 @@
             const target = +el.getAttribute('data-target');
             let count = 0;
             const updateCount = () => {
-                const increment = target / 50;
+                const increment = target / 40;
                 if (count < target) {
                     count += increment;
                     el.innerText = Math.ceil(count);
