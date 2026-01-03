@@ -272,6 +272,84 @@
         @media (max-width: 480px) {
             nav { display: none; } /* Opcional: esconder menú en móviles muy pequeños */
         }
+
+        /* ===== NUESTRO PROCESO ===== */
+.process {
+    padding: 100px 5%;
+    background: linear-gradient(180deg, #070b18, #050505);
+    text-align: center;
+}
+
+.process h2 {
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+}
+
+.process p {
+    opacity: 0.7;
+    font-size: 0.95rem;
+    margin-bottom: 70px;
+}
+
+.process-wrapper {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+}
+
+.process-line {
+    position: absolute;
+    top: 36px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(to right, var(--secondary), var(--primary));
+    opacity: 0.35;
+}
+
+.process-step {
+    position: relative;
+    z-index: 2;
+}
+
+.process-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: 2px solid var(--secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
+    font-size: 1.6rem;
+    color: var(--primary);
+    background: rgba(5,5,5,0.9);
+    box-shadow: 0 0 25px rgba(112,0,255,0.35);
+}
+
+.process-step h3 {
+    font-size: 1.05rem;
+    margin-bottom: 5px;
+}
+
+.process-step span {
+    font-size: 0.8rem;
+    opacity: 0.6;
+}
+
+@media (max-width: 900px) {
+    .process-wrapper {
+        grid-template-columns: 1fr;
+    }
+    .process-line {
+        display: none;
+    }
+    .process-step {
+        margin-bottom: 40px;
+    }
+}
+
     </style>
 </head>
 <body>
@@ -380,18 +458,56 @@
             </div>
         </div>
     </section>
+<section class="process reveal" id="process">
+    <h2>Nuestro Proceso</h2>
+    <p>Un camino claro, estratégico y eficiente hacia tu proyecto digital.</p>
+
+    <div class="process-wrapper">
+        <div class="process-line"></div>
+
+        <div class="process-step reveal">
+            <div class="process-icon">💬</div>
+            <h3>Consulta</h3>
+            <span>Entendemos tu idea</span>
+        </div>
+
+        <div class="process-step reveal">
+            <div class="process-icon">📄</div>
+            <h3>Propuesta</h3>
+            <span>Estrategia & diseño</span>
+        </div>
+
+        <div class="process-step reveal">
+            <div class="process-icon">💻</div>
+            <h3>Desarrollo</h3>
+            <span>Construcción técnica</span>
+        </div>
+
+        <div class="process-step reveal">
+            <div class="process-icon">✔️</div>
+            <h3>Validación</h3>
+            <span>Pruebas y ajustes</span>
+        </div>
+
+        <div class="process-step reveal">
+            <div class="process-icon">🚀</div>
+            <h3>Entrega</h3>
+            <span>Lanzamiento final</span>
+        </div>
+    </div>
+</section>
 
     <section class="contact" id="contact">
         <div class="contact-container reveal">
             <h2 style="font-size: 1.8rem; margin-bottom: 15px;">Hablemos de tu próximo paso.</h2>
-            <p style="opacity: 0.7; font-size: 0.9rem;">Disponible para consultorías y proyectos de ingeniería.</p>
+            <p style="opacity: 0.7; font-size: 0.9rem;">Disponible para consultorías y proyectos .</p>
             
             <div class="contact-box">
-                <span style="text-transform: uppercase; letter-spacing: 2px; font-size: 0.7rem; color: var(--primary);">Correo Electrónico</span>
-                <a href="mailto:victormedina1467@gmail.com" class="contact-link">victormedina1467@gmail.com</a>
+                <span style="text-transform: uppercase; letter-spacing: 2px; font-size: 0.7rem; color: var(--primary);">WhatsApp</span>
+                <a href="https://wa.link/vdkd0w" class="contact-link">922-208-1087</a>
                 <hr style="opacity: 0.1; margin: 20px 0;">
                 <span style="text-transform: uppercase; letter-spacing: 2px; font-size: 0.7rem; color: var(--primary);">Instagram</span>
-                <a href="https://instagram.com/vic_.samm_" target="_blank" class="contact-link">vic_.samm_</a>
+                <a href="https://instagram.com/trujillo_digital_hub" target="_blank" class="contact-link">trujillo_digital_hub</a>
             </div>
         </div>
     </section>
