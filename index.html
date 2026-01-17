@@ -349,6 +349,61 @@
         margin-bottom: 40px;
     }
 }
+/* ===== FORMACIÓN COMPLEMENTARIA ===== */
+.education {
+    padding: 90px 5%;
+    background: rgba(255,255,255,0.01);
+    border-top: 1px solid var(--border);
+}
+
+.education-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.education-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 25px;
+    border-radius: 18px;
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+}
+
+.education-icon {
+    font-size: 1.8rem;
+    color: var(--primary);
+}
+
+.education-info h3 {
+    font-size: 1.05rem;
+    margin-bottom: 5px;
+    color: #fff;
+}
+
+.education-info span {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--primary);
+}
+
+.education-info p {
+    font-size: 0.85rem;
+    opacity: 0.7;
+    margin-top: 6px;
+    line-height: 1.4;
+}
+
+@media (min-width: 768px) {
+    .education-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
 
     </style>
 </head>
@@ -363,8 +418,10 @@
         <nav>
             <ul>
                 <li><a href="#home">Inicio</a></li>
+                 <li><a href="#education">Formación</a></li>
                 <li><a href="#services">Servicios</a></li>
                 <li><a href="#contact">Contacto</a></li>
+               
             </ul>
         </nav>
     </header>
@@ -419,6 +476,51 @@
         </div>
     </section>
 
+     <section class="education" id="education">
+    <div class="section-header reveal">
+        <h2>Formación Complementaria</h2>
+        <div class="accent-line"></div>
+    </div>
+
+    <div class="education-grid">
+        <div class="education-card reveal">
+            <div class="education-icon">📘</div>
+            <div class="education-info">
+                <span>Curso</span>
+                <h3>Desarrollo Web Full Stack</h3>
+                <p>CBTIS 213.</p>
+            </div>
+        </div>
+
+        <div class="education-card reveal">
+            <div class="education-icon">🎓</div>
+            <div class="education-info">
+                <span>Diplomado</span>
+                <h3>Educación Financiera</h3>
+                <p>Condusef.</p>
+            </div>
+        </div>
+
+        <div class="education-card reveal">
+            <div class="education-icon">🤖</div>
+            <div class="education-info">
+                <span>Curso</span>
+                <h3>Introducción a Inteligencia Artificial</h3>
+                <p>Fundamentos de IA, automatización y uso práctico de modelos.</p>
+            </div>
+        </div>
+
+        <div class="education-card reveal">
+            <div class="education-icon">📊</div>
+            <div class="education-info">
+                <span>Certificación</span>
+                <h3>Análisis de Datos</h3>
+                <p>Visualización, métricas y toma de decisiones basadas en datos.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
     <section class="services" id="services">
         <div class="section-header reveal">
             <h2>Servicios de Élite</h2>
@@ -448,8 +550,8 @@
             </div>
             <div class="service-card reveal">
                 <i>📊</i>
-                <h3>PRÓXIMAMENTE</h3>
-                <p>Nuevas soluciones en desarrollo.</p>
+                <h3>Clases de Programación</h3>
+                <p>C, Java, Html y Css.</p>
             </div>
             <div class="service-card reveal">
                 <i>🚀</i>
@@ -458,6 +560,8 @@
             </div>
         </div>
     </section>
+   
+
 <section class="process reveal" id="process">
     <h2>Nuestro Proceso</h2>
     <p>Un camino claro, estratégico y eficiente hacia tu proyecto digital.</p>
@@ -597,4 +701,5 @@
         }
     </script>
 </body>
+
 </html>
