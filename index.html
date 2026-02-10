@@ -627,6 +627,41 @@
     </div>
 
 </section>
+<!-- ===== VERIFICACIÓN DE CONSTANCIAS ===== -->
+
+<section class="courses" id="verificacion">
+
+    <div class="section-header reveal">
+        <h2>Verificar Constancia</h2>
+        <div class="accent-line"></div>
+    </div>
+
+    <div class="courses-container">
+
+        <div class="course-card reveal">
+
+            <div class="course-icon">✅</div>
+
+            <h3>Validación Oficial</h3>
+
+            <p>Ingresa tu código para verificar la autenticidad de tu constancia emitida por Trujillo Digital Hub.</p>
+
+            <input id="codigoConstancia" placeholder="Ejemplo: 2222222222"
+            style="margin-top:20px;padding:12px;border-radius:8px;border:none;width:100%;">
+
+            <button onclick="verificarConstancia()" 
+            style="margin-top:15px;padding:12px 20px;background:#00f2ff;border:none;border-radius:8px;font-weight:bold;cursor:pointer;">
+            Verificar
+            </button>
+
+            <p id="resultadoConstancia" style="margin-top:15px;"></p>
+
+        </div>
+
+    </div>
+
+</section>
+
 
 <section class="process reveal" id="process">
     <h2>Nuestro Proceso</h2>
@@ -767,6 +802,104 @@
             };
             updateCount();
         }
+        // ===== SISTEMA DE VERIFICACIÓN =====
+
+const constancias = {
+    "0000000000":{
+nombre:"Tec.Victor Samuel Medina Trujillo",
+curso:"Como utilizar la IA en tu negocio",
+cargo:"instructor",
+calificacion:"10"
+},
+"5366413396":{
+nombre:"Thelma Isabel Vergara Hernandez	",
+curso:"Como utilizar la IA en tu negocio",
+cargo:"Alumno",
+calificacion:"ND"
+},
+"5366413398":{
+nombre:"María Elizabeth Cruz Reyes",
+curso:"Como utilizar la IA en tu negocio",
+cargo:"Alumno",
+calificacion:"ND"
+},
+"5366413340":{
+nombre:"Yanelli Ortiz Velazquez	",
+curso:"Como utilizar la IA en tu negocio",
+cargo:"Alumno",
+calificacion:"ND"
+},
+"5366413399":{
+nombre:"Perla Del Carmen Silva Ortiz",
+curso:"Como utilizar la IA en tu negocio",
+cargo:"Alumno",
+calificacion:"ND"
+},
+"5366413401":{
+nombre:"Sandy Paola Cruz Tolentino",
+curso:"Como utilizar la IA en tu negocio",
+cargo:"Alumno",
+calificacion:"ND"
+},
+"5366413403":{
+nombre:"Esther Anayansi Rodriguez Cortés",
+curso:"Como utilizar la IA en tu negocio",
+cargo:"Alumno",
+calificacion:"ND"
+},
+"5366413404":{
+nombre:"Laura Patricia Torres Rodriguez",
+curso:"Como utilizar la IA en tu negocio",
+cargo:"Alumno",
+calificacion:"ND"
+},
+"5366413405":{
+nombre:"Ofelia Trujillo Barrales",
+curso:"Como utilizar la IA en tu negocio",
+cargo:"Alumno",
+calificacion:"ND"
+},
+"5366413406":{
+nombre:"Angelica Celia Hoyos Arellano",
+curso:"Como utilizar la IA en tu negocio",
+cargo:"Alumno",
+calificacion:"ND"
+},
+
+
+};
+
+
+function verificarConstancia(){
+
+let codigo = document.getElementById("codigoConstancia").value;
+let resultado = document.getElementById("resultadoConstancia");
+
+if(constancias[codigo]){
+
+let data = constancias[codigo];
+
+resultado.innerHTML = `
+Constancia válida<br><br>
+
+Alumno: ${data.nombre}<br>
+Curso: ${data.curso}<br>
+Cargo: ${data.cargo}<br>
+Calificación obtenida: ${data.calificacion}
+
+`;
+
+resultado.style.color="#00f2ff";
+
+}else{
+
+resultado.innerHTML="Código no encontrado";
+resultado.style.color="red";
+
+}
+
+}
+
     </script>
 </body>
 
