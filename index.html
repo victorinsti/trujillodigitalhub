@@ -404,6 +404,40 @@
         grid-template-columns: repeat(2, 1fr);
     }
 }
+/* ===== CURSOS ===== */
+
+.courses {
+    padding: 90px 5%;
+    background: rgba(255,255,255,0.01);
+    border-top: 1px solid var(--border);
+}
+
+.courses-container {
+    display: grid;
+    gap: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.course-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+}
+
+.course-icon {
+    font-size: 2rem;
+    color: var(--primary);
+    margin-bottom: 15px;
+}
+
+@media (min-width: 768px) {
+    .courses-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
 
     </style>
 </head>
@@ -419,8 +453,10 @@
             <ul>
                 <li><a href="#home">Inicio</a></li>
                  <li><a href="#education">Formación</a></li>
+                 <li><a href="#courses">Cursos</a></li>
                 <li><a href="#services">Servicios</a></li>
                 <li><a href="#contact">Contacto</a></li>
+                     
                
             </ul>
         </nav>
@@ -555,8 +591,8 @@
             </div>
             <div class="service-card reveal">
                 <i>🚀</i>
-                <h3>PRÓXIMAMENTE</h3>
-                <p>Nuevas fronteras tecnológicas.</p>
+                <h3>Cursos Digitales</h3>
+                <p>Ofrecemos cursos 100% en linea que permiten a los asistentes recibir una constancia de asistencia.</p>
             </div>
         </div>
     </section>
@@ -600,6 +636,38 @@
         </div>
     </div>
 </section>
+<!-- ===== CURSOS & CONVOCATORIAS ===== -->
+<section class="courses" id="courses">
+
+    <div class="section-header reveal">
+        <h2>Cursos & Convocatorias</h2>
+        <div class="accent-line"></div>
+    </div>
+
+    <div class="courses-container">
+
+        <div class="course-card reveal">
+            <div class="course-icon">🎓</div>
+            <h3>Formación & Cursos</h3>
+            <p>
+                Imparto cursos enfocados en tecnología, inteligencia artificial,
+                programación y herramientas digitales aplicadas al mundo real.
+            </p>
+        </div>
+
+        <div class="course-card reveal">
+            <div class="course-icon">📢</div>
+            <h3>Convocatorias Abiertas</h3>
+            <p>
+                Como usar la IA en tu negocio (sin ser experto)
+               <a href="https://wa.me/message/JRJIIIRDQ47OO1" target="_blank" class="contact-link">Inscribete Aqui</a>
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
 
     <section class="contact" id="contact">
         <div class="contact-container reveal">
