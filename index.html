@@ -6,438 +6,9 @@
     <title>Trujillo Digital Hub | Victor Trujillo</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-
+<link rel="stylesheet" href="main.js">
+<link rel="stylesheet" href="stilos.css">
     <style>
-        :root {
-            --primary: #00f2ff;
-            --secondary: #7000ff;
-            --bg: #050505;
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --text: #e2e8f0;
-            --border: rgba(255, 255, 255, 0.1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        /* Cursor oculto solo en dispositivos con puntero (PC) */
-        @media (pointer: fine) {
-            * { cursor: none; }
-            #cursor {
-                width: 20px;
-                height: 20px;
-                border: 2px solid var(--primary);
-                border-radius: 50%;
-                position: fixed;
-                pointer-events: none;
-                z-index: 9999;
-                transition: transform 0.1s ease-out;
-            }
-        }
-
-        /* En móviles ocultamos el cursor de JS */
-        @media (pointer: coarse) {
-            #cursor { display: none; }
-        }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
-
-        h1, h2, h3, .logo {
-            font-family: 'Space Grotesk', sans-serif;
-        }
-
-        .bg-glow {
-            position: fixed;
-            width: 100vw;
-            height: 100vw;
-            background: radial-gradient(circle, rgba(112, 0, 255, 0.08) 0%, transparent 70%);
-            top: -10%;
-            right: -10%;
-            z-index: -1;
-            filter: blur(80px);
-        }
-
-        #progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 4px;
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            width: 0%;
-            z-index: 1001;
-        }
-
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 20px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 1000;
-            transition: 0.4s;
-        }
-
-        header.scrolled {
-            background: rgba(5, 5, 5, 0.9);
-            backdrop-filter: blur(15px);
-            padding: 12px 5%;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .logo {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #fff;
-            letter-spacing: 1px;
-        }
-        .logo span { color: var(--primary); }
-
-        nav ul { display: flex; list-style: none; }
-        nav ul li { margin-left: 20px; }
-        nav ul li a {
-            text-decoration: none;
-            color: var(--text);
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            opacity: 0.7;
-        }
-
-        /* Hero */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 100px 5% 40px;
-        }
-
-        .hero h1 {
-            font-size: clamp(2.2rem, 10vw, 5.5rem);
-            line-height: 1.1;
-            margin-bottom: 15px;
-            background: linear-gradient(180deg, #fff 0%, #aaa 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .typewriter {
-            font-size: 1rem;
-            color: var(--primary);
-            min-height: 40px;
-            margin-bottom: 30px;
-            font-weight: 500;
-            max-width: 90%;
-        }
-
-        .academic-container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            width: 100%;
-            max-width: 600px;
-            margin: 20px auto;
-        }
-
-        .academic-badge {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            padding: 20px;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            text-align: left;
-        }
-
-        .academic-badge i { font-size: 1.8rem; }
-        .academic-info h4 { color: var(--primary); font-size: 0.7rem; text-transform: uppercase; }
-        .academic-info h2 { font-size: 1.2rem; color: #fff; }
-        .academic-info p { opacity: 0.7; font-size: 0.85rem; }
-
-        .path-connector {
-            width: 2px;
-            height: 20px;
-            background: var(--primary);
-            margin: -10px auto;
-            opacity: 0.3;
-        }
-
-        /* Stats */
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            padding: 60px 5%;
-            background: rgba(255,255,255,0.01);
-            border-top: 1px solid var(--border);
-        }
-
-        .stat-item h2 { font-size: 2.2rem; color: var(--primary); }
-        .stat-item p { font-size: 0.65rem; text-transform: uppercase; opacity: 0.6; }
-
-        /* Services */
-        .services { padding: 80px 5%; }
-        .section-header h2 { font-size: 2rem; margin-bottom: 10px; text-align: center;}
-        .accent-line { width: 50px; height: 3px; background: var(--primary); margin: 0 auto 40px; }
-
-        .services-grid {
-            display: grid;
-            grid-template-columns: 1fr; /* Una columna por defecto en móvil */
-            gap: 20px;
-        }
-
-        .service-card {
-            background: var(--card-bg);
-            padding: 30px 20px;
-            border-radius: 20px;
-            border: 1px solid var(--border);
-        }
-
-        .service-card i { font-size: 2rem; color: var(--primary); margin-bottom: 15px; display: block; }
-        .service-card h3 { font-size: 1.2rem; margin-bottom: 10px; }
-        .service-card p { font-size: 0.9rem; opacity: 0.7; line-height: 1.4; }
-
-        /* Contact */
-        .contact { padding: 80px 5%; background: #080808; }
-        .contact-box {
-            background: var(--card-bg);
-            padding: 30px 20px;
-            border-radius: 20px;
-            border: 1px solid var(--border);
-            margin-top: 30px;
-            word-wrap: break-word; /* Para correos largos */
-        }
-
-        .contact-link {
-            display: block;
-            color: var(--primary);
-            text-decoration: none;
-            font-size: 1rem;
-            margin: 10px 0;
-            font-weight: 600;
-        }
-
-        footer {
-            padding: 30px 5%;
-            border-top: 1px solid var(--border);
-            text-align: center;
-            font-size: 0.7rem;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            opacity: 0.6;
-        }
-
-        /* Animations */
-        .reveal {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: 0.6s all ease-out;
-        }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Desktop Adaptations */
-        @media (min-width: 768px) {
-            header { padding: 25px 10%; }
-            .logo { font-size: 1.4rem; }
-            .services-grid { grid-template-columns: repeat(2, 1fr); }
-            .stats { grid-template-columns: repeat(4, 1fr); padding: 80px 10%; }
-            .hero p { font-size: 1.1rem; }
-            .academic-container { flex-direction: column; }
-            footer { flex-direction: row; justify-content: space-between; text-align: left; }
-        }
-
-        @media (min-width: 1024px) {
-            .services-grid { grid-template-columns: repeat(3, 1fr); }
-        }
-
-        /* Esconder nav en pantallas muy pequeñas si es necesario, o dejarlo simple */
-        @media (max-width: 480px) {
-            nav { display: none; } /* Opcional: esconder menú en móviles muy pequeños */
-        }
-
-        /* ===== NUESTRO PROCESO ===== */
-.process {
-    padding: 100px 5%;
-    background: linear-gradient(180deg, #070b18, #050505);
-    text-align: center;
-}
-
-.process h2 {
-    font-size: 2.2rem;
-    margin-bottom: 10px;
-}
-
-.process p {
-    opacity: 0.7;
-    font-size: 0.95rem;
-    margin-bottom: 70px;
-}
-
-.process-wrapper {
-    position: relative;
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 20px;
-}
-
-.process-line {
-    position: absolute;
-    top: 36px;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(to right, var(--secondary), var(--primary));
-    opacity: 0.35;
-}
-
-.process-step {
-    position: relative;
-    z-index: 2;
-}
-
-.process-icon {
-    width: 72px;
-    height: 72px;
-    border-radius: 50%;
-    border: 2px solid var(--secondary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 15px;
-    font-size: 1.6rem;
-    color: var(--primary);
-    background: rgba(5,5,5,0.9);
-    box-shadow: 0 0 25px rgba(112,0,255,0.35);
-}
-
-.process-step h3 {
-    font-size: 1.05rem;
-    margin-bottom: 5px;
-}
-
-.process-step span {
-    font-size: 0.8rem;
-    opacity: 0.6;
-}
-
-@media (max-width: 900px) {
-    .process-wrapper {
-        grid-template-columns: 1fr;
-    }
-    .process-line {
-        display: none;
-    }
-    .process-step {
-        margin-bottom: 40px;
-    }
-}
-/* ===== FORMACIÓN COMPLEMENTARIA ===== */
-.education {
-    padding: 90px 5%;
-    background: rgba(255,255,255,0.01);
-    border-top: 1px solid var(--border);
-}
-
-.education-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 20px;
-    max-width: 900px;
-    margin: 0 auto;
-}
-
-.education-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    padding: 25px;
-    border-radius: 18px;
-    display: flex;
-    gap: 15px;
-    align-items: flex-start;
-}
-
-.education-icon {
-    font-size: 1.8rem;
-    color: var(--primary);
-}
-
-.education-info h3 {
-    font-size: 1.05rem;
-    margin-bottom: 5px;
-    color: #fff;
-}
-
-.education-info span {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--primary);
-}
-
-.education-info p {
-    font-size: 0.85rem;
-    opacity: 0.7;
-    margin-top: 6px;
-    line-height: 1.4;
-}
-
-@media (min-width: 768px) {
-    .education-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-/* ===== CURSOS ===== */
-
-.courses {
-    padding: 90px 5%;
-    background: rgba(255,255,255,0.01);
-    border-top: 1px solid var(--border);
-}
-
-.courses-container {
-    display: grid;
-    gap: 20px;
-    max-width: 900px;
-    margin: 0 auto;
-}
-
-.course-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    padding: 30px;
-    border-radius: 20px;
-    text-align: center;
-}
-
-.course-icon {
-    font-size: 2rem;
-    color: var(--primary);
-    margin-bottom: 15px;
-}
-
-@media (min-width: 768px) {
-    .courses-container {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
 
     </style>
 </head>
@@ -554,6 +125,218 @@
                 <p>Visualización, métricas y toma de decisiones basadas en datos.</p>
             </div>
         </div>
+
+         <div class="education-card reveal">
+            <div class="education-icon">🚀</div> 
+            <div class="education-info">
+                <span>Curso</span>
+                <h3>Tranformación Digital</h3>
+                <p>Santander Open Academy.</p>
+            </div>
+        </div>
+
+        <div class="education-card reveal">
+            <div class="education-icon">📣</div>
+            <div class="education-info">
+                <span>Curso</span>
+                <h3>Storytelling en el Marketing Digital</h3>
+                <p>The University Of Chicago.</p>
+            </div>
+        </div>
+
+        <div class="education-card reveal">
+            <div class="education-icon">🧠</div>
+            <div class="education-info">
+                <span>Curso</span>
+                <h3>"SanaMente LibreMente: jóvenes por la paz y contra las adicciones"</h3>
+                <p>Tecnológico de Monterrey.</p>
+            </div>
+        </div>
+
+        <div class="education-card reveal">
+            <div class="education-icon">💻</div>
+            <div class="education-info">
+                <span>Curso</span>
+                <h3>Python</h3>
+                <p>Santander Open Academy.</p>
+            </div>
+        </div>
+
+        <div class="education-card reveal">
+            <div class="education-icon">📣</div>
+            <div class="education-info">
+                <span>Curso</span>
+                <h3>Publicidad en redes sociales</h3>
+                <p>Santander Open Academy.</p>
+            </div>
+        </div>
+
+         <div class="education-card reveal">
+            <div class="education-icon">🔐</div>
+            <div class="education-info">
+                <span>Curso</span>
+                <h3>Protección de software y seguridad de la IA</h3>
+                <p>Santander X.</p>
+            </div>
+        </div>
+
+        <div class="education-card reveal">
+            <div class="education-icon">🧠</div>
+            <div class="education-info">
+                <span>Curso</span>
+                <h3>Plan de Carrera Profesional</h3>
+                <p>ICE MÉXICO,Microsotf, Open English.</p>
+            </div>
+        </div>
+
+        <div class="education-card reveal">
+            <div class="education-icon">🧠</div>
+            <div class="education-info">
+                <span>Curso</span>
+                <h3>Pensamiento crítico y resolución de problemas</h3>
+                <p>Santander Open Academy.</p>
+            </div>
+        </div>
+
+        <div class="education-card reveal">
+            <div class="education-icon">🌿</div>
+            <div class="education-info">
+                <span>Curso</span>
+                <h3>Mindfulness & Worklife Balance</h3>
+                <p>Santander Open Academy.</p>
+            </div>
+        </div>
+
+        <div class="education-card reveal">
+            <div class="education-icon">🧠</div>
+            <div class="education-info">
+                <span>Curso</span>
+                <h3>Liderazgo</h3>
+                <p>Santander Open Academy.</p>
+            </div>
+        </div>
+
+        <div class="education-card reveal">
+            <div class="education-icon">🚀</div>
+            <div class="education-info">
+                <span>Curso</span>
+                <h3>Liderazgo empresarial</h3>
+                <p>Santander X.</p>
+            </div>
+        </div>
+
+        <div class="education-card reveal">
+            <div class="education-icon">📊</div>
+            <div class="education-info">
+                <span>Curso</span>
+                <h3>Introducción a la Ciencia de Datos</h3>
+                <p>IE university.</p>
+            </div>
+        </div>
+        
+        <div class="education-card reveal">
+            <div class="education-icon">🤖</div>
+            <div class="education-info">
+                <span>Curso</span>
+                <h3>Inteligencia Artificial y productividad</h3>
+                <p>Google.</p>
+            </div>
+        </div>
+
+        <div class="education-card reveal">
+            <div class="education-icon">🤖</div>
+            <div class="education-info">
+                <span>Curso</span>
+                <h3>IA Generativa</h3>
+                <p>MIT Professional Education.</p>
+            </div>
+        </div>
+
+        <div class="education-card reveal">
+           <div class="education-icon">🚀</div>
+            <div class="education-info">
+                <span>Curso</span>
+                <h3>Gestión de Proyectos y Fundamentos de metodología Agile</h3>
+                <p>MIT Professional Education.</p>
+            </div>
+        </div>
+
+<div class="education-card reveal">
+            <div class="education-icon">📊</div>
+            <div class="education-info">
+                <span>Curso</span>
+                <h3>Excel</h3>
+                <p>Santander Open Academy.</p>
+            </div>
+        </div>
+
+        <div class="education-card reveal">
+           <div class="education-icon">📈</div>
+            <div class="education-info">
+                <span>Curso</span>
+                <h3>Estrategias de crecimiento para empresas:
+diversificación y ventas</h3>
+                <p>Santander X.</p>
+            </div>
+        </div>
+
+        <div class="education-card reveal">
+            <div class="education-icon">🎓</div>
+            <div class="education-info">
+                <span>Seminario</span>
+                <h3>Tu Ruta hacia la Certificación Oficial para ser Instructor Profesional</h3>
+                <p>KVALITY, CAPACITACIÓN Y ASESORÍA.</p>
+            </div>
+        </div>
+
+        <div class="education-card reveal">
+           <div class="education-icon">📚</div>
+            <div class="education-info">
+                <span>Curso</span>
+                <h3>Una mirada a la educación digital</h3>
+                <p>Secretaria de Educación Publica.</p>
+            </div>
+        </div>
+
+        <div class="education-card reveal">
+            <div class="education-icon">🤖</div>
+            <div class="education-info">
+                <span>Curso</span>
+                <h3>Inteligencia Artificial para la mediación
+del aprendizaje</h3>
+                <p>Secretaria de Educación Publica.</p>
+            </div>
+        </div>
+
+        <div class="education-card reveal">
+            <div class="education-icon">🤖</div>
+            <div class="education-info">
+                <span>Curso</span>
+                <h3>IA para Docentes</h3>
+                <p>Secretaria de Educación Publica.</p>
+            </div>
+        </div>
+
+        <div class="education-card reveal">
+            <div class="education-icon">💻</div>
+            <div class="education-info">
+                <span>Curso</span>
+                <h3>Finder</h3>
+                <p>Capacitate para el Empleo.</p>
+            </div>
+        </div>
+
+        <div class="education-card reveal">
+           <div class="education-icon">🤖</div>
+            <div class="education-info">
+                <span>Curso</span>
+                <h3>Aplicación de la inteligencia artificial en tu
+negocio</h3>
+                <p>Santander X.</p>
+            </div>
+        </div>
+
+
     </div>
 </section>
 
@@ -723,9 +506,8 @@
         <div>© 2026 TRUJILLO DIGITAL HUB</div>
         <div>FCC BUAP | INGENIERÍA EN T.I.</div>
     </footer>
-
-    <script>
-        // 1. Cursor Custom (Solo PC)
+<script>
+     // 1. Cursor Custom (Solo PC)
         const cursor = document.querySelector('#cursor');
         if (window.matchMedia("(pointer: fine)").matches) {
             document.addEventListener('mousemove', (e) => {
@@ -805,65 +587,103 @@
         // ===== SISTEMA DE VERIFICACIÓN =====
 
 const constancias = {
+    "2222222222":{
+nombre:"Aqui aparecerá tu nombre",
+curso:"En está seccion aparecera el curso que tomaste",
+cargo:"Alumno",
+calificacion:"Aqui aparecera la calificación obtenida",
+horas:"Total de horas cursadas"
+},
     "0000000000":{
-nombre:"Tec.Victor Samuel Medina Trujillo",
+nombre:"Victor Samuel Medina Trujillo",
 curso:"Como utilizar la IA en tu negocio",
 cargo:"instructor",
-calificacion:"10"
+calificacion:"10",
+horas:"5 horas totales",
+inicio:" 16/02/26",
+termino:" 20/02/26"
 },
 "5366413396":{
 nombre:"Thelma Isabel Vergara Hernandez	",
 curso:"Como utilizar la IA en tu negocio",
 cargo:"Alumno",
-calificacion:"ND"
+calificacion:"ND",
+horas:"5 horas totales",
+inicio:" 16/02/26",
+termino:" 20/02/26"
 },
 "5366413398":{
 nombre:"María Elizabeth Cruz Reyes",
 curso:"Como utilizar la IA en tu negocio",
 cargo:"Alumno",
-calificacion:"ND"
+calificacion:"ND",
+horas:"5 horas totales",
+inicio:" 16/02/26",
+termino:" 20/02/26"
 },
 "5366413340":{
 nombre:"Yanelli Ortiz Velazquez	",
 curso:"Como utilizar la IA en tu negocio",
 cargo:"Alumno",
-calificacion:"ND"
+calificacion:"ND",
+horas:"5 horas totales",
+inicio:" 16/02/26",
+termino:" 20/02/26"
 },
 "5366413399":{
 nombre:"Perla Del Carmen Silva Ortiz",
 curso:"Como utilizar la IA en tu negocio",
 cargo:"Alumno",
-calificacion:"ND"
+calificacion:"ND",
+horas:"5 horas totales",
+inicio:" 16/02/26",
+termino:" 20/02/26"
 },
 "5366413401":{
 nombre:"Sandy Paola Cruz Tolentino",
 curso:"Como utilizar la IA en tu negocio",
 cargo:"Alumno",
-calificacion:"ND"
+calificacion:"ND",
+horas:"5 horas totales",
+inicio:" 16/02/26",
+termino:" 20/02/26"
 },
 "5366413403":{
 nombre:"Esther Anayansi Rodriguez Cortés",
 curso:"Como utilizar la IA en tu negocio",
 cargo:"Alumno",
-calificacion:"ND"
+calificacion:"ND",
+horas:"5 horas totales",
+inicio:" 16/02/26",
+termino:" 20/02/26"
 },
 "5366413404":{
 nombre:"Laura Patricia Torres Rodriguez",
 curso:"Como utilizar la IA en tu negocio",
 cargo:"Alumno",
-calificacion:"ND"
+calificacion:"ND",
+horas:"5 horas totales",
+inicio:" 16/02/26",
+termino:" 20/02/26"
 },
 "5366413405":{
 nombre:"Ofelia Trujillo Barrales",
 curso:"Como utilizar la IA en tu negocio",
 cargo:"Alumno",
-calificacion:"ND"
+calificacion:"ND",
+horas:"5 horas totales",
+inicio:" 16/02/26",
+termino:" 20/02/26"
 },
 "5366413406":{
 nombre:"Angelica Celia Hoyos Arellano",
 curso:"Como utilizar la IA en tu negocio",
 cargo:"Alumno",
-calificacion:"ND"
+calificacion:"ND",
+horas:"5 horas totales",
+inicio:" 16/02/26",
+termino:" 20/02/26"
+
 },
 
 
@@ -880,27 +700,30 @@ if(constancias[codigo]){
 let data = constancias[codigo];
 
 resultado.innerHTML = `
-Constancia válida<br><br>
+Constancia Válida<br><br>
 
-Alumno: ${data.nombre}<br>
-Curso: ${data.curso}<br>
-Cargo: ${data.cargo}<br>
-Calificación obtenida: ${data.calificacion}
+Alumno: ${data.nombre}<br><br>
+Curso: ${data.curso}<br><br>
+Cargo: ${data.cargo}<br><br>
+Calificación obtenida: ${data.calificacion}<br><br>
+Horas cursadas: ${data.horas}<br><br>
+Fecha de Inicio:${data.inicio}<br><br>
+Fecha de Finalización:${data.termino}
 
 `;
 
-resultado.style.color="#00f2ff";
+resultado.style.color="white";
 
 }else{
 
-resultado.innerHTML="Código no encontrado";
+resultado.innerHTML="Código no encontrado verifique el numero de su constancia";
 resultado.style.color="red";
 
 }
 
 }
 
-    </script>
+</script>
 </body>
 
 </html>
