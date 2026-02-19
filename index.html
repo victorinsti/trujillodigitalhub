@@ -156,26 +156,20 @@ Mentalidad Empresarial Para Crecer <br>
 
 
             <div id="modalCurso" class="modal">
-
-<div class="modal-content">
-
-<span class="close" onclick="cerrarModal()">X</span>
-
-<h2>Mentalidad Empresarial Para Crecer</h2>
-
 <p>
-📅 Fechas: 25 al 27 de febrero 2026 <br>
-🕕 Horario: 6 pm a 7 pm <br>
-🎓 Incluye constancia de asistencia <br>
-📚 Material incluido <br>
-💰 Costo: $100 MXN
+Mentalidad Empresarial Para Crecer <br>
+"del 25 al 27 de febrero de 2026"
 </p>
 
-<a href="https://wa.me/message/JRJIIIRDQ47OO1" target="_blank">Inscribirme por WhatsApp</a>
+<a href="#" class="contact-link" onclick="abrirModal(event)">
+Inscribete Aqui
+</a>
+
 
 </div>
 
 </div>
+
 
             <hr><br>
             <p>
@@ -554,10 +548,44 @@ function abrirModal(e){
 e.preventDefault();
 document.getElementById("modalCurso").style.display="flex";
 }
+function abrirModal(e){
+e.preventDefault();
+document.getElementById("modalCurso").style.display="flex";
+document.body.style.overflow="hidden";
+}
+
+function cerrarModal(){
+document.getElementById("modalCurso").style.display="none";
+document.body.style.overflow="auto";
+}
 
 
 </script>
 
+<!-- ===== MODAL CURSO ===== -->
+
+<div id="modalCurso" class="modal">
+
+<div class="modal-content">
+
+<span class="close" onclick="cerrarModal()">✕</span>
+
+<h2>Mentalidad Empresarial Para Crecer</h2>
+
+<p>
+📅 Fechas: 25 al 27 de febrero 2026<br><br>
+🕕 Horario: 6 pm a 7 pm<br><br>
+🎓 Incluye constancia de asistencia<br><br>
+📚 Material incluido<br><br>
+💰 Costo: $100 MXN
+</p>
+
+<a href="https://wa.me/message/JRJIIIRDQ47OO1" target="_blank">
+Inscribirme por WhatsApp
+</a>
+
+</div>
+</div>
 
 </body>
 
