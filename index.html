@@ -23,9 +23,9 @@
         <nav>
             <ul>
                 <li><a href="#home">Inicio</a></li>
+                <li><a href="#services">Servicios</a></li>
                  <li><a href="#courses">Cursos</a></li>
                  <li><a href="#verificarc">Verificar Constancia</a></li>
-                <li><a href="#services">Servicios</a></li>
                 <li><a href="#contact">Contacto</a></li>
                      
                
@@ -152,7 +152,8 @@ Mentalidad Empresarial Para Crecer <br>
 "del 25 al 27 de febrero de 2026"
 </p>
 
-<a href="#" class="contact-link" onclick="abrirModal()">Inscribete Aqui</a>
+<a href="javascript:void(0)" class="contact-link" onclick="abrirModal()">Inscribete Aqui</a>
+
 
             <div id="modalCurso" class="modal">
 
@@ -549,13 +550,11 @@ resultado.style.color="red";
 }
 
 
-function abrirModal(){
+function abrirModal(e){
+e.preventDefault();
 document.getElementById("modalCurso").style.display="flex";
 }
 
-function cerrarModal(){
-document.getElementById("modalCurso").style.display="none";
-}
 
 </script>
 
