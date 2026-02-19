@@ -148,10 +148,34 @@
             <h3>Convocatorias Abiertas</h3>
             <hr><br>
             <p>
-                Mentalidad Empresarial Para Crecer <br>
-                "del 25 al 27 de febrero de 2026"
-               <a href="https://wa.me/message/JRJIIIRDQ47OO1" target="_blank" class="contact-link">Inscribete Aqui</a>
-            </p>
+Mentalidad Empresarial Para Crecer <br>
+"del 25 al 27 de febrero de 2026"
+</p>
+
+<a href="#" class="contact-link" onclick="abrirModal()">Inscribete Aqui</a>
+
+            <div id="modalCurso" class="modal">
+
+<div class="modal-content">
+
+<span class="close" onclick="cerrarModal()">X</span>
+
+<h2>Mentalidad Empresarial Para Crecer</h2>
+
+<p>
+📅 Fechas: 25 al 27 de febrero 2026 <br>
+🕕 Horario: 6 pm a 7 pm <br>
+🎓 Incluye constancia de asistencia <br>
+📚 Material incluido <br>
+💰 Costo: $100 MXN
+</p>
+
+<a href="https://wa.me/message/JRJIIIRDQ47OO1" target="_blank">Inscribirme por WhatsApp</a>
+
+</div>
+
+</div>
+
             <hr><br>
             <p>
                 Como usar la IA en tu negocio (sin ser experto) <br>
@@ -524,7 +548,18 @@ resultado.style.color="red";
 
 }
 
+
+function abrirModal(){
+document.getElementById("modalCurso").style.display="flex";
+}
+
+function cerrarModal(){
+document.getElementById("modalCurso").style.display="none";
+}
+
 </script>
+
+
 </body>
 
 </html>
