@@ -259,7 +259,19 @@
         }
 
         /* Esconder nav en pantallas muy pequeñas si es necesario, o dejarlo simple */
-       
+       @media (max-width: 768px) {
+
+    nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    nav ul li {
+        margin: 5px 10px;
+    }
+
+}
+
 
         /* ===== NUESTRO PROCESO ===== */
 .process {
