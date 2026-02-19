@@ -259,9 +259,7 @@
         }
 
         /* Esconder nav en pantallas muy pequeñas si es necesario, o dejarlo simple */
-        @media (max-width: 480px) {
-            nav { display: none; } /* Opcional: esconder menú en móviles muy pequeños */
-        }
+       
 
         /* ===== NUESTRO PROCESO ===== */
 .process {
