@@ -731,6 +731,19 @@
     box-shadow:0 0 25px rgba(112,0,255,0.6);
 }
 
+.contact{
+    padding:120px 5% 80px; /* 🔥 más espacio arriba */
+    background:#080808;
+    position:relative;
+    z-index:2;
+}
+section{
+    position:relative;
+}
+.process{
+    margin-bottom:80px;
+}
+
 /* Footer pro */
 
 .footer-pro{
