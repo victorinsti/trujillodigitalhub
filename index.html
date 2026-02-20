@@ -19,19 +19,24 @@
     <div class="bg-glow"></div>
 
     <header id="header">
-        <div class="logo">TRUJILLO <span>DIGITAL</span> HUB</div>
-        <nav>
-            <ul>
-                <li><a href="#home">Inicio</a></li>
-                <li><a href="#services">Servicios</a></li>
-                 <li><a href="#courses">Cursos</a></li>
-                 <li><a href="#verificarc">Verificar Constancia</a></li>
-                <li><a href="#contact">Contacto</a></li>
-                     
-               
-            </ul>
-        </nav>
-    </header>
+    <div class="logo">TRUJILLO <span>DIGITAL</span> HUB</div>
+
+    <div class="menu-toggle" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <nav id="mobileNav">
+        <ul>
+            <li><a href="#home" onclick="toggleMenu()">Inicio</a></li>
+            <li><a href="#services" onclick="toggleMenu()">Servicios</a></li>
+            <li><a href="#courses" onclick="toggleMenu()">Cursos</a></li>
+            <li><a href="#verificarc" onclick="toggleMenu()">Verificar</a></li>
+            <li><a href="#contact" onclick="toggleMenu()">Contacto</a></li>
+        </ul>
+    </nav>
+</header>
 
     <section class="hero" id="home">
         <h1 class="reveal">Victor Trujillo</h1>
