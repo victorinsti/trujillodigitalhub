@@ -445,7 +445,43 @@
     border-radius: 5px;
     transition: 0.3s;
 }
+.pcurso{
+    display:inline-block;
+    margin:15px 0;
+    padding:10px 25px;
+    font-size:1.3rem;
+    font-weight:700;
+    color:#00f2ff;
+    border-radius:50px;
+    border:2px solid rgba(0,242,255,0.4);
+    background:rgba(0,242,255,0.05);
+    letter-spacing:1px;
+    box-shadow:0 0 15px rgba(0,242,255,0.4);
+    transition:0.3s ease;
+}
 
+.pcurso:hover{
+    background:rgba(0,242,255,0.15);
+    transform:scale(1.05);
+}
+.btn-inscribete{
+   display:inline-block;
+    margin-top:15px;
+    padding:12px 28px;
+    font-size:0.95rem;
+    font-weight:600;
+    text-decoration:none;
+    color:white;
+    background:linear-gradient(90deg,var(--primary),var(--secondary));
+    border-radius:50px;
+    transition:0.3s ease;
+    box-shadow:0 0 20px rgba(112,0,255,0.4);
+}
+
+.btn-inscribete:hover{
+    transform:translateY(-3px);
+    box-shadow:0 0 30px rgba(112,0,255,0.7);
+}
 /* Mobile Styles */
 @media (max-width: 768px) {
 
@@ -485,4 +521,137 @@
     .menu-toggle {
         display: flex;
     }
+    
+}
+/* ===== CONVOCATORIAS PRO ===== */
+
+.convocatorias-title{
+    font-size:1.6rem;
+    font-weight:700;
+    margin-bottom:25px;
+    position:relative;
+    display:inline-block;
+}
+
+.convocatorias-title::after{
+    content:"";
+    display:block;
+    width:60%;
+    height:3px;
+    background:linear-gradient(to right,var(--primary),var(--secondary));
+    margin:10px auto 0;
+    border-radius:5px;
+}
+
+/* Tarjeta individual de curso */
+.course-card{
+    background:linear-gradient(145deg, rgba(20,20,30,0.9), rgba(10,10,15,0.9));
+    border:1px solid rgba(0,242,255,0.15);
+    padding:35px 25px;
+    border-radius:20px;
+    text-align:center;
+    transition:0.4s ease;
+    box-shadow:0 0 25px rgba(0,0,0,0.4);
+}
+
+.course-card:hover{
+    transform:translateY(-8px);
+    border:1px solid rgba(0,242,255,0.5);
+    box-shadow:0 0 35px rgba(0,242,255,0.3);
+}
+
+/* Nombre del curso */
+.course-card h3{
+    font-size:1.2rem;
+    font-weight:600;
+    margin-bottom:8px;
+}
+
+/* Fecha */
+.course-card .fecha{
+    font-size:0.9rem;
+    opacity:0.6;
+    margin-bottom:15px;
+}
+/* ===== VERIFICACIÓN PREMIUM ===== */
+
+.verificacion-container{
+    display:flex;
+    justify-content:center;
+    margin-top:40px;
+}
+
+.verificacion-card{
+    max-width:500px;
+    width:100%;
+    background:linear-gradient(145deg, rgba(20,20,30,0.95), rgba(10,10,15,0.95));
+    border:1px solid rgba(0,242,255,0.15);
+    padding:40px 30px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 0 40px rgba(0,0,0,0.4);
+    transition:0.4s ease;
+}
+
+.verificacion-card:hover{
+    transform:translateY(-6px);
+    border:1px solid rgba(0,242,255,0.5);
+    box-shadow:0 0 35px rgba(0,242,255,0.25);
+}
+
+.verificacion-icon{
+    font-size:2rem;
+    margin-bottom:15px;
+}
+
+.verificacion-text{
+    opacity:0.7;
+    font-size:0.9rem;
+    margin-bottom:25px;
+}
+
+/* Input */
+.input-group-verificacion input{
+    width:100%;
+    padding:14px;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,0.1);
+    background:rgba(255,255,255,0.05);
+    color:white;
+    font-size:0.95rem;
+    outline:none;
+    transition:0.3s;
+}
+
+.input-group-verificacion input:focus{
+    border:1px solid var(--primary);
+    box-shadow:0 0 15px rgba(0,242,255,0.4);
+}
+
+/* Botón */
+.btn-verificar{
+    margin-top:20px;
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:50px;
+    background:linear-gradient(90deg,var(--primary),var(--secondary));
+    color:#050505;
+    font-weight:700;
+    font-size:0.95rem;
+    cursor:pointer;
+    transition:0.3s ease;
+    box-shadow:0 0 20px rgba(112,0,255,0.4);
+}
+
+.btn-verificar:hover{
+    transform:translateY(-3px);
+    box-shadow:0 0 30px rgba(112,0,255,0.7);
+}
+
+/* Resultado */
+.resultado-verificacion{
+    margin-top:20px;
+    font-size:0.9rem;
+    line-height:1.5;
 }

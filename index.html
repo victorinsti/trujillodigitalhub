@@ -18,24 +18,27 @@
     <div id="progress"></div>
     <div class="bg-glow"></div>
 
-    <header id="header">
+   <header id="header">
+
     <div class="logo">TRUJILLO <span>DIGITAL</span> HUB</div>
 
+    <!-- BOTON MOBILE -->
     <div class="menu-toggle" onclick="toggleMenu()">
         <span></span>
         <span></span>
         <span></span>
     </div>
 
-    <nav id="mobileNav">
+    <nav id="navMenu">
         <ul>
-            <li><a href="#home" onclick="toggleMenu()">Inicio</a></li>
-            <li><a href="#services" onclick="toggleMenu()">Servicios</a></li>
-            <li><a href="#courses" onclick="toggleMenu()">Cursos</a></li>
-            <li><a href="#verificarc" onclick="toggleMenu()">Verificar</a></li>
-            <li><a href="#contact" onclick="toggleMenu()">Contacto</a></li>
+            <li><a href="#home">Inicio</a></li>
+            <li><a href="#services">Servicios</a></li>
+            <li><a href="#courses">Cursos</a></li>
+            <li><a href="#verificarc">Verificar</a></li>
+            <li><a href="#contact">Contacto</a></li>
         </ul>
     </nav>
+
 </header>
 
     <section class="hero" id="home">
@@ -151,22 +154,39 @@
         <div class="course-card reveal">
             <div class="course-icon">📢</div>
             <h3>Convocatorias Abiertas</h3>
-            <hr><br>
-            <p>
-Mentalidad Empresarial Para Crecer <br>
-"del 25 al 27 de febrero de 2026"
-</p>
+            <div class="course-card">
 
- <a href="https://wa.me/message/JRJIIIRDQ47OO1" target="_blank" class="contact-link">Inscribete Aqui</a>
+<h3>Mentalidad Empresarial Para Crecer</h3>
 
+<p class="fecha">Del 25 al 27 de Febrero 2026</p>
 
-            <div id="modalCurso" class="modal">
-<p>
-  <p>
-                Como usar la IA en tu negocio (sin ser experto) <br>
-                "del 16 al 20 de febrero de 2026"
-               <a href="https://wa.me/message/JRJIIIRDQ47OO1" target="_blank" class="contact-link">Inscribete Aqui</a>
-            </p>
+<p class="pcurso">$100 MXN</p>
+
+<a href="https://wa.me/message/JRJIIIRDQ47OO1" class="btn-inscribete">Inscribirme</a>
+
+</div>
+<br>
+<div class="course-card">
+<h3>Emprende y Vende en Redes Sociales </h3>
+       <p class="fecha">Del 9 al 13 de Marzo 2026</p>
+        <p class="pcurso">$200 MX</p>
+<a href="https://wa.me/message/JRJIIIRDQ47OO1" class="btn-inscribete">Inscribirme</a>
+Inscríbete Ahora 🚀
+</div>
+<br>
+<div class="course-card">
+<h3>Como Iniciar Un Negocio digital desde cero </h3>
+        <p class="fecha">Del 17 al 20 de Marzo 2026</p>
+        <p class="pcurso">$200 MX</p>
+<a href="https://wa.me/message/JRJIIIRDQ47OO1" target="_blank" class="btn-inscribete">Inscribirme</a>
+            </div>
+            <br>
+<div class="course-card">
+<h3>Como Promorcionar Productos en Redes Sociales</h3>
+        <p class="fecha">Del 25 al 27 de Marzo 2026</p>
+       <p class="pcurso">$200 MX</p>
+<a href="https://wa.me/message/JRJIIIRDQ47OO1" target="_blank" class="btn-inscribete">Inscribirme</a>
+          </div>
 
 
 </div>
@@ -184,29 +204,35 @@ Mentalidad Empresarial Para Crecer <br>
 <section class="verificarc" id="verificarc">
 
     <div class="section-header reveal">
-        <h2>Verificar Constancia</h2>
+        <h2>Verificación de Constancia</h2>
         <div class="accent-line"></div>
     </div>
 
-    <div class="courses-container">
+    <div class="verificacion-container reveal">
 
-        <div class="course-card reveal">
+        <div class="verificacion-card">
 
-            <div class="course-icon">✅</div>
+            <div class="verificacion-icon">🔎</div>
 
             <h3>Validación Oficial</h3>
 
-            <p>Ingresa tu número de constancia para verificar la autenticidad.</p>
+            <p class="verificacion-text">
+                Ingresa tu código único para comprobar la autenticidad de tu constancia.
+            </p>
 
-            <input id="codigoConstancia" placeholder="Ejemplo: 2222222222"
-            style="margin-top:20px;padding:12px;border-radius:8px;border:none;width:100%;">
+            <div class="input-group-verificacion">
+                <input 
+                    type="text" 
+                    id="codigoConstancia" 
+                    placeholder="Ejemplo: 2222222222"
+                >
+            </div>
 
-            <button onclick="verificarConstancia()" 
-            style="margin-top:15px;padding:12px 20px;background:#00f2ff;border:none;border-radius:8px;font-weight:bold;cursor:pointer;">
-            Verificar
+            <button onclick="verificarConstancia()" class="btn-verificar">
+                Verificar Constancia
             </button>
 
-            <p id="resultadoConstancia" style="margin-top:15px;"></p>
+            <div id="resultadoConstancia" class="resultado-verificacion"></div>
 
         </div>
 
@@ -512,16 +538,17 @@ if(constancias[codigo]){
 let data = constancias[codigo];
 
 resultado.innerHTML = `
-Constancia Válida<br><br>
+<span style="color:limegreen; font-weight:bold;">
+Constancia Válida
+</span><br><br>
 
-Alumno: ${data.nombre}<br><br>
+Nombre: ${data.nombre}<br><br>
 Curso: ${data.curso}<br><br>
-Cargo: ${data.cargo}<br><br>
+Rol: ${data.cargo}<br><br>
 Calificación obtenida: ${data.calificacion}<br><br>
 Horas cursadas: ${data.horas}<br><br>
 Fecha de Inicio:${data.inicio}<br><br>
 Fecha de Finalización:${data.termino}
-
 `;
 
 resultado.style.color="white";
@@ -551,7 +578,19 @@ document.getElementById("modalCurso").style.display="none";
 document.body.style.overflow="auto";
 }
 
+
+function toggleMenu(){
+
+    const nav = document.getElementById("navMenu");
+    const toggle = document.querySelector(".menu-toggle");
+
+    nav.classList.toggle("active");
+    toggle.classList.toggle("active");
+
+}
+
 </script>
+
 
 </div>
 </div>
