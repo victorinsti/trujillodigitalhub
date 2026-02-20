@@ -560,6 +560,15 @@
     box-shadow:0 0 35px rgba(0,242,255,0.3);
 }
 
+.hora{
+    font-size:0.9rem;
+    color:var(--primary);
+    margin-bottom:15px;
+    font-weight:500;
+    letter-spacing:1px;
+    opacity:0.9;
+}
+
 /* Nombre del curso */
 .course-card h3{
     font-size:1.2rem;
@@ -654,4 +663,98 @@
     margin-top:20px;
     font-size:0.9rem;
     line-height:1.5;
+}
+/* ===== CONTACT PRO ===== */
+
+.contact-title{
+    font-size:2rem;
+    text-align:center;
+    margin-bottom:10px;
+}
+
+.contact-subtitle{
+    text-align:center;
+    opacity:0.7;
+    margin-bottom:40px;
+}
+
+.contact-grid{
+    display:grid;
+    gap:20px;
+    max-width:700px;
+    margin:0 auto;
+}
+
+.contact-card{
+    background:linear-gradient(145deg, rgba(20,20,30,0.9), rgba(10,10,15,0.9));
+    border:1px solid rgba(0,242,255,0.15);
+    padding:30px;
+    border-radius:20px;
+    text-align:center;
+    transition:0.4s ease;
+}
+
+.contact-card:hover{
+    transform:translateY(-5px);
+    border:1px solid rgba(0,242,255,0.5);
+    box-shadow:0 0 25px rgba(0,242,255,0.3);
+}
+
+.contact-icon{
+    font-size:2rem;
+    margin-bottom:10px;
+}
+
+.contact-label{
+    display:block;
+    font-size:0.8rem;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:var(--primary);
+    margin-bottom:10px;
+}
+
+.contact-action{
+    display:inline-block;
+    margin-top:10px;
+    padding:12px 25px;
+    border-radius:50px;
+    text-decoration:none;
+    color:white;
+    background:linear-gradient(90deg,var(--primary),var(--secondary));
+    font-weight:600;
+    transition:0.3s;
+}
+
+.contact-action:hover{
+    transform:translateY(-3px);
+    box-shadow:0 0 25px rgba(112,0,255,0.6);
+}
+
+/* Footer pro */
+
+.footer-pro{
+    border-top:1px solid var(--border);
+    padding:30px 5%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:0.8rem;
+    opacity:0.7;
+}
+
+.footer-logo span{
+    color:var(--primary);
+}
+
+@media(max-width:768px){
+    .contact-grid{
+        grid-template-columns:1fr;
+    }
+
+    .footer-pro{
+        flex-direction:column;
+        gap:10px;
+        text-align:center;
+    }
 }
