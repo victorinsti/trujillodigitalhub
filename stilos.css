@@ -782,3 +782,29 @@ section{
         text-align:center;
     }
 }
+/* ===== CALENDARIO CONSULTORÍA ===== */
+/* ===== SECCION CALENDARIO BLANCA ===== */
+
+.calendar-section{
+    background:#507c80;
+    padding:100px 5%;
+}
+
+.calendar-box{
+    max-width:1000px;
+    margin:auto;
+}
+
+.calendar-box h2{
+    color:#111;
+    text-align:center;
+    font-size:2rem;
+    margin-bottom:30px;
+}
+
+.calendar-box iframe{
+    border:none;
+    width:100%;
+    height:650px;
+    border-radius:10px;
+}
