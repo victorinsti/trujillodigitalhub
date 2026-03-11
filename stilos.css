@@ -815,3 +815,19 @@ section{
     height:650px;
     border-radius:10px;
 }
+.calendar-box a{
+    display:inline-block;
+    margin-top:10px;
+    color:#25D366; /* verde WhatsApp */
+    font-weight:600;
+    text-decoration:none;
+    border:2px solid #25D366;
+    padding:8px 18px;
+    border-radius:30px;
+    transition:0.3s ease;
+}
+
+.calendar-box a:hover{
+    background:#25D366;
+    color:white;
+}
