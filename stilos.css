@@ -801,6 +801,13 @@ section{
     font-size:2rem;
     margin-bottom:30px;
 }
+.calendar-box p{
+    color:#111;
+    text-align:center;
+    font-size:1rem;
+    margin-bottom:10px;
+    font-family:'Courier New', Courier, monospace;
+}
 
 .calendar-box iframe{
     border:none;
