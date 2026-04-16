@@ -1,3 +1,4 @@
+
 :root {
             --primary: #00f2ff;
             --secondary: #7000ff;
@@ -830,4 +831,5 @@ section{
 .calendar-box a:hover{
     background:#25D366;
     color:white;
+
 }

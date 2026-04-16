@@ -62,7 +62,7 @@
     <h2 class="convocatorias-title">Temario del Programa</h2>
     <div class="education-grid">
 
-        <div class="education-card reveal">
+       <div class="education-card reveal">
     <div class="education-icon">01</div>
     <div class="education-info">
         <span>Día 1</span>
@@ -135,8 +135,6 @@
         </p>
     </div>
 </div>
-
-    </div>
 </section>
 
 <section class="cta" style="text-align:center; padding:40px 20px;">
@@ -219,27 +217,6 @@ Una vez realizado el pago, completa el siguiente formulario para confirmar tu in
         <button id="modalBtn">Cerrar</button>
     </div>
 </div>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } 
-from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBDAOW-qrvxTcJVM4QNWPQvrmbz8wcAQLM",
-  authDomain: "trujillo-digital-hub.firebaseapp.com",
-  projectId: "trujillo-digital-hub",
-  appId: "1:162799375782:web:2be9127bfeaa613fd6ab67"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-// 🔒 PROTECCIÓN GLOBAL
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    window.location.href = "index.html";
-  }
-});
-</script>
 </body>
 </html>

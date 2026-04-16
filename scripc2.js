@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
     
     // 1. LÓGICA DEL CURSOR PERSONALIZADO

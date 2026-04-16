@@ -1,3 +1,4 @@
+
 // ===============================
 // MODAL PROFESIONAL
 // ===============================
@@ -167,5 +168,6 @@ const codigo = form.querySelector('[name="codigo_curso"]').value;
             }
         });
     });
+
 
 });
