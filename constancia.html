@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Constancia | Trujillo Digital Hub</title>
+
+<style>
+body{
+    margin:0;
+    font-family: 'Segoe UI', sans-serif;
+    background: radial-gradient(circle at top, #0a0a0a, #000);
+    color:white;
+}
+
+/* CONTENEDOR */
+.contenedor{
+    max-width:500px;
+    margin:80px auto;
+    padding:40px;
+    border-radius:20px;
+    background: rgba(255,255,255,0.03);
+    border:1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    box-shadow:0 0 40px rgba(0,242,255,0.2);
+    text-align:center;
+}
+
+/* TITULOS */
+h1{
+    font-size:1.5rem;
+    margin-bottom:10px;
+    color:#00f2ff;
+}
+
+h2{
+    margin:20px 0;
+}
+
+/* INFO */
+.info{
+    text-align:left;
+    margin-top:20px;
+}
+
+.info p{
+    margin:10px 0;
+    font-size:0.95rem;
+    opacity:0.9;
+}
+
+.info strong{
+    color:#00f2ff;
+}
+
+/* ESTADO */
+.valida{
+    color:#00ff88;
+    font-weight:bold;
+}
+
+.error{
+    color:red;
+    text-align:center;
+}
+
+/* BOTON */
+.btn{
+    margin-top:25px;
+    padding:12px 20px;
+    border:none;
+    border-radius:10px;
+    background:linear-gradient(90deg,#00f2ff,#7000ff);
+    color:black;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.btn:hover{
+    transform:scale(1.05);
+}
+.logo{
+    display:block;
+    margin:40px auto 20px;
+    max-width:220px;
+    filter: drop-shadow(0 0 15px #00f2ff);
+}
+</style>
+</head>
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } 
+from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBDAOW-qrvxTcJVM4QNWPQvrmbz8wcAQLM",
+  authDomain: "trujillo-digital-hub.firebaseapp.com",
+  projectId: "trujillo-digital-hub",
+  appId: "1:162799375782:web:2be9127bfeaa613fd6ab67"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+// 🔒 SOLO SI ESTÁ LOGUEADO
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    window.location.href = "sesion.html";
+  }
+});
+
+</script>
+<body>
+
+<div class="contenedor" id="contenedor">
+<img src="LOGO OFICIAL TRUJILLO DIGITAL HUB.png" class="logo">
+    <h1>TRUJILLO DIGITAL HUB</h1>
+    <p>✔ Verificación Oficial de Constancia</p>
+
+    <h2>Constancia de Asistencia</h2>
+
+    <div id="estado"></div>
+
+    <div class="info">
+        <p><strong>Nombre:</strong> <span id="nombre"></span></p>
+        <p><strong>Curso:</strong> <span id="curso"></span></p>
+        <p><strong>Cargo:</strong> <span id="cargo"></span></p>
+        <p><strong>Calificación:</strong> <span id="calificacion"></span></p>
+<p><strong>Instructor:</strong> <span id="instructor"></span></p>
+        <p><strong>Horas:</strong> <span id="horas"></span></p>
+        <p><strong>Inicio:</strong> <span id="inicio"></span></p>
+        <p><strong>Término:</strong> <span id="termino"></span></p>
+    </div>
+
+    <button class="btn" onclick="window.location.href='index.html#verificarc'">
+    Volver al inicio
+</button>
+
+</div>
+
+    <script>
+       // ===== OBTENER CODIGO =====
+const urlParams = new URLSearchParams(window.location.search);
+const codigo = urlParams.get("codigo");
+
+// ===== BASE DE DATOS LOCAL =====
+const constancias = {
+
+    
+    "2222222222":{
+nombre:"Aqui aparecerá tu nombre",
+curso:"En está seccion aparecera el curso que tomaste",
+cargo:"Alumno",
+calificacion:"Aqui aparecera la calificación obtenida",
+instructor: "Victor Samuel Medina Trujillo",
+horas:"Total de horas cursadas",
+inicio:" Fecha de inicio del curso",
+termino:" Fecha de fin del curso"
+},
+    "0000000000":{
+nombre:"Victor Samuel Medina Trujillo",
+curso:"Como utilizar la IA en tu negocio",
+cargo:"instructor",
+calificacion:"10",
+horas:"5 horas totales",
+inicio:" 16/02/26",
+termino:" 20/02/26",
+instructor: "Victor Samuel Medina Trujillo"
+},
+"5366413396":{
+nombre:"Thelma Isabel Vergara Hernandez	",
+curso:"Como utilizar la IA en tu negocio",
+cargo:"Alumno",
+calificacion:"10",
+horas:"5 horas totales",
+inicio:" 16/02/26",
+termino:" 20/02/26",
+instructor: "Victor Samuel Medina Trujillo"
+},
+"5366413398":{
+nombre:"María Elizabeth Cruz Reyes",
+curso:"Como utilizar la IA en tu negocio",
+cargo:"Alumno",
+calificacion:"10",
+horas:"5 horas totales",
+inicio:" 16/02/26",
+termino:" 20/02/26",
+instructor: "Victor Samuel Medina Trujillo"
+},
+
+"5366413399":{
+nombre:"Perla Del Carmen Silva Ortiz",
+curso:"Como utilizar la IA en tu negocio",
+cargo:"Alumno",
+calificacion:"9",
+horas:"5 horas totales",
+inicio:" 16/02/26",
+termino:" 20/02/26",
+instructor: "Victor Samuel Medina Trujillo"
+},
+
+"5366413404":{
+nombre:"Laura Patricia Torres Rodriguez",
+curso:"Como utilizar la IA en tu negocio",
+cargo:"Alumno",
+calificacion:"8",
+horas:"5 horas totales",
+inicio:" 16/02/26",
+termino:" 20/02/26",
+instructor: "Victor Samuel Medina Trujillo"
+},
+
+"5366413406":{
+nombre:"Angelica Celia Hoyos Arellano",
+curso:"Como utilizar la IA en tu negocio",
+cargo:"Alumno",
+calificacion:"10",
+horas:"5 horas totales",
+inicio:" 16/02/26",
+termino:" 20/02/26",
+instructor: "Victor Samuel Medina Trujillo"
+
+},
+"5366413397":{
+nombre:"Erika Joachin Bautista	",
+curso:"Como utilizar la IA en tu negocio",
+cargo:"Alumno",
+calificacion:"10",
+horas:"5 horas totales",
+inicio:" 16/02/26",
+termino:" 20/02/26",
+instructor: "Victor Samuel Medina Trujillo"
+},
+"5366413407":{
+nombre:"Elda Patricia Rodríguez Rodríguez	",
+curso:"Como utilizar la IA en tu negocio",
+cargo:"Alumno",
+calificacion:"10",
+horas:"5 horas totales",
+inicio:" 16/02/26",
+termino:" 20/02/26",
+instructor: "Victor Samuel Medina Trujillo"
+},
+"5366413408":{
+nombre:"Floriana Martínez Zaragoza",
+curso:"Como utilizar la IA en tu negocio",
+cargo:"Alumno",
+calificacion:"9",
+horas:"5 horas totales",
+inicio:" 16/02/26",
+termino:" 20/02/26",
+instructor: "Victor Samuel Medina Trujillo"
+},
+
+"5366413409":{
+nombre:"Jose Arturo Perez Medina	",
+curso:"Como utilizar la IA en tu negocio",
+cargo:"Alumno",
+calificacion:"10",
+horas:"5 horas totales",
+inicio:" 16/02/26",
+termino:" 20/02/26",
+instructor: "Victor Samuel Medina Trujillo"
+},
+
+"AND2026-0000" : {
+nombre:"Victor Samuel Medina Trujillo",
+curso:"Activa Tu Negocio Digital en 3 Días",
+cargo:"Instructor",
+calificacion:"10",
+horas:"3",
+inicio:" 3/03/26",
+termino:" 5/03/26",
+instructor: "Victor Samuel Medina Trujillo"
+},
+    "AND2026-37482" : {
+nombre:"Ilse Cárdenas Ascanio	",
+curso:"Activa Tu Negocio Digital en 3 Días",
+cargo:"Alumno",
+calificacion:"9",
+horas:"3",
+inicio:" 3/03/26",
+termino:" 5/03/26",
+instructor: "Victor Samuel Medina Trujillo"
+},
+     "AND2026-94732" : {
+nombre:"Tania Yaritzel Hernandez Calderon	",
+curso:"Activa Tu Negocio Digital en 3 Días",
+cargo:"Alumno",
+calificacion:"9",
+horas:"3",
+inicio:" 3/03/26",
+termino:" 5/03/26",
+instructor: "Victor Samuel Medina Trujillo"
+},
+    "AND2026-27591" : {
+nombre:"Elda Patricia Rodriguez Rodriguez",
+curso:"Activa Tu Negocio Digital en 3 Días",
+cargo:"Alumno",
+calificacion:"9",
+horas:"3",
+inicio:" 3/03/26",
+termino:" 5/03/26",
+instructor: "Victor Samuel Medina Trujillo"
+},
+     "AND2026-38904" : {
+nombre:"Floriana Martínez Zaragoza",
+curso:"Activa Tu Negocio Digital en 3 Días",
+cargo:"Alumno",
+calificacion:"9",
+horas:"3",
+inicio:" 3/03/26",
+termino:" 5/03/26",
+instructor: "Victor Samuel Medina Trujillo"
+},
+    "AND2026-72850" : {
+nombre:"Karen Jazmin Miramon Barrales",
+curso:"Activa Tu Negocio Digital en 3 Días",
+cargo:"Alumno",
+calificacion:"9",
+horas:"3",
+inicio:" 3/03/26",
+termino:" 5/03/26",
+instructor: "Victor Samuel Medina Trujillo"
+},
+     "AND2026-61429" : {
+nombre:"Karla Graciela Alor Cruz",
+curso:"Activa Tu Negocio Digital en 3 Días",
+cargo:"Alumno",
+calificacion:"7",
+horas:"3",
+inicio:" 3/03/26",
+termino:" 5/03/26",
+instructor: "Victor Samuel Medina Trujillo"
+},
+    "AND2026-70396" : {
+nombre:"Lucia Fabrina Romero Martínez",
+curso:"Activa Tu Negocio Digital en 3 Días",
+cargo:"Alumno",
+calificacion:"7",
+horas:"3",
+inicio:" 3/03/26",
+termino:" 5/03/26",
+instructor: "Victor Samuel Medina Trujillo"
+},
+     "AND2026-70402" : {
+nombre:"Maria Soledad Ordoñez Garcia",
+curso:"Activa Tu Negocio Digital en 3 Días",
+cargo:"Alumno",
+calificacion:"10",
+horas:"3",
+inicio:" 3/03/26",
+termino:" 5/03/26",
+instructor: "Victor Samuel Medina Trujillo"
+},
+     "AND2026-26945" : {
+nombre:"Denisse Vaughan Vera",
+curso:"Activa Tu Negocio Digital en 3 Días",
+cargo:"Alumno",
+calificacion:"7",
+horas:"3",
+inicio:" 3/03/26",
+termino:" 5/03/26",
+instructor: "Victor Samuel Medina Trujillo"
+},
+    "AND2026-70398" : {
+nombre:"Jairo Jesus Alegria Cadena	",
+curso:"Activa Tu Negocio Digital en 3 Días",
+cargo:"Alumno",
+calificacion:"7",
+horas:"3",
+inicio:" 3/03/26",
+termino:" 5/03/26",
+instructor: "Victor Samuel Medina Trujillo"
+},
+     "AND2026-70400" : {
+nombre:"Iris Elizabeth Poblete Alvarado	",
+curso:"Activa Tu Negocio Digital en 3 Días",
+cargo:"Alumno",
+calificacion:"9",
+horas:"3",
+inicio:" 3/03/26",
+termino:" 5/03/26",
+instructor: "Victor Samuel Medina Trujillo"
+},
+     "AND2026-70399" : {
+nombre:"Amayrani Esteban Hernández 	",
+curso:"Activa Tu Negocio Digital en 3 Días",
+cargo:"Alumno",
+calificacion:"10",
+horas:"3",
+inicio:" 3/03/26",
+termino:" 5/03/26",
+instructor: "Victor Samuel Medina Trujillo"
+},
+
+     "AND2026-59367" : {
+nombre:"María Elizabeth Cruz Reyes		",
+curso:"Activa Tu Negocio Digital en 3 Días",
+cargo:"Alumno",
+calificacion:"7",
+horas:"3",
+inicio:" 3/03/26",
+termino:" 5/03/26",
+instructor: "Victor Samuel Medina Trujillo"
+},
+
+     "ND2026-000" : {
+nombre:"Victor Samuel Medina Trujillo",
+curso:"Como Iniciar Un Negocio Digital Desde Cero",
+cargo:"Instructor",
+calificacion:"10",
+horas:"6",
+inicio:" 9/03/26",
+termino:" 13/03/26",
+instructor: "Victor Samuel Medina Trujillo"
+},
+
+    "ND2026-001" : {
+nombre:"Jairo Jesus Alegria Cadena",
+curso:"Como Iniciar Un Negocio Digital Desde Cero",
+cargo:"Alumno",
+calificacion:"9",
+horas:"6",
+inicio:" 9/03/26",
+termino:" 13/03/26",
+instructor: "Victor Samuel Medina Trujillo"
+},
+    "ND2026-002" : {
+nombre:"Floriana Martínez Zaragoza",
+curso:"Como Iniciar Un Negocio Digital Desde Cero",
+cargo:"Alumno",
+calificacion:"10",
+horas:"6",
+inicio:" 9/03/26",
+termino:" 13/03/26",
+instructor: "Victor Samuel Medina Trujillo"
+},
+     "ND2026-003" : {
+nombre:"Elda Patricia Rodriguez Rodriguez",
+curso:"Como Iniciar Un Negocio Digital Desde Cero",
+cargo:"Alumno",
+calificacion:"10",
+horas:"6",
+inicio:" 9/03/26",
+termino:" 13/03/26",
+instructor: "Victor Samuel Medina Trujillo"
+},
+     "ND2026-004" : {
+nombre:"Erika Joachin Bautista",
+curso:"Como Iniciar Un Negocio Digital Desde Cero",
+cargo:"Alumno",
+calificacion:"10",
+horas:"6",
+inicio:" 9/03/26",
+termino:" 13/03/26",
+instructor: "Victor Samuel Medina Trujillo"
+},
+
+     "ND2026-005" : {
+nombre:"Clara Luz Morales",
+curso:"Como Iniciar Un Negocio Digital Desde Cero",
+cargo:"Alumno",
+calificacion:"10",
+horas:"6",
+inicio:" 9/03/26",
+termino:" 13/03/26",
+instructor: "Victor Samuel Medina Trujillo"
+},
+
+};
+
+     // ===== VALIDAR Y MOSTRAR =====
+if (codigo && constancias[codigo]) {
+
+    const data = constancias[codigo];
+
+    document.getElementById("estado").innerHTML =
+        "<p class='valida'>✔ Constancia válida</p>";
+
+    document.getElementById("nombre").textContent = data.nombre;
+    document.getElementById("curso").textContent = data.curso;
+    document.getElementById("cargo").textContent = data.cargo;
+    document.getElementById("calificacion").textContent = data.calificacion;
+    document.getElementById("instructor").textContent = data.instructor;
+    document.getElementById("horas").textContent = data.horas;
+    document.getElementById("inicio").textContent = data.inicio;
+    document.getElementById("termino").textContent = data.termino;
+
+} else {
+
+    document.getElementById("contenedor").innerHTML = `
+        <h2 class="error">❌ Constancia no encontrada</h2>
+        <button class="btn" onclick="window.location.href='index.html#verificarc'">
+            Volver al inicio
+        </button>
+    `;
+
+}
+</script>
+
+</body>
+</html>

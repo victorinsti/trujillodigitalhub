@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Mi Panel</title>
+<style>
+body {
+  background:#0a0a0a;
+  color:white;
+  font-family:sans-serif;
+  text-align:center;
+}
+.card {
+  background:#111;
+  margin:20px auto;
+  padding:20px;
+  border-radius:10px;
+  width:300px;
+}
+button {
+  padding:10px;
+  border:none;
+  background:#00f2ff;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<h1>📚 Mis Cursos</h1>
+<div id="cursos"></div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } 
+from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
+
+import { 
+  getFirestore, 
+  doc, 
+  getDoc 
+} from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSy...",
+  authDomain: "trujillo-digital-hub.firebaseapp.com",
+  projectId: "trujillo-digital-hub",
+  appId: "1:..."
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+onAuthStateChanged(auth, async (user) => {
+
+  if (!user) {
+    window.location.href = "sesion.html";
+    return;
+  }
+
+  const docRef = doc(db, "usuarios", user.uid);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+
+    const data = docSnap.data();
+    const cursosDiv = document.getElementById("cursos");
+
+    data.cursos.forEach(curso => {
+
+      cursosDiv.innerHTML += `
+        <div class="card">
+          <h3>${curso.curso}</h3>
+          <button onclick="verConstancia('${curso.constancia}')">
+            Ver constancia
+          </button>
+        </div>
+      `;
+
+    });
+
+  }
+
+});
+
+// 🔥 abrir constancia
+window.verConstancia = function(codigo){
+  window.location.href = "constancia.html?codigo=" + codigo;
+}
+
+</script>
+
+</body>
+</html>
