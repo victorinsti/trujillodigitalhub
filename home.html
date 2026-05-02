@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <link rel="stylesheet" href="estilosreg.css">
+<body>
+
+<h1>Bienvenido 👨‍💻</h1>
+<button onclick="logout()">Cerrar sesión</button>
+
+<script type="module">
+    
+
+// 🔥 IMPORTAR FIREBASE
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+import { 
+  getAuth, 
+  onAuthStateChanged, 
+  signOut 
+} from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
+
+// 🔐 CONFIGURACIÓN (la tuya)
+const firebaseConfig = {
+  apiKey: "AIzaSyBDAOW-qrvxTcJVM4QNWPQvrmbz8wcAQLM",
+  authDomain: "trujillo-digital-hub.firebaseapp.com",
+  projectId: "trujillo-digital-hub",
+  storageBucket: "trujillo-digital-hub.firebasestorage.app",
+  messagingSenderId: "162799375782",
+  appId: "1:162799375782:web:2be9127bfeaa613fd6ab67"
+};
+
+// 🚀 Inicializar Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+// 🔒 PROTEGER LA PÁGINA
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("Usuario logueado:", user.email);
+  } else {
+    // ❌ Si NO hay sesión → lo manda al login
+    window.location.href = "index.html";
+  }
+});
+
+// 🔓 LOGOUT
+window.logout = function () {
+  signOut(auth)
+    .then(() => {
+      alert("Sesión cerrada ✅");
+      window.location.href = "index.html";
+    })
+    .catch((error) => {
+      alert("Error al cerrar sesión");
+      console.error(error);
+    });
+};
+
+</script>
+
+</body>
+</html>
