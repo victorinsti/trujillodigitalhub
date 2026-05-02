@@ -104,12 +104,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// 🔒 SOLO SI ESTÁ LOGUEADO
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    window.location.href = "sesion.html";
-  }
-});
+
 
 </script>
 <body>

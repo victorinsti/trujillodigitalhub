@@ -392,16 +392,15 @@
             updateCount();
         }
        
-function redirigirConstancia(){
-
-    let codigo = document.getElementById("codigoConstancia").value.trim();
-
-    if(codigo){
-        window.location.href = "constancia.html?codigo=" + codigo;
-    } else {
-        alert("Ingresa un código válido");
+function redirigirConstancia() {
+    const codigo = document.getElementById("codigoConstancia").value;
+    
+    if (!codigo) {
+        alert("Ingresa un código");
+        return;
     }
 
+    window.location.href = `constancia.html?codigo=${codigo}`;
 }
 
 function abrirModal(e){
