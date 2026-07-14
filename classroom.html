@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>TDH Classroom - Conectado</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --primary:#2563eb;
+    --accent:#7c3aed;
+    --bg:#0f172a;
+}
+
+body{
+    margin:0;
+    font-family:'Poppins',sans-serif;
+    background:var(--bg);
+    color:white;
+}
+
+nav{
+    background:rgba(30,41,59,.8);
+    backdrop-filter:blur(10px);
+    padding:15px 30px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid rgba(255,255,255,.1);
+}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:30px 20px;
+}
+
+.banner{
+    background:linear-gradient(135deg,#1e40af,#7c3aed);
+    border-radius:18px;
+    padding:40px;
+    margin-bottom:25px;
+}
+
+.main-grid{
+    display:grid;
+    grid-template-columns:280px 1fr;
+    gap:25px;
+}
+
+.card{
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:16px;
+    padding:20px;
+    margin-bottom:20px;
+}
+
+.card-title{
+    color:#94a3b8;
+    font-size:.8rem;
+    text-transform:uppercase;
+    margin-bottom:12px;
+    font-weight:700;
+}
+
+#filtroClase{
+    width:100%;
+    padding:12px;
+    background:#1e293b;
+    border:1px solid #334155;
+    border-radius:10px;
+    color:white;
+}
+
+.btn{
+    background:var(--primary);
+    border:none;
+    color:white;
+    padding:12px 20px;
+    border-radius:10px;
+    font-weight:600;
+    cursor:pointer;
+}
+
+textarea{
+    width:100%;
+    box-sizing:border-box;
+    background:#0f172a;
+    border:1px solid #334155;
+    color:white;
+    border-radius:10px;
+    padding:12px;
+    margin-bottom:12px;
+}
+
+.announcement{
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:14px;
+    padding:20px;
+    margin-bottom:15px;
+}
+
+.avatar{
+    width:42px;
+    height:42px;
+    background:#2563eb;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+}
+
+@media(max-width:900px){
+    .main-grid{
+        grid-template-columns:1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <div style="font-size:1.2rem;font-weight:700;">
+        TDH <span style="color:#60a5fa;">Classroom</span>
+    </div>
+
+    <div id="user-info" style="color:#94a3b8;">
+        Conectado
+    </div>
+</nav>
+
+<div class="container">
+
+    <div class="banner">
+        <h1 id="titulo-clase">Selecciona una clase</h1>
+        <p id="subtitulo-clase">
+            Bienvenido a tu aula virtual
+        </p>
+    </div>
+
+    <div class="main-grid">
+
+        <aside>
+
+            <div class="card">
+                <div class="card-title">Seleccionar clase</div>
+
+                <select id="filtroClase">
+                    <option value="">Cargando...</option>
+                </select>
+            </div>
+
+            <div class="card">
+
+                <div class="card-title">
+                    Compañeros
+                </div>
+
+                <div id="alumnos-list"></div>
+
+            </div>
+
+        </aside>
+
+        <main>
+
+            <div class="card" id="area-publicar">
+
+    <div class="card-title">
+        Crear publicación
+    </div>
+
+    <select id="tipoPublicacion" style="
+        width:100%;
+        padding:12px;
+        margin-bottom:12px;
+        background:#1e293b;
+        color:white;
+        border:1px solid #334155;
+        border-radius:10px;
+    ">
+        <option value="Anuncio">📢 Anuncio</option>
+        <option value="Tarea">📝 Tarea</option>
+        <option value="Proyecto">🚀 Proyecto</option>
+        <option value="Examen">📚 Examen</option>
+        <option value="Calificación">🏆 Calificación</option>
+    </select>
+
+    <input
+        type="text"
+        id="tituloPost"
+        placeholder="Título..."
+        style="
+            width:100%;
+            box-sizing:border-box;
+            padding:12px;
+            margin-bottom:12px;
+            background:#0f172a;
+            border:1px solid #334155;
+            border-radius:10px;
+            color:white;
+        "
+    >
+
+    <textarea
+        id="postContent"
+        rows="5"
+        placeholder="Descripción..."
+    ></textarea>
+
+    <input
+        type="number"
+        id="calificacionInput"
+        placeholder="Calificación (opcional)"
+        style="
+            width:100%;
+            box-sizing:border-box;
+            padding:12px;
+            margin-bottom:12px;
+            background:#0f172a;
+            border:1px solid #334155;
+            border-radius:10px;
+            color:white;
+        "
+    >
+
+    <button class="btn" id="btnPublicar">
+        Publicar
+    </button>
+
+</div>
+
+            <div id="feed-anuncios"></div>
+
+        </main>
+
+    </div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+import {
+    getFirestore,
+    collection,
+    getDocs,
+    updateDoc,
+    doc,
+    addDoc,
+    query,
+    where,
+    deleteDoc
+}
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyCQa5lpfZ2owUu47CBO6Pe5-wOymUX7wa0",
+    authDomain: "campusconnect-9ac9c.firebaseapp.com",
+    projectId: "campusconnect-9ac9c"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+let alumnosData = [];
+let claseActual = "";
+
+const usuario = JSON.parse(localStorage.getItem("usuarioTDH")) || {
+    nombre:"Invitado",
+    rol:"alumno"
+};
+
+document.getElementById("user-info").textContent =
+    usuario.nombre;
+
+if(usuario.rol !== "admin"){
+    document.getElementById("area-publicar").style.display = "none";
+}
+
+window.irAlClassroom = () => {
+
+    if(alumnoLogueado){
+
+        localStorage.setItem(
+            "usuarioTDH",
+            JSON.stringify({
+                nombre: alumnoLogueado[0].nombre,
+                matricula: alumnoLogueado[0].matricula,
+                rol: "alumno"
+            })
+        );
+
+    }else{
+
+        localStorage.setItem(
+            "usuarioTDH",
+            JSON.stringify({
+                nombre: "Prof. Trujillo",
+                rol: "admin"
+            })
+        );
+
+    }
+
+    window.location.href = "classroom.html";
+
+};
+
+document
+.getElementById("filtroClase")
+.addEventListener("change", async e => {
+
+    claseActual = e.target.value;
+
+    if(!claseActual) return;
+
+    document.getElementById("titulo-clase")
+    .textContent = claseActual;
+
+    cargarAlumnos();
+    cargarAnuncios();
+
+});
+
+function cargarAlumnos(){
+
+    const compañeros = alumnosData.filter(
+        a => a.materia === claseActual
+    );
+
+    const list =
+        document.getElementById("alumnos-list");
+
+    list.innerHTML = "";
+
+    // EVITAR NOMBRES DUPLICADOS
+    const nombresUnicos =
+        [...new Set(
+            compañeros.map(c => c.nombre)
+        )];
+
+    nombresUnicos.forEach(nombre => {
+
+        list.innerHTML += `
+            <div style="
+                display:flex;
+                align-items:center;
+                gap:10px;
+                margin-bottom:10px;
+            ">
+
+                <div style="
+                    width:10px;
+                    height:10px;
+                    border-radius:50%;
+                    background:#10b981;
+                "></div>
+
+                ${nombre}
+
+            </div>
+        `;
+
+    });
+
+}
+
+async function cargarAnuncios(){
+
+    const feed =
+        document.getElementById("feed-anuncios");
+
+    feed.innerHTML = "";
+
+    const q = query(
+        collection(db,"classroom_posts"),
+        where("clase","==",claseActual),
+        orderBy("fecha","desc")
+    );
+
+    const snap = await getDocs(q);
+
+    if(snap.empty){
+
+        feed.innerHTML = `
+            <p style="color:#94a3b8;">
+                No hay publicaciones todavía.
+            </p>
+        `;
+
+        return;
+    }
+
+    snap.forEach(doc => {
+
+        const d = doc.data();
+
+        let icono = "📢";
+
+        if(d.tipo === "Tarea") icono = "📝";
+        if(d.tipo === "Proyecto") icono = "🚀";
+        if(d.tipo === "Examen") icono = "📚";
+        if(d.tipo === "Calificación") icono = "🏆";
+
+        feed.innerHTML += `
+
+            <div class="announcement">
+
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                    margin-bottom:15px;
+                    flex-wrap:wrap;
+                    gap:10px;
+                ">
+
+                    <div style="
+                        display:flex;
+                        align-items:center;
+                        gap:12px;
+                    ">
+
+                        <div class="avatar">
+                            ${icono}
+                        </div>
+
+                        <div>
+
+                            <div style="
+                                font-size:1rem;
+                                font-weight:700;
+                            ">
+                                ${d.titulo || d.tipo}
+                            </div>
+
+                            <div style="
+                                color:#94a3b8;
+                                font-size:.8rem;
+                            ">
+                                ${d.autor}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div style="
+                        background:#1e293b;
+                        padding:6px 12px;
+                        border-radius:10px;
+                        font-size:.8rem;
+                    ">
+                        ${d.tipo || "Anuncio"}
+                    </div>
+
+                </div>
+
+                <div style="
+                    color:#e2e8f0;
+                    line-height:1.6;
+                    margin-bottom:15px;
+                ">
+                    ${d.contenido}
+                    ${
+    d.tipo === "Tarea"
+    ?
+    `
+    <div style="
+        background:#7c3aed;
+        padding:12px;
+        border-radius:12px;
+        margin-bottom:15px;
+        font-weight:600;
+    ">
+        📝 TAREA ASIGNADA
+    </div>
+    `
+    :
+    ""
+}
+
+${
+    d.tipo === "Proyecto"
+    ?
+    `
+    <div style="
+        background:#2563eb;
+        padding:12px;
+        border-radius:12px;
+        margin-bottom:15px;
+        font-weight:600;
+    ">
+        🚀 PROYECTO ASIGNADO
+    </div>
+    `
+    :
+    ""
+}
+                </div>
+
+                ${
+                    d.calificacion
+                    ?
+                    `
+                    <div style="
+                        display:inline-block;
+                        background:#2563eb;
+                        padding:8px 14px;
+                        border-radius:10px;
+                        font-weight:700;
+                        margin-bottom:15px;
+                    ">
+                        Calificación: ${d.calificacion}
+                    </div>
+                    `
+                    :
+                    ""
+                }
+
+                <div style="
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:15px;
+">
+
+    ${
+        usuario.rol !== "admin"
+        &&
+        (
+            d.tipo === "Tarea"
+            ||
+            d.tipo === "Proyecto"
+        )
+        ?
+        `
+        <button
+            class="btn"
+            onclick="entregarTarea('${doc.id}')"
+        >
+            📎 Entregar
+        </button>
+        `
+        :
+        ""
+    }
+
+    ${
+        usuario.rol === "admin"
+        ?
+        `
+        <button
+            class="btn"
+            onclick="verEntregas('${doc.id}')"
+        >
+            📂 Entregas
+        </button>
+        `
+        :
+        ""
+    }
+
+    <button
+        class="btn"
+        onclick="abrirComentarios('${doc.id}')"
+    >
+        💬 Comentarios
+    </button>
+
+</div>
+
+<div
+    id="comentarios-${doc.id}"
+    style="
+        margin-top:10px;
+        background:#0f172a;
+        padding:12px;
+        border-radius:12px;
+        display:none;
+    "
+></div>
+
+            </div>
+
+        `;
+
+    });
+
+}
+
+document
+.getElementById("btnPublicar")
+.addEventListener("click", async () => {
+
+    const contenido =
+        document.getElementById("postContent").value;
+
+    const titulo =
+        document.getElementById("tituloPost").value;
+
+    const tipo =
+        document.getElementById("tipoPublicacion").value;
+
+    const calificacion =
+        document.getElementById("calificacionInput").value;
+
+    if(!claseActual){
+
+        alert("Selecciona una clase");
+        return;
+
+    }
+
+    if(!contenido.trim()){
+
+        alert("Escribe contenido");
+        return;
+
+    }
+
+    await addDoc(
+        collection(db,"classroom_posts"),
+        {
+            clase: claseActual,
+            titulo: titulo,
+            contenido: contenido,
+            tipo: tipo,
+            calificacion: calificacion || null,
+            autor: usuario.nombre,
+            fecha: serverTimestamp()
+        }
+    );
+
+    document.getElementById("postContent").value = "";
+    document.getElementById("tituloPost").value = "";
+    document.getElementById("calificacionInput").value = "";
+
+    cargarAnuncios();
+
+});
+
+async function inicializar(){
+
+    const snap = await getDocs(collection(db,"alumnos"));
+
+    alumnosData = snap.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+    }));
+
+    console.log("USUARIO:", usuario);
+    console.log("ALUMNOS:", alumnosData);
+
+    const select =
+        document.getElementById("filtroClase");
+
+    select.innerHTML =
+        '<option value="">Selecciona...</option>';
+
+    let materias = [];
+
+    // ADMIN VE TODO
+    if(usuario.rol === "admin"){
+
+        materias = [
+            ...new Set(
+                alumnosData.map(a => a.materia)
+            )
+        ];
+
+    }else{
+
+        // FILTRAR POR MATRICULA
+        materias = [
+            ...new Set(
+                alumnosData
+                .filter(a =>
+                    String(a.matricula).trim() ===
+                    String(usuario.matricula).trim()
+                )
+                .map(a => a.materia)
+            )
+        ];
+
+    }
+
+    console.log("MATERIAS:", materias);
+
+    if(materias.length === 0){
+
+        select.innerHTML =
+            '<option value="">No tienes clases</option>';
+
+        return;
+    }
+
+    materias.forEach(materia => {
+
+        const option =
+            document.createElement("option");
+
+        option.value = materia;
+        option.textContent = materia;
+
+        select.appendChild(option);
+
+    });
+    if(materias.length > 0){
+
+    claseActual = materias[0];
+
+    select.value = materias[0];
+
+    document.getElementById("titulo-clase")
+    .textContent = materias[0];
+
+    cargarAlumnos();
+
+    cargarAnuncios();
+
+}
+
+}
+
+inicializar();
+window.verEntregas = async (idPublicacion) => {
+
+    const q = query(
+        collection(db,"entregas"),
+        where("publicacionId","==",idPublicacion)
+    );
+
+    const snap = await getDocs(q);
+
+    if(snap.empty){
+
+        alert("No hay entregas todavía");
+        return;
+
+    }
+
+    let texto = "ENTREGAS:\n\n";
+
+    snap.forEach(doc => {
+
+        const d = doc.data();
+
+        texto += `
+Alumno: ${d.alumno}
+Entrega: ${d.comentario}
+
+`;
+
+    });
+
+    alert(texto);
+
+};
+
+window.entregarTarea = async (idPublicacion) => {
+
+    if(usuario.rol === "admin"){
+
+        alert("Los profesores no entregan tareas");
+        return;
+
+    }
+
+    const comentario = prompt(
+        "Escribe tu entrega o enlace:"
+    );
+
+    if(!comentario) return;
+
+    await addDoc(
+        collection(db,"entregas"),
+        {
+            publicacionId: idPublicacion,
+            alumno: usuario.nombre,
+            matricula: usuario.matricula,
+            comentario: comentario,
+            fecha: serverTimestamp()
+        }
+    );
+
+    alert("Entrega enviada");
+
+};
+
+window.verEntregas = async (idPublicacion) => {
+
+    const q = query(
+        collection(db,"entregas"),
+        where("publicacionId","==",idPublicacion)
+    );
+
+    const snap = await getDocs(q);
+
+    if(snap.empty){
+
+        alert("No hay entregas");
+        return;
+
+    }
+
+    let texto = "ENTREGAS:\n\n";
+
+    snap.forEach(doc => {
+
+        const d = doc.data();
+
+        texto += `
+Alumno: ${d.alumno}
+Entrega: ${d.comentario}
+
+`;
+
+    });
+
+    alert(texto);
+
+};
+window.abrirComentarios = async (idPublicacion) => {
+
+    const box =
+        document.getElementById(
+            `comentarios-${idPublicacion}`
+        );
+
+    if(box.style.display === "block"){
+
+        box.style.display = "none";
+        return;
+
+    }
+
+    box.style.display = "block";
+
+    const q = query(
+        collection(db,"comentarios"),
+        where("publicacionId","==",idPublicacion)
+    );
+
+    const snap = await getDocs(q);
+
+    let html = "";
+
+    snap.forEach(doc => {
+
+        const d = doc.data();
+
+        html += `
+            <div style="
+                background:#1e293b;
+                padding:10px;
+                border-radius:10px;
+                margin-bottom:10px;
+            ">
+
+                <strong>${d.usuario}</strong>
+
+                <div style="
+                    margin-top:5px;
+                    color:#cbd5e1;
+                ">
+                    ${d.comentario}
+                </div>
+
+            </div>
+        `;
+
+    });
+
+    html += `
+
+        <textarea
+            id="nuevoComentario-${idPublicacion}"
+            placeholder="Escribe un comentario..."
+            rows="3"
+        ></textarea>
+
+        <button
+            class="btn"
+            onclick="enviarComentario('${idPublicacion}')"
+        >
+            Enviar
+        </button>
+
+    `;
+
+    box.innerHTML = html;
+
+};
+
+window.enviarComentario = async (idPublicacion) => {
+
+    const input =
+        document.getElementById(
+            `nuevoComentario-${idPublicacion}`
+        );
+
+    const texto = input.value;
+
+    if(!texto.trim()) return;
+
+    await addDoc(
+        collection(db,"comentarios"),
+        {
+            publicacionId:idPublicacion,
+            usuario:usuario.nombre,
+            comentario:texto,
+            fecha:serverTimestamp()
+        }
+    );
+
+    abrirComentarios(idPublicacion);
+
+};
+
+window.verEntregas = async (idPublicacion) => {
+
+    const q = query(
+        collection(db,"entregas"),
+        where("publicacionId","==",idPublicacion)
+    );
+
+    const snap = await getDocs(q);
+
+    if(snap.empty){
+
+        alert("No hay entregas");
+        return;
+
+    }
+
+    let texto = "";
+
+    snap.forEach(docSnap => {
+
+        const d = docSnap.data();
+
+        texto += `
+Alumno: ${d.alumno}
+
+Entrega:
+${d.comentario}
+
+---------------------
+
+`;
+
+    });
+
+    alert(texto);
+
+};
+
+window.entregarTarea = async (idPublicacion) => {
+
+    const entrega = prompt(
+        "Escribe tu entrega o pega un enlace:"
+    );
+
+    if(!entrega) return;
+
+    await addDoc(
+        collection(db,"entregas"),
+        {
+            publicacionId:idPublicacion,
+            alumno:usuario.nombre,
+            matricula:usuario.matricula,
+            comentario:entrega,
+            fecha:serverTimestamp()
+        }
+    );
+
+    alert("Tarea entregada");
+
+};
+</script>
+
+</body>
+</html>
