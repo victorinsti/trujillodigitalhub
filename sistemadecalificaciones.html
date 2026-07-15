@@ -152,7 +152,7 @@ input{
     <div class="login-box">
 
         <h2 style="margin-top:0;">
-            Sistema Trujillo
+            Consulta tus calificaciones
         </h2>
 
         <p>
@@ -233,12 +233,40 @@ input{
     <h3>Registrar Nuevo Alumno / Materia</h3>
     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
         <input type="text" id="newNombre" placeholder="Nombre completo">
-        <input type="text" id="newMatricula" placeholder="Matrícula">
-        <input type="text" id="newMateria" placeholder="Materia (ej. Inglés)">
+       <select id="newMateria">
+
+</select>
         <button onclick="registrarAlumno()" class="btn-download" style="background: #10b981;">
             Registrar
         </button>
     </div>
+</div>
+<div class="glass-card" style="background:rgba(255,255,255,.08);margin-bottom:20px;padding:20px;">
+
+    <h3>📚 Administrar Materias</h3>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+
+        <input
+            type="text"
+            id="nuevaMateria"
+            placeholder="Nueva materia">
+
+        <button
+            class="btn-download"
+            style="background:#2563eb;"
+            onclick="crearMateria()">
+
+            Agregar Materia
+
+        </button>
+
+    </div>
+
+    <br>
+
+    <div id="listaMaterias"></div>
+
 </div>
         <table>
 
@@ -345,6 +373,7 @@ import {
     updateDoc,
     doc,
     addDoc,
+    setDoc,
     query,
     where,
     deleteDoc
@@ -352,7 +381,7 @@ import {
 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
-    apiKey:"AIzaSyCQa5lpfZ2owUu47CBO6Pe5-wOymUX7wa0",
+    apiKey: "AIzaSyCQa5lpfZ2owUu47CBO6Pe5-wOymUX7wa0",
     authDomain:"campusconnect-9ac9c.firebaseapp.com",
     projectId:"campusconnect-9ac9c"
 };
@@ -363,6 +392,11 @@ const db = getFirestore(app);
 
 let datosGlobales = [];
 let alumnoLogueado = null;
+// ===== CONFIGURACIÓN DEL ADMINISTRADOR =====
+const ADMIN = {
+    usuario: "Victor",
+    password: "A1VicSam"
+};
 
 async function cargarDatos(){
 
@@ -375,47 +409,182 @@ async function cargarDatos(){
     }));
 
 }
+// ============================
+// CARGAR MATERIAS
+// ============================
+
+async function cargarMaterias(){
+
+    const snap = await getDocs(collection(db,"materias"));
+    console.log("Materias encontradas:", snap.size);
+
+snap.forEach(docu=>{
+    console.log(docu.id, docu.data());
+});
+
+    const select = document.getElementById("newMateria");
+    const lista = document.getElementById("listaMaterias");
+
+    select.innerHTML="";
+    lista.innerHTML="";
+
+    snap.forEach(docu=>{
+
+        const materia = docu.data();
+
+        // Agregar al selector
+        select.innerHTML += `
+            <option value="${materia.nombre}">
+                ${materia.nombre}
+            </option>
+        `;
+
+        // Mostrar en la lista
+        lista.innerHTML += `
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                background:white;
+                color:black;
+                padding:10px;
+                margin-bottom:8px;
+                border-radius:10px;
+            ">
+
+                <strong>${materia.nombre}</strong>
+
+                <button
+                    onclick="eliminarMateria('${docu.id}')"
+                    style="
+                        background:#dc2626;
+                        color:white;
+                        border:none;
+                        padding:8px 12px;
+                        border-radius:8px;
+                        cursor:pointer;
+                    ">
+
+                    Eliminar
+
+                </button>
+
+            </div>
+        `;
+
+    });
+
+}
+// =======================================
+// CREAR MATERIA
+// =======================================
+
+window.crearMateria = async () => {
+
+    const nombre = document
+        .getElementById("nuevaMateria")
+        .value
+        .trim();
+
+    if (nombre === "") {
+
+        alert("Escribe el nombre de la materia.");
+
+        return;
+
+    }
+
+    // Verificar si ya existe
+    const consulta = query(
+        collection(db, "materias"),
+        where("nombre", "==", nombre)
+    );
+
+    const existe = await getDocs(consulta);
+
+    if (!existe.empty) {
+
+        alert("Esa materia ya existe.");
+
+        return;
+
+    }
+
+    await addDoc(
+        collection(db, "materias"),
+        {
+            nombre: nombre
+        }
+    );
+
+    document.getElementById("nuevaMateria").value = "";
+
+    await cargarMaterias();
+
+};
+// =======================================
+// ELIMINAR MATERIA
+// =======================================
+
+window.eliminarMateria = async (id) => {
+
+    if (!confirm("¿Eliminar esta materia?")) {
+
+        return;
+
+    }
+
+    await deleteDoc(
+        doc(db, "materias", id)
+    );
+
+    await cargarMaterias();
+
+};
 
 window.login = async () => {
 
     await cargarDatos();
 
-    const val =
-        document
+    const usuario = document
         .getElementById("userInput")
         .value
         .trim();
 
-    if(val.toLowerCase() === "admin"){
+    // ===== ADMINISTRADOR =====
+    if (usuario === ADMIN.usuario) {
 
-        abrirAdmin();
+        const password = prompt("Contraseña del administrador:");
+
+        if (password === ADMIN.password) {
+
+            abrirAdmin();
+            return;
+
+        }
+
+        alert("Contraseña incorrecta");
         return;
-
     }
 
-    const encontrados =
-        datosGlobales.filter(
-            a =>
-            String(a.matricula).trim()
-            ===
-            String(val).trim()
-        );
+    // ===== ALUMNO =====
+    const encontrados = datosGlobales.filter(a =>
+        String(a.matricula).trim() === usuario
+    );
 
-    if(encontrados.length === 0){
+    if (encontrados.length === 0) {
 
         alert("Matrícula no encontrada");
         return;
 
     }
 
-    // UN SOLO ALUMNO CON MUCHAS MATERIAS
     alumnoLogueado = encontrados;
 
     abrirPortalAlumno();
 
 };
-
-function abrirAdmin(){
+async function abrirAdmin(){
 
     document
     .getElementById("auth-screen")
@@ -424,6 +593,10 @@ function abrirAdmin(){
     document
     .getElementById("panel-admin")
     .style.display = "block";
+
+    await cargarDatos();
+
+    await cargarMaterias();
 
     llenarMaterias();
 
@@ -549,22 +722,23 @@ function renderTabla(datos){
 
 function llenarMaterias(){
 
-    const select =
-        document.getElementById("filtroMateria");
+    const filtro = document.getElementById("filtroMateria");
 
-    const materias =
-        [...new Set(
-            datosGlobales.map(a => a.materia)
-        )];
+    const materias = [...new Set(
+        datosGlobales
+            .map(a => a.materia)
+            .filter(Boolean)
+    )].sort();
 
-    select.innerHTML =
-        `<option value="Todas">
+    filtro.innerHTML = `
+        <option value="Todas">
             Todas las materias
-        </option>`;
+        </option>
+    `;
 
     materias.forEach(m => {
 
-        select.innerHTML += `
+        filtro.innerHTML += `
             <option value="${m}">
                 ${m}
             </option>
@@ -573,7 +747,6 @@ function llenarMaterias(){
     });
 
 }
-
 window.filtrar = () => {
 
     const texto =
@@ -754,7 +927,7 @@ window.generarBoletaPDF = () => {
     doc.line(30, finalY, 85, finalY);
     doc.setFontSize(9);
     doc.setFont("helvetica", "bold");
-    doc.text("ING. VICTOR TRUJILLO", 57.5, finalY + 5, { align: "center" });
+    doc.text("TEC. VICTOR TRUJILLO", 57.5, finalY + 5, { align: "center" });
     doc.setFont("helvetica", "normal");
     doc.setFontSize(8);
     doc.text("Firma del Titular", 57.5, finalY + 10, { align: "center" });
@@ -785,123 +958,119 @@ window.generarBoletaPDF = () => {
 
     doc.save(`Boleta_${alumno.matricula}.pdf`);
 };
-// --- FUNCIÓN PARA CREAR ALUMNO (NUEVA) ---
-window.registrarAlumno = async () => {
+async function generarMatricula() {
 
-    const nombre =
-        document.getElementById("newNombre")
-        .value.trim();
+    while (true) {
 
-    const matricula =
-        document.getElementById("newMatricula")
-        .value.trim();
+        // Genera un número aleatorio de 6 dígitos
+        const numero = Math.floor(Math.random() * 900000) + 100000;
 
-    const materia =
-        document.getElementById("newMateria")
-        .value.trim();
+        const matricula = "TDH" + numero;
 
-    if(!nombre || !matricula || !materia){
-
-        alert("Completa todos los campos");
-        return;
-
-    }
-
-    try{
-
-        // BUSCAR SI YA EXISTE ESA MATRICULA
+        // Verificar que no exista en Firebase
         const q = query(
-            collection(db,"alumnos"),
-            where("matricula","==",matricula)
+            collection(db, "alumnos"),
+            where("matricula", "==", matricula)
         );
 
         const snap = await getDocs(q);
 
-        // VALIDAR NOMBRE DIFERENTE CON MISMA MATRICULA
-        if(!snap.empty){
+        // Si no existe, la usamos
+        if (snap.empty) {
+            return matricula;
+        }
 
-            const alumnoExistente = snap.docs[0].data();
+    }
 
-            if(
-                alumnoExistente.nombre.trim().toLowerCase()
-                !==
-                nombre.trim().toLowerCase()
-            ){
+}
 
-                alert(
-                    "Esta matrícula ya pertenece a otro alumno"
-                );
+// --- FUNCIÓN PARA CREAR ALUMNO (NUEVA) ---
+window.registrarAlumno = async () => {
 
-                return;
+    const nombre = document
+        .getElementById("newNombre")
+        .value
+        .trim();
 
-            }
+    const materia = document
+        .getElementById("newMateria")
+        .value
+        .trim();
 
-            // VALIDAR SI YA TIENE ESA MATERIA
-            const materiaExiste = snap.docs.find(docu =>
-                docu.data().materia.trim().toLowerCase()
-                ===
+    if (!nombre || !materia) {
+
+        alert("Completa todos los campos.");
+        return;
+
+    }
+
+    try {
+
+        // Buscar si el alumno ya existe por nombre
+        const qNombre = query(
+            collection(db, "alumnos"),
+            where("nombre", "==", nombre)
+        );
+
+        const snapNombre = await getDocs(qNombre);
+
+        let matricula;
+
+        if (!snapNombre.empty) {
+
+            // ===== EL ALUMNO YA EXISTE =====
+
+            matricula = snapNombre.docs[0].data().matricula;
+
+            // Verificar que no tenga esa materia
+            const yaTiene = snapNombre.docs.some(docu =>
+                String(docu.data().materia).trim().toLowerCase() ===
                 materia.trim().toLowerCase()
             );
 
-            if(materiaExiste){
+            if (yaTiene) {
 
-                alert(
-                    "El alumno ya tiene registrada esa materia"
-                );
+                alert("El alumno ya está inscrito en esa materia.");
 
                 return;
 
             }
 
-        }else{
+        } else {
 
-            // VALIDAR SI EL NOMBRE YA EXISTE CON OTRA MATRICULA
-            const qNombre = query(
-                collection(db,"alumnos"),
-                where("nombre","==",nombre)
-            );
+            // ===== ALUMNO NUEVO =====
 
-            const snapNombre = await getDocs(qNombre);
-
-            if(!snapNombre.empty){
-
-                alert(
-                    "Ese alumno ya existe con otra matrícula"
-                );
-
-                return;
-
-            }
+            matricula = await generarMatricula();
 
         }
 
-        // CREAR NUEVA MATERIA PARA EL MISMO ALUMNO
+        // Guardar inscripción
         await addDoc(
-            collection(db,"alumnos"),
+            collection(db, "alumnos"),
             {
                 nombre,
                 matricula,
                 materia,
-                p1:0,
-                p2:0,
-                p3:0,
-                promedio:0
+                p1: 0,
+                p2: 0,
+                p3: 0,
+                promedio: 0
             }
         );
 
-        alert("Registro exitoso");
+        alert("Alumno registrado correctamente.");
 
         document.getElementById("newNombre").value = "";
-        document.getElementById("newMatricula").value = "";
-        document.getElementById("newMateria").value = "";
 
-        location.reload();
+        await cargarDatos();
 
-    }catch(error){
+        renderTabla(datosGlobales);
 
-        console.log(error);
+    } catch (error) {
 
-        alert("Error al registrar");
+        console.error(error);
+
+        alert("Error al registrar el alumno.");
 
     }
 
@@ -1034,6 +1203,17 @@ window.unificarAlumnosDuplicados = async () => {
     }
 
 };
+function cerrarSesion(){
+
+    alumnoLogueado = null;
+
+    document.getElementById("panel-admin").style.display = "none";
+    document.getElementById("portal-alumno").style.display = "none";
+    document.getElementById("auth-screen").style.display = "flex";
+
+    document.getElementById("userInput").value = "";
+
+}
 </script>
 
 
