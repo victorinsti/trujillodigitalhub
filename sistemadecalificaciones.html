@@ -862,7 +862,8 @@ window.entrarClassroomAdmin = () => {
 
 window.generarBoletaPDF = () => {
     if (!alumnoLogueado) return;
-
+let logoTDH = new Image();
+logoTDH.src = "LOGO OFICIAL TRUJILLO DIGITAL HUB.png";
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
     const alumno = alumnoLogueado[0];
