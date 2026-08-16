@@ -8,8 +8,6 @@ export async function enviarTelegram(datos){
     const mensaje = `
 🎓 NUEVA INSCRIPCIÓN
 
-━━━━━━━━━━━━━━━━━━━━━━
-
 👦 Alumno:
 ${datos.nombre}
 
@@ -25,7 +23,7 @@ ${datos.correo || "No proporcionado"}
 ━━━━━━━━━━━━━━━━━━━━━━
 
 💻 Programa:
-Talento Digital Junior PLUS
+Creador Digital TDH
 
 📅 Fecha:
 ${fecha.toLocaleDateString("es-MX")}
