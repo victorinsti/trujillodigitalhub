@@ -2,990 +2,435 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>TDH Classroom - Conectado</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TDH Classroom</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-    --primary:#2563eb;
-    --accent:#7c3aed;
-    --bg:#0f172a;
+  --bg:#07111f;--panel:#0d1a2d;--panel2:#111f34;--line:#233653;
+  --text:#f8fafc;--muted:#94a3b8;--blue:#3b82f6;--purple:#8b5cf6;
+  --cyan:#06b6d4;--green:#10b981;--yellow:#f59e0b;--red:#ef4444;
 }
-
-body{
-    margin:0;
-    font-family:'Poppins',sans-serif;
-    background:var(--bg);
-    color:white;
-}
-
-nav{
-    background:rgba(30,41,59,.8);
-    backdrop-filter:blur(10px);
-    padding:15px 30px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    border-bottom:1px solid rgba(255,255,255,.1);
-}
-
-.container{
-    max-width:1100px;
-    margin:auto;
-    padding:30px 20px;
-}
-
-.banner{
-    background:linear-gradient(135deg,#1e40af,#7c3aed);
-    border-radius:18px;
-    padding:40px;
-    margin-bottom:25px;
-}
-
-.main-grid{
-    display:grid;
-    grid-template-columns:280px 1fr;
-    gap:25px;
-}
-
-.card{
-    background:rgba(255,255,255,.05);
-    border:1px solid rgba(255,255,255,.08);
-    border-radius:16px;
-    padding:20px;
-    margin-bottom:20px;
-}
-
-.card-title{
-    color:#94a3b8;
-    font-size:.8rem;
-    text-transform:uppercase;
-    margin-bottom:12px;
-    font-weight:700;
-}
-
-#filtroClase{
-    width:100%;
-    padding:12px;
-    background:#1e293b;
-    border:1px solid #334155;
-    border-radius:10px;
-    color:white;
-}
-
-.btn{
-    background:var(--primary);
-    border:none;
-    color:white;
-    padding:12px 20px;
-    border-radius:10px;
-    font-weight:600;
-    cursor:pointer;
-}
-
-textarea{
-    width:100%;
-    box-sizing:border-box;
-    background:#0f172a;
-    border:1px solid #334155;
-    color:white;
-    border-radius:10px;
-    padding:12px;
-    margin-bottom:12px;
-}
-
-.announcement{
-    background:rgba(255,255,255,.05);
-    border:1px solid rgba(255,255,255,.08);
-    border-radius:14px;
-    padding:20px;
-    margin-bottom:15px;
-}
-
-.avatar{
-    width:42px;
-    height:42px;
-    background:#2563eb;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-weight:700;
-}
-
-@media(max-width:900px){
-    .main-grid{
-        grid-template-columns:1fr;
-    }
-}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 10% 0%,#172554 0,transparent 34%),radial-gradient(circle at 90% 10%,#312e81 0,transparent 28%),var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif;min-height:100vh}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+nav{position:sticky;top:0;z-index:20;background:rgba(7,17,31,.9);backdrop-filter:blur(18px);border-bottom:1px solid var(--line);padding:15px 4%;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.brand{display:flex;align-items:center;gap:11px;font-family:Poppins;font-weight:800;font-size:1.25rem}
+.logo{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,var(--blue),var(--purple));box-shadow:0 10px 25px #0005}
+.user{color:#cbd5e1;font-size:.9rem}.role{padding:6px 10px;border-radius:999px;background:#172554;color:#93c5fd;margin-left:7px}
+.container{max-width:1250px;margin:auto;padding:28px 18px 60px}
+.hero{position:relative;overflow:hidden;padding:34px;border:1px solid #ffffff18;border-radius:25px;background:linear-gradient(135deg,#1d4ed8dd,#6d28d9cc);margin-bottom:22px}
+.hero:after{content:"";position:absolute;width:240px;height:240px;border-radius:50%;right:-70px;top:-110px;background:#ffffff14}
+.hero h1{margin:0 0 8px;font-family:Poppins;font-size:clamp(1.8rem,4vw,2.7rem)}.hero p{margin:0;color:#dbeafe}
+.grid{display:grid;grid-template-columns:285px 1fr;gap:22px}
+.card{background:rgba(13,26,45,.88);border:1px solid var(--line);border-radius:19px;padding:20px;margin-bottom:18px}
+.section-title{font-size:.75rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:800;margin-bottom:13px}
+select,input,textarea{width:100%;border:1px solid #30435f;background:#081426;color:white;border-radius:12px;padding:12px;outline:none}
+select:focus,input:focus,textarea:focus{border-color:#60a5fa;box-shadow:0 0 0 3px #3b82f622}
+textarea{min-height:115px;resize:vertical}
+label{display:block;font-size:.82rem;color:#cbd5e1;margin:0 0 6px;font-weight:600}
+.field{margin-bottom:12px}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{border:0;border-radius:12px;padding:11px 15px;color:white;font-weight:700;background:linear-gradient(135deg,var(--blue),var(--purple));transition:.18s}
+.btn:hover{transform:translateY(-1px);filter:brightness(1.08)}.btn.secondary{background:#1e293b}.btn.green{background:linear-gradient(135deg,#059669,#10b981)}.btn.yellow{background:linear-gradient(135deg,#d97706,#f59e0b)}.btn.red{background:#991b1b}
+.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:13px}
+.student{display:flex;align-items:center;gap:9px;padding:9px 0;color:#dbe4ef;border-bottom:1px solid #ffffff09}.dot{width:9px;height:9px;border-radius:50%;background:var(--green);flex:none}
+.post{background:linear-gradient(180deg,#101e33,#0d192a);border:1px solid var(--line);border-radius:19px;padding:20px;margin-bottom:16px}
+.post-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.post-title{font-family:Poppins;font-size:1.08rem;font-weight:700}.meta{font-size:.77rem;color:var(--muted);margin-top:4px}
+.badge{padding:6px 10px;border-radius:999px;background:#1e293b;color:#cbd5e1;font-size:.72rem;font-weight:800;white-space:nowrap}.badge.task{background:#4c1d95;color:#ddd6fe}.badge.activity{background:#164e63;color:#a5f3fc}.badge.project{background:#1e3a8a;color:#bfdbfe}.badge.exam{background:#78350f;color:#fde68a}.badge.grade{background:#064e3b;color:#a7f3d0}
+.content{white-space:pre-wrap;line-height:1.7;color:#dbe4ef;margin:16px 0}
+.deadline{padding:11px 13px;border-radius:12px;background:#17243a;color:#cbd5e1;font-size:.84rem}.deadline.overdue{background:#3a1720;color:#fecaca}
+.empty{padding:28px;text-align:center;color:var(--muted);border:1px dashed #334155;border-radius:15px}
+.status{margin-top:10px;font-size:.85rem;min-height:20px}.ok{color:#6ee7b7}.err{color:#fca5a5}.hidden{display:none!important}
+.resource{display:inline-flex;align-items:center;gap:7px;color:#bfdbfe;text-decoration:none;padding:9px 12px;border-radius:10px;background:#172554;margin-top:10px}
+.file-chip{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border-radius:10px;background:#17243a;color:#dbeafe;margin-top:8px}
+.modal-wrap{position:fixed;inset:0;z-index:100;background:#020617aa;backdrop-filter:blur(8px);display:grid;place-items:center;padding:18px}
+.modal{width:min(760px,100%);max-height:90vh;overflow:auto;background:#0d1a2d;border:1px solid #334968;border-radius:22px;box-shadow:0 25px 80px #0009;padding:22px}
+.modal-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}.modal h2{font-family:Poppins;margin:0}
+.close{width:38px;height:38px;border:0;border-radius:10px;background:#1e293b;color:white;font-size:1.2rem}
+.submission{padding:16px;border:1px solid var(--line);border-radius:16px;background:#0a1627;margin-bottom:12px}
+.submission-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.grade-box{padding:8px 12px;border-radius:10px;background:#064e3b;color:#a7f3d0;font-weight:800}
+.notice{padding:12px 14px;border-radius:12px;background:#172554;color:#bfdbfe;margin-bottom:12px}
+@media(max-width:850px){.grid{grid-template-columns:1fr}.two{grid-template-columns:1fr}nav{align-items:flex-start;flex-direction:column}}
 </style>
 </head>
-
 <body>
-
 <nav>
-    <div style="font-size:1.2rem;font-weight:700;">
-        TDH <span style="color:#60a5fa;">Classroom</span>
-    </div>
-
-    <div id="user-info" style="color:#94a3b8;">
-        Conectado
-    </div>
+  <div class="brand"><div class="logo">TDH</div><div>Trujillo Digital <span style="color:#60a5fa">Hub</span></div></div>
+  <div class="user" id="userInfo">Cargando...</div>
 </nav>
 
 <div class="container">
+  <section class="hero">
+    <h1 id="classTitle">Selecciona una clase</h1>
+    <p id="classSubtitle">Tu espacio para tareas, actividades, proyectos y calificaciones.</p>
+  </section>
 
-    <div class="banner">
-        <h1 id="titulo-clase">Selecciona una clase</h1>
-        <p id="subtitulo-clase">
-            Bienvenido a tu aula virtual
-        </p>
-    </div>
+  <div class="grid">
+    <aside>
+      <div class="card">
+        <div class="section-title">Mis clases</div>
+        <select id="classSelect"><option value="">Cargando...</option></select>
+      </div>
+      <div class="card">
+        <div class="section-title">Alumnos</div>
+        <div id="students"><div class="empty">Selecciona una clase.</div></div>
+      </div>
+    </aside>
 
-    <div class="main-grid">
+    <main>
+      <section class="card hidden" id="teacherPanel">
+        <div class="section-title">Panel del profesor</div>
+        <div class="field"><label for="postType">Tipo</label>
+          <select id="postType">
+            <option value="Anuncio">📢 Anuncio</option><option value="Tarea">📝 Tarea</option>
+            <option value="Actividad">✏️ Actividad</option><option value="Proyecto">🚀 Proyecto</option>
+            <option value="Examen">📚 Examen</option><option value="Calificación">🏆 Calificación</option>
+          </select>
+        </div>
+        <div class="field"><label for="postTitle">Título</label><input id="postTitle" placeholder="Ej. Actividad 1 — Proposiciones lógicas"></div>
+        <div class="field"><label for="postContent">Instrucciones</label><textarea id="postContent" placeholder="Escribe aquí las instrucciones para tus alumnos..."></textarea></div>
+        <div class="two">
+          <div class="field"><label for="dueDate">Fecha límite</label><input id="dueDate" type="datetime-local"></div>
+          <div class="field"><label for="grade">Puntos máximos (opcional)</label><input id="grade" type="number" min="0" max="100" placeholder="Ej. 100"></div>
+        </div>
+        <div class="field"><label for="resourceUrl">Enlace de apoyo (opcional)</label><input id="resourceUrl" type="url" placeholder="https://..."></div>
+        <div class="actions"><button class="btn" id="publishBtn">✨ Publicar en Classroom</button><button class="btn secondary" id="testFirebaseBtn" type="button">🔌 Probar conexión</button></div>
+        <div id="publishStatus" class="status"></div>
+      </section>
 
-        <aside>
-
-            <div class="card">
-                <div class="card-title">Seleccionar clase</div>
-
-                <select id="filtroClase">
-                    <option value="">Cargando...</option>
-                </select>
-            </div>
-
-            <div class="card">
-
-                <div class="card-title">
-                    Compañeros
-                </div>
-
-                <div id="alumnos-list"></div>
-
-            </div>
-
-        </aside>
-
-        <main>
-
-            <div class="card" id="area-publicar">
-
-    <div class="card-title">
-        Crear publicación
-    </div>
-
-    <select id="tipoPublicacion" style="
-        width:100%;
-        padding:12px;
-        margin-bottom:12px;
-        background:#1e293b;
-        color:white;
-        border:1px solid #334155;
-        border-radius:10px;
-    ">
-        <option value="Anuncio">📢 Anuncio</option>
-        <option value="Tarea">📝 Tarea</option>
-        <option value="Proyecto">🚀 Proyecto</option>
-        <option value="Examen">📚 Examen</option>
-        <option value="Calificación">🏆 Calificación</option>
-    </select>
-
-    <input
-        type="text"
-        id="tituloPost"
-        placeholder="Título..."
-        style="
-            width:100%;
-            box-sizing:border-box;
-            padding:12px;
-            margin-bottom:12px;
-            background:#0f172a;
-            border:1px solid #334155;
-            border-radius:10px;
-            color:white;
-        "
-    >
-
-    <textarea
-        id="postContent"
-        rows="5"
-        placeholder="Descripción..."
-    ></textarea>
-
-    <input
-        type="number"
-        id="calificacionInput"
-        placeholder="Calificación (opcional)"
-        style="
-            width:100%;
-            box-sizing:border-box;
-            padding:12px;
-            margin-bottom:12px;
-            background:#0f172a;
-            border:1px solid #334155;
-            border-radius:10px;
-            color:white;
-        "
-    >
-
-    <button class="btn" id="btnPublicar">
-        Publicar
-    </button>
-
+      <div id="feed"><div class="empty">Selecciona una clase para ver las publicaciones.</div></div>
+    </main>
+  </div>
 </div>
 
-            <div id="feed-anuncios"></div>
-
-        </main>
-
-    </div>
-
-</div>
+<div id="modalRoot" class="hidden"></div>
 
 <script type="module">
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, getDocs, addDoc, updateDoc, doc, query, where, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-import {
-    getFirestore,
-    collection,
-    getDocs,
-    updateDoc,
-    doc,
-    addDoc,
-    query,
-    where,
-    deleteDoc
-}
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-const firebaseConfig = {
-    apiKey: "AIzaSyCQa5lpfZ2owUu47CBO6Pe5-wOymUX7wa0",
-    authDomain: "campusconnect-9ac9c.firebaseapp.com",
-    projectId: "campusconnect-9ac9c"
+const firebaseConfig={
+  apiKey:"AIzaSyCQa5lpfZ2owUu47CBO6Pe5-wOymUX7wa0",
+  authDomain:"campusconnect-9ac9c.firebaseapp.com",
+  projectId:"campusconnect-9ac9c",
+  storageBucket:"campusconnect-9ac9c.firebasestorage.app"
 };
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
+const SUPABASE_URL="https://gilmauyvyjuycewsmhoe.supabase.co";
+const SUPABASE_KEY="sb_publishable_MEGPZox3P9-0ybdiJ8Jmng_dTJG_sUY";
+const supabase=createClient(SUPABASE_URL,SUPABASE_KEY);
+const SUPABASE_BUCKET="classroom";
+const usuario=JSON.parse(localStorage.getItem("usuarioTDH"))||{nombre:"Invitado",rol:"alumno",matricula:""};
+let alumnosData=[],claseActual="",stopPosts=null;
+const $=selector=>selector.startsWith("#")||(!selector.includes(".")&&!selector.includes("["))?document.getElementById(selector):document.querySelector(selector);
+const esc=v=>String(v??"").replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;","\"":"&quot;"}[c]));
+const fecha=v=>{if(!v)return "";const d=v?.toDate?v.toDate():new Date(v);return isNaN(d)?"":d.toLocaleString("es-MX",{dateStyle:"medium",timeStyle:"short"})};
+const showStatus=(msg,ok=false)=>{const e=$("publishStatus");e.className="status "+(ok?"ok":"err");e.textContent=msg};
+const conTimeout=(promise,ms=15000)=>Promise.race([
+  promise,
+  new Promise((_,reject)=>setTimeout(()=>reject(new Error("La conexión con Firebase está tardando demasiado. Verifica Internet y las reglas de Firestore.")),ms))
+]);
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+$("userInfo").innerHTML=`${esc(usuario.nombre)} <span class="role">${usuario.rol==="admin"?"👨‍🏫 Profesor":"🎓 Alumno"}</span>`;
+if(usuario.rol==="admin")$("teacherPanel").classList.remove("hidden");
 
-let alumnosData = [];
-let claseActual = "";
-
-const usuario = JSON.parse(localStorage.getItem("usuarioTDH")) || {
-    nombre:"Invitado",
-    rol:"alumno"
-};
-
-document.getElementById("user-info").textContent =
-    usuario.nombre;
-
-if(usuario.rol !== "admin"){
-    document.getElementById("area-publicar").style.display = "none";
+async function cargarAlumnos(){
+  try{
+    const snap=await getDocs(collection(db,"alumnos"));
+    alumnosData=snap.docs.map(d=>({id:d.id,...d.data()}));
+    const materias=[...new Set(alumnosData.map(a=>String(a.materia||"").trim()).filter(Boolean))].sort();
+    const permitidas=usuario.rol==="admin"?materias:[...new Set(alumnosData.filter(a=>String(a.matricula).trim()===String(usuario.matricula).trim()).map(a=>String(a.materia||"").trim()).filter(Boolean))].sort();
+    $("classSelect").innerHTML=permitidas.length?'<option value="">Selecciona una materia...</option>':'<option value="">No tienes clases</option>';
+    permitidas.forEach(m=>{const o=document.createElement("option");o.value=m;o.textContent=m;$("classSelect").appendChild(o)});
+    if(permitidas.length){claseActual=permitidas[0];$("classSelect").value=claseActual;actualizarClase()}
+  }catch(e){console.error(e);$("classSelect").innerHTML='<option value="">Error al cargar</option>';$("feed").innerHTML=`<div class="empty err">No se pudieron cargar las clases: ${esc(e.message)}</div>`}
 }
-
-window.irAlClassroom = () => {
-
-    if(alumnoLogueado){
-
-        localStorage.setItem(
-            "usuarioTDH",
-            JSON.stringify({
-                nombre: alumnoLogueado[0].nombre,
-                matricula: alumnoLogueado[0].matricula,
-                rol: "alumno"
-            })
-        );
-
-    }else{
-
-        localStorage.setItem(
-            "usuarioTDH",
-            JSON.stringify({
-                nombre: "Prof. Trujillo",
-                rol: "admin"
-            })
-        );
-
+function actualizarClase(){
+  $("classTitle").textContent=claseActual||"Selecciona una clase";
+  $("classSubtitle").textContent=claseActual?"Tareas, actividades, proyectos y calificaciones de esta materia.":"Tu espacio virtual de aprendizaje.";
+  cargarCompañeros();cargarPublicaciones();
+}
+function cargarCompañeros(){
+  const arr=alumnosData.filter(a=>String(a.materia||"").trim()===claseActual);
+  const names=[...new Set(arr.map(a=>a.nombre).filter(Boolean))];
+  $("students").innerHTML=names.length?names.map(n=>`<div class="student"><span class="dot"></span>${esc(n)}</div>`).join(""):"<div class='empty'>No hay alumnos registrados.</div>"
+}
+function cargarPublicaciones(){
+  if(stopPosts){stopPosts();stopPosts=null}
+  if(!claseActual)return;
+  $("feed").innerHTML='<div class="empty">Cargando publicaciones...</div>';
+  const q=query(collection(db,"classroom_posts"),where("clase","==",claseActual));
+  stopPosts=onSnapshot(q,snap=>{
+    const posts=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.fecha?.toMillis?.()??0)-(a.fecha?.toMillis?.()??0));
+    renderPosts(posts)
+  },err=>$("feed").innerHTML=`<div class="empty err">No se pudieron cargar las publicaciones: ${esc(err.message)}</div>`)
+}
+function renderPosts(posts){
+  if(!posts.length){$("feed").innerHTML='<div class="empty">📚 Todavía no hay publicaciones en esta materia.</div>';return}
+  $("feed").innerHTML=posts.map(p=>{
+    const type=p.tipo||"Anuncio", due=p.fechaLimite?new Date(p.fechaLimite):null, overdue=due&&!isNaN(due)&&due<Date.now();
+    const icons={Anuncio:"📢",Tarea:"📝",Actividad:"✏️",Proyecto:"🚀",Examen:"📚",Calificación:"🏆"};
+    const badge=type==="Tarea"?"task":type==="Actividad"?"activity":type==="Proyecto"?"project":type==="Examen"?"exam":type==="Calificación"?"grade":"";
+    return `<article class="post">
+      <div class="post-head"><div><div class="post-title">${icons[type]||"📢"} ${esc(p.titulo||type)}</div><div class="meta">${esc(p.autor||"Profesor")} · ${fecha(p.fecha)||"Publicado recientemente"}</div></div><span class="badge ${badge}">${esc(type)}</span></div>
+      <div class="content">${esc(p.contenido||"")}</div>
+      ${p.fechaLimite?`<div class="deadline ${overdue?"overdue":""}">⏰ Fecha límite: ${esc(fecha(p.fechaLimite))}${overdue?" · Vencida":""}</div>`:""}
+      ${p.calificacion?`<div class="deadline" style="margin-top:10px">🎯 Valor: <strong>${esc(p.calificacion)} puntos</strong></div>`:""}
+      ${p.recursoUrl?`<a class="resource" href="${esc(p.recursoUrl)}" target="_blank" rel="noopener">🔗 Abrir material de apoyo</a>`:""}
+      <div class="actions">
+        ${usuario.rol!=="admin"&&(type==="Tarea"||type==="Actividad"||type==="Proyecto")?`<button class="btn green" data-action="deliver" data-id="${p.id}">📎 Entregar trabajo</button>`:""}
+        <button class="btn secondary" data-action="comments" data-id="${p.id}">💬 Comentarios</button>
+        ${usuario.rol==="admin"?`<button class="btn yellow" data-action="deliveries" data-id="${p.id}">📂 Ver entregas y calificar</button>`:
+`<button class="btn secondary" data-action="mydelivery" data-id="${p.id}">⭐ Mi entrega</button>`}
+      </div>
+      <div id="comments-${p.id}" class="comment-box hidden"></div>
+    </article>`
+  }).join("")
+}
+$("classSelect").addEventListener("change",e=>{claseActual=e.target.value;actualizarClase()});
+$("publishBtn").addEventListener("click",async()=>{
+  if(usuario.rol!=="admin")return;
+  const titulo=$("postTitle").value.trim(),contenido=$("postContent").value.trim(),tipo=$("postType").value,due=$("dueDate").value,grade=$("grade").value.trim(),url=$("resourceUrl").value.trim();
+  if(!claseActual)return showStatus("Selecciona una materia.");
+  if(!titulo)return showStatus("Escribe un título.");
+  if(!contenido)return showStatus("Escribe las instrucciones.");
+  const btn=$("publishBtn");
+  btn.disabled=true;
+  btn.textContent="⏳ Publicando...";
+  showStatus("Conectando con Classroom…",true);
+  try{
+    const payload={
+      clase:claseActual,
+      titulo,
+      contenido,
+      tipo,
+      calificacion:grade||null,
+      fechaLimite:due||null,
+      recursoUrl:url||null,
+      autor:usuario.nombre||"Profesor",
+      fecha:serverTimestamp()
+    };
+    const result=await conTimeout(addDoc(collection(db,"classroom_posts"),payload),15000);
+    $("postTitle").value="";
+    $("postContent").value="";
+    $("dueDate").value="";
+    $("grade").value="";
+    $("resourceUrl").value="";
+    showStatus("✓ Actividad publicada correctamente. ID: "+result.id,true);
+  }catch(e){
+    console.error("Error publicando en Classroom:",e);
+    let msg=e?.message||String(e);
+    if(e?.code==="permission-denied"||e?.code==="firestore/permission-denied") {
+      msg="Firebase rechazó la publicación (permission-denied). Hay que revisar las reglas de Firestore para classroom_posts.";
+    } else if(e?.code==="unavailable") {
+      msg="Firebase no está disponible en este momento. Comprueba Internet.";
     }
-
-    window.location.href = "classroom.html";
-
-};
-
-document
-.getElementById("filtroClase")
-.addEventListener("change", async e => {
-
-    claseActual = e.target.value;
-
-    if(!claseActual) return;
-
-    document.getElementById("titulo-clase")
-    .textContent = claseActual;
-
-    cargarAlumnos();
-    cargarAnuncios();
-
+    showStatus("❌ No se pudo publicar: "+msg,false);
+  }finally{
+    btn.disabled=false;
+    btn.textContent="✨ Publicar en Classroom";
+  }
 });
 
-function cargarAlumnos(){
 
-    const compañeros = alumnosData.filter(
-        a => a.materia === claseActual
-    );
-
-    const list =
-        document.getElementById("alumnos-list");
-
-    list.innerHTML = "";
-
-    // EVITAR NOMBRES DUPLICADOS
-    const nombresUnicos =
-        [...new Set(
-            compañeros.map(c => c.nombre)
-        )];
-
-    nombresUnicos.forEach(nombre => {
-
-        list.innerHTML += `
-            <div style="
-                display:flex;
-                align-items:center;
-                gap:10px;
-                margin-bottom:10px;
-            ">
-
-                <div style="
-                    width:10px;
-                    height:10px;
-                    border-radius:50%;
-                    background:#10b981;
-                "></div>
-
-                ${nombre}
-
-            </div>
-        `;
-
-    });
-
-}
-
-async function cargarAnuncios(){
-
-    const feed =
-        document.getElementById("feed-anuncios");
-
-    feed.innerHTML = "";
-
-    const q = query(
-        collection(db,"classroom_posts"),
-        where("clase","==",claseActual),
-        orderBy("fecha","desc")
-    );
-
-    const snap = await getDocs(q);
-
-    if(snap.empty){
-
-        feed.innerHTML = `
-            <p style="color:#94a3b8;">
-                No hay publicaciones todavía.
-            </p>
-        `;
-
-        return;
-    }
-
-    snap.forEach(doc => {
-
-        const d = doc.data();
-
-        let icono = "📢";
-
-        if(d.tipo === "Tarea") icono = "📝";
-        if(d.tipo === "Proyecto") icono = "🚀";
-        if(d.tipo === "Examen") icono = "📚";
-        if(d.tipo === "Calificación") icono = "🏆";
-
-        feed.innerHTML += `
-
-            <div class="announcement">
-
-                <div style="
-                    display:flex;
-                    justify-content:space-between;
-                    align-items:center;
-                    margin-bottom:15px;
-                    flex-wrap:wrap;
-                    gap:10px;
-                ">
-
-                    <div style="
-                        display:flex;
-                        align-items:center;
-                        gap:12px;
-                    ">
-
-                        <div class="avatar">
-                            ${icono}
-                        </div>
-
-                        <div>
-
-                            <div style="
-                                font-size:1rem;
-                                font-weight:700;
-                            ">
-                                ${d.titulo || d.tipo}
-                            </div>
-
-                            <div style="
-                                color:#94a3b8;
-                                font-size:.8rem;
-                            ">
-                                ${d.autor}
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <div style="
-                        background:#1e293b;
-                        padding:6px 12px;
-                        border-radius:10px;
-                        font-size:.8rem;
-                    ">
-                        ${d.tipo || "Anuncio"}
-                    </div>
-
-                </div>
-
-                <div style="
-                    color:#e2e8f0;
-                    line-height:1.6;
-                    margin-bottom:15px;
-                ">
-                    ${d.contenido}
-                    ${
-    d.tipo === "Tarea"
-    ?
-    `
-    <div style="
-        background:#7c3aed;
-        padding:12px;
-        border-radius:12px;
-        margin-bottom:15px;
-        font-weight:600;
-    ">
-        📝 TAREA ASIGNADA
-    </div>
-    `
-    :
-    ""
-}
-
-${
-    d.tipo === "Proyecto"
-    ?
-    `
-    <div style="
-        background:#2563eb;
-        padding:12px;
-        border-radius:12px;
-        margin-bottom:15px;
-        font-weight:600;
-    ">
-        🚀 PROYECTO ASIGNADO
-    </div>
-    `
-    :
-    ""
-}
-                </div>
-
-                ${
-                    d.calificacion
-                    ?
-                    `
-                    <div style="
-                        display:inline-block;
-                        background:#2563eb;
-                        padding:8px 14px;
-                        border-radius:10px;
-                        font-weight:700;
-                        margin-bottom:15px;
-                    ">
-                        Calificación: ${d.calificacion}
-                    </div>
-                    `
-                    :
-                    ""
-                }
-
-                <div style="
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    margin-bottom:15px;
-">
-
-    ${
-        usuario.rol !== "admin"
-        &&
-        (
-            d.tipo === "Tarea"
-            ||
-            d.tipo === "Proyecto"
-        )
-        ?
-        `
-        <button
-            class="btn"
-            onclick="entregarTarea('${doc.id}')"
-        >
-            📎 Entregar
-        </button>
-        `
-        :
-        ""
-    }
-
-    ${
-        usuario.rol === "admin"
-        ?
-        `
-        <button
-            class="btn"
-            onclick="verEntregas('${doc.id}')"
-        >
-            📂 Entregas
-        </button>
-        `
-        :
-        ""
-    }
-
-    <button
-        class="btn"
-        onclick="abrirComentarios('${doc.id}')"
-    >
-        💬 Comentarios
-    </button>
-
-</div>
-
-<div
-    id="comentarios-${doc.id}"
-    style="
-        margin-top:10px;
-        background:#0f172a;
-        padding:12px;
-        border-radius:12px;
-        display:none;
-    "
-></div>
-
-            </div>
-
-        `;
-
-    });
-
-}
-
-document
-.getElementById("btnPublicar")
-.addEventListener("click", async () => {
-
-    const contenido =
-        document.getElementById("postContent").value;
-
-    const titulo =
-        document.getElementById("tituloPost").value;
-
-    const tipo =
-        document.getElementById("tipoPublicacion").value;
-
-    const calificacion =
-        document.getElementById("calificacionInput").value;
-
-    if(!claseActual){
-
-        alert("Selecciona una clase");
-        return;
-
-    }
-
-    if(!contenido.trim()){
-
-        alert("Escribe contenido");
-        return;
-
-    }
-
-    await addDoc(
-        collection(db,"classroom_posts"),
-        {
-            clase: claseActual,
-            titulo: titulo,
-            contenido: contenido,
-            tipo: tipo,
-            calificacion: calificacion || null,
-            autor: usuario.nombre,
-            fecha: serverTimestamp()
-        }
-    );
-
-    document.getElementById("postContent").value = "";
-    document.getElementById("tituloPost").value = "";
-    document.getElementById("calificacionInput").value = "";
-
-    cargarAnuncios();
-
+$("testFirebaseBtn").addEventListener("click",async()=>{
+  const btn=$("testFirebaseBtn");
+  btn.disabled=true;btn.textContent="Probando…";
+  showStatus("Probando conexión con Firebase…",true);
+  try{
+    await conTimeout(getDocs(query(collection(db,"classroom_posts"),where("clase","==",claseActual))),10000);
+    showStatus("✓ Firebase responde correctamente. Si publicar sigue fallando, son las reglas de escritura.",true);
+  }catch(e){
+    console.error("Diagnóstico Firebase:",e);
+    showStatus("❌ Conexión/permiso: "+(e?.code?e.code+" — ":"")+e.message,false);
+  }finally{
+    btn.disabled=false;btn.textContent="🔌 Probar conexión";
+  }
 });
 
-async function inicializar(){
+$("feed").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-action]");if(!b)return;
+  if(b.dataset.action==="deliver")abrirEntrega(b.dataset.id);
+  if(b.dataset.action==="deliveries")abrirEntregas(b.dataset.id);
+  if(b.dataset.action==="comments")abrirComentarios(b.dataset.id);
+  if(b.dataset.action==="mydelivery")abrirMiEntrega(b.dataset.id);
+});
 
-    const snap = await getDocs(collection(db,"alumnos"));
+function abrirModal(title,body){
+  $("modalRoot").classList.remove("hidden");
+  $("modalRoot").innerHTML=`<div class="modal-wrap" data-close><div class="modal"><div class="modal-head"><h2>${title}</h2><button class="close" data-close>×</button></div>${body}</div></div>`;
+}
+function cerrarModal(){$("modalRoot").classList.add("hidden");$("modalRoot").innerHTML=""}
+$("modalRoot").addEventListener("click",e=>{if(e.target.dataset.close!==undefined||e.target.classList.contains("modal-wrap"))cerrarModal()});
 
-    alumnosData = snap.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-    }));
+function abrirEntrega(id){
+  abrirModal("📎 Entregar trabajo",`<div class="notice">Puedes entregar una imagen, un PDF, un enlace o combinar varias opciones.</div>
+    <div class="field"><label for="deliveryFile">Imagen o PDF</label><input id="deliveryFile" type="file" accept="image/*,application/pdf"></div>
+    <div class="field"><label for="deliveryLink">Enlace</label><input id="deliveryLink" type="url" placeholder="Google Drive, Canva, GitHub, OneDrive..."></div>
+    <div class="field"><label for="deliveryComment">Comentario para el profesor</label><textarea id="deliveryComment" placeholder="Agrega una descripción o nota sobre tu trabajo..."></textarea></div>
+    <div id="uploadProgress" class="hidden" style="margin:12px 0">
+      <div style="height:10px;background:#17243a;border-radius:999px;overflow:hidden">
+        <div id="uploadBar" style="height:100%;width:0%;background:linear-gradient(90deg,#3b82f6,#8b5cf6);transition:width .2s"></div>
+      </div>
+      <div id="uploadText" class="small" style="margin-top:6px">Preparando archivo...</div>
+    </div>
+    <div id="deliveryStatus" class="status"></div>
+    <div class="actions"><button class="btn green" id="sendDelivery">🚀 Enviar entrega</button><button class="btn secondary" id="testStorage">🔌 Probar Storage</button><button class="btn secondary" data-close>Cancelar</button></div>`);
+  $("sendDelivery").addEventListener("click",()=>enviarEntrega(id));
 
-    console.log("USUARIO:", usuario);
-    console.log("ALUMNOS:", alumnosData);
-
-    const select =
-        document.getElementById("filtroClase");
-
-    select.innerHTML =
-        '<option value="">Selecciona...</option>';
-
-    let materias = [];
-
-    // ADMIN VE TODO
-    if(usuario.rol === "admin"){
-
-        materias = [
-            ...new Set(
-                alumnosData.map(a => a.materia)
-            )
-        ];
-
-    }else{
-
-        // FILTRAR POR MATRICULA
-        materias = [
-            ...new Set(
-                alumnosData
-                .filter(a =>
-                    String(a.matricula).trim() ===
-                    String(usuario.matricula).trim()
-                )
-                .map(a => a.materia)
-            )
-        ];
-
-    }
-
-    console.log("MATERIAS:", materias);
-
-    if(materias.length === 0){
-
-        select.innerHTML =
-            '<option value="">No tienes clases</option>';
-
-        return;
-    }
-
-    materias.forEach(materia => {
-
-        const option =
-            document.createElement("option");
-
-        option.value = materia;
-        option.textContent = materia;
-
-        select.appendChild(option);
-
-    });
-    if(materias.length > 0){
-
-    claseActual = materias[0];
-
-    select.value = materias[0];
-
-    document.getElementById("titulo-clase")
-    .textContent = materias[0];
-
-    cargarAlumnos();
-
-    cargarAnuncios();
-
+  $("testStorage").addEventListener("click",async()=>{
+    const s=$("deliveryStatus"),b=$("testStorage");
+    b.disabled=true;b.textContent="Probando…";
+    s.className="status ok";s.textContent="Probando Supabase Storage…";
+    try{
+      const probe=new Blob(["TDH Supabase Storage OK"],{type:"text/plain"});
+      const ruta=`__tdh_test__/${Date.now()}.txt`;
+      const result=await Promise.race([
+        supabase.storage.from(SUPABASE_BUCKET).upload(ruta,probe,{contentType:"text/plain",upsert:false}),
+        new Promise((_,reject)=>setTimeout(()=>reject(new Error("Supabase Storage no respondió en 10 segundos.")),10000))
+      ]);
+      if(result.error)throw result.error;
+      s.className="status ok";s.textContent="✓ Supabase Storage funciona correctamente.";
+    }catch(e){
+      s.className="status err";s.textContent="❌ Supabase Storage: "+(e?.message||e);
+    }finally{b.disabled=false;b.textContent="🔌 Probar Storage"}
+  });
 }
 
+async function enviarEntrega(id){
+  const status=$("deliveryStatus"),file=$("deliveryFile").files[0],link=$("deliveryLink").value.trim(),comment=$("deliveryComment").value.trim();
+  if(!file&&!link&&!comment){status.className="status err";status.textContent="Agrega un archivo, un enlace o un comentario.";return}
+  if(file&&(file.size>10*1024*1024)){status.className="status err";status.textContent="El archivo supera el límite de 10 MB.";return}
+  if(file&&!(file.type.startsWith("image/")||file.type==="application/pdf")){status.className="status err";status.textContent="Solo se permiten imágenes y PDF.";return}
+  const btn=$("sendDelivery");btn.disabled=true;btn.textContent="Subiendo...";
+  try{
+    let archivo=null;
+    if(file){
+      const progressWrap=$("uploadProgress"),bar=$("uploadBar"),uploadText=$("uploadText");
+      progressWrap.classList.remove("hidden");
+      bar.style.width="5%";
+      uploadText.textContent="Conectando con Supabase Storage…";
+
+      const safe=file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+      const ruta=`entregas/${String(usuario.matricula||"sin-matricula")}/${Date.now()}_${safe}`;
+      bar.style.width="20%";
+      uploadText.textContent="Subiendo archivo…";
+
+      const result=await Promise.race([
+        supabase.storage.from(SUPABASE_BUCKET).upload(ruta,file,{
+          contentType:file.type||"application/octet-stream",
+          upsert:false
+        }),
+        new Promise((_,reject)=>setTimeout(()=>reject(new Error("Supabase Storage no respondió en 20 segundos.")),20000))
+      ]);
+
+      if(result.error)throw result.error;
+      bar.style.width="80%";
+      uploadText.textContent="Archivo subido. Generando enlace…";
+
+      const {data:urlData}=supabase.storage.from(SUPABASE_BUCKET).getPublicUrl(ruta);
+      if(!urlData?.publicUrl)throw new Error("No se pudo generar la URL pública.");
+
+      bar.style.width="100%";
+      uploadText.textContent="Archivo listo. Guardando entrega…";
+      archivo={nombre:file.name,tipo:file.type,tamano:file.size,url:urlData.publicUrl,ruta};
+    }
+    await addDoc(collection(db,"entregas"),{publicacionId:id,alumno:usuario.nombre,matricula:String(usuario.matricula||""),comentario:comment,enlace:link||null,archivo,calificacion:null,retroalimentacion:"",fecha:serverTimestamp()});
+    status.className="status ok";status.textContent="✓ Entrega enviada correctamente.";
+    btn.textContent="Entrega enviada";btn.disabled=true;
+  }catch(e){console.error(e);status.className="status err";
+    let msg=(e?.code?e.code+" — ":"")+e.message;
+    if(e?.code==="storage/unauthorized") msg="Supabase Storage rechazó el archivo (storage/unauthorized). Hay que revisar las reglas de Storage.";
+    if(e?.code==="storage/unknown") msg="Supabase Storage no pudo completar la subida. Revisa Storage y la conexión.";
+    status.textContent="❌ "+msg;
+    btn.disabled=false;btn.textContent="🚀 Enviar entrega";
+    $("uploadProgress")?.classList.add("hidden")}
 }
 
-inicializar();
-window.verEntregas = async (idPublicacion) => {
-
-    const q = query(
-        collection(db,"entregas"),
-        where("publicacionId","==",idPublicacion)
-    );
-
-    const snap = await getDocs(q);
-
-    if(snap.empty){
-
-        alert("No hay entregas todavía");
-        return;
-
+async function abrirEntregas(id){
+  abrirModal("📂 Entregas de alumnos",'<div class="empty">Cargando entregas...</div>');
+  try{
+    const snap=await getDocs(query(collection(db,"entregas"),where("publicacionId","==",id)));
+    const rows=snap.docs.map(d=>({id:d.id,...d.data()}));
+    if(!rows.length){$(".modal").innerHTML=`<div class="modal-head"><h2>📂 Entregas de alumnos</h2><button class="close" data-close>×</button></div><div class="empty">Aún no hay entregas.</div>`;return}
+    $(".modal").innerHTML=`<div class="modal-head"><h2>📂 Entregas de alumnos</h2><button class="close" data-close>×</button></div>${rows.map(x=>`
+      <div class="submission">
+        <div class="submission-head"><div><strong>${esc(x.alumno||"Alumno")}</strong><div class="meta">Matrícula: ${esc(x.matricula||"—")}</div></div>${x.calificacion!=null?`<div class="grade-box">⭐ ${esc(x.calificacion)}/100</div>`:"<span class='badge'>Sin calificar</span>"}</div>
+        ${x.comentario?`<div class="content">${esc(x.comentario)}</div>`:""}
+        ${x.enlace?`<a class="resource" href="${esc(x.enlace)}" target="_blank" rel="noopener">🔗 Abrir enlace del alumno</a>`:""}
+        ${x.archivo?.url?`<a class="resource" href="${esc(x.archivo.url)}" target="_blank" rel="noopener">📄 ${esc(x.archivo.nombre||"Abrir archivo")}</a>`:""}
+        ${x.retroalimentacion?`<div class="notice" style="margin-top:12px">💬 <strong>Retroalimentación:</strong><br>${esc(x.retroalimentacion)}</div>`:""}
+        <div class="actions"><button class="btn yellow" data-grade="${x.id}" data-current="${x.calificacion??""}" data-feedback="${esc(x.retroalimentacion||"")}">⭐ Calificar</button></div>
+      </div>`).join("")}`;
+    document.querySelectorAll("[data-grade]").forEach(b=>b.addEventListener("click",()=>abrirCalificar(b.dataset.grade,b.dataset.current,b.dataset.feedback,id)))
+  }catch(e){$(".modal").innerHTML=`<div class="modal-head"><h2>📂 Entregas</h2><button class="close" data-close>×</button></div><div class="empty err">No se pudieron cargar: ${esc(e.message)}</div>`}
+}
+function abrirCalificar(entregaId,current,feedback,postId){
+  abrirModal("⭐ Calificar entrega",`<div class="notice">La calificación quedará guardada en la entrega del alumno.</div>
+    <div class="field"><label for="score">Calificación (0 a 100)</label><input id="score" type="number" min="0" max="100" step="1" value="${esc(current)}" placeholder="Ej. 95"></div>
+    <div class="field"><label for="feedback">Retroalimentación</label><textarea id="feedback" placeholder="Escribe comentarios para el alumno...">${esc(feedback)}</textarea></div>
+    <div id="gradeStatus" class="status"></div>
+    <div class="actions"><button class="btn yellow" id="saveGrade">💾 Guardar calificación</button><button class="btn secondary" data-close>Cancelar</button></div>`);
+  $("saveGrade").addEventListener("click",async()=>{
+    const score=$("score").value,fb=$("feedback").value.trim(),status=$("gradeStatus");
+    if(score===""||Number(score)<0||Number(score)>100){status.className="status err";status.textContent="Escribe una calificación entre 0 y 100.";return}
+    const btn=$("saveGrade");btn.disabled=true;btn.textContent="Guardando...";
+    try{
+      await updateDoc(doc(db,"entregas",entregaId),{calificacion:Number(score),retroalimentacion:fb,fechaCalificacion:serverTimestamp(),calificadoPor:usuario.nombre});
+      status.className="status ok";status.textContent="✓ Calificación guardada correctamente.";
+      btn.textContent="Guardado ✓";
+      setTimeout(()=>abrirEntregas(postId),600);
+    }catch(e){status.className="status err";status.textContent="No se pudo guardar: "+e.message;btn.disabled=false;btn.textContent="💾 Guardar calificación"}
+  })
+}
+async function abrirMiEntrega(id){
+  abrirModal("⭐ Mi entrega",'<div class="empty">Cargando tu entrega...</div>');
+  try{
+    const snap=await getDocs(query(collection(db,"entregas"),where("publicacionId","==",id)));
+    const rows=snap.docs.map(d=>({id:d.id,...d.data()})).filter(x=>String(x.matricula||"")===String(usuario.matricula||""));
+    if(!rows.length){
+      $(".modal").innerHTML=`<div class="modal-head"><h2>⭐ Mi entrega</h2><button class="close" data-close>×</button></div><div class="empty">Todavía no has enviado una entrega.</div>`;
+      return;
     }
-
-    let texto = "ENTREGAS:\n\n";
-
-    snap.forEach(doc => {
-
-        const d = doc.data();
-
-        texto += `
-Alumno: ${d.alumno}
-Entrega: ${d.comentario}
-
-`;
-
-    });
-
-    alert(texto);
-
-};
-
-window.entregarTarea = async (idPublicacion) => {
-
-    if(usuario.rol === "admin"){
-
-        alert("Los profesores no entregan tareas");
-        return;
-
-    }
-
-    const comentario = prompt(
-        "Escribe tu entrega o enlace:"
-    );
-
-    if(!comentario) return;
-
-    await addDoc(
-        collection(db,"entregas"),
-        {
-            publicacionId: idPublicacion,
-            alumno: usuario.nombre,
-            matricula: usuario.matricula,
-            comentario: comentario,
-            fecha: serverTimestamp()
-        }
-    );
-
-    alert("Entrega enviada");
-
-};
-
-window.verEntregas = async (idPublicacion) => {
-
-    const q = query(
-        collection(db,"entregas"),
-        where("publicacionId","==",idPublicacion)
-    );
-
-    const snap = await getDocs(q);
-
-    if(snap.empty){
-
-        alert("No hay entregas");
-        return;
-
-    }
-
-    let texto = "ENTREGAS:\n\n";
-
-    snap.forEach(doc => {
-
-        const d = doc.data();
-
-        texto += `
-Alumno: ${d.alumno}
-Entrega: ${d.comentario}
-
-`;
-
-    });
-
-    alert(texto);
-
-};
-window.abrirComentarios = async (idPublicacion) => {
-
-    const box =
-        document.getElementById(
-            `comentarios-${idPublicacion}`
-        );
-
-    if(box.style.display === "block"){
-
-        box.style.display = "none";
-        return;
-
-    }
-
-    box.style.display = "block";
-
-    const q = query(
-        collection(db,"comentarios"),
-        where("publicacionId","==",idPublicacion)
-    );
-
-    const snap = await getDocs(q);
-
-    let html = "";
-
-    snap.forEach(doc => {
-
-        const d = doc.data();
-
-        html += `
-            <div style="
-                background:#1e293b;
-                padding:10px;
-                border-radius:10px;
-                margin-bottom:10px;
-            ">
-
-                <strong>${d.usuario}</strong>
-
-                <div style="
-                    margin-top:5px;
-                    color:#cbd5e1;
-                ">
-                    ${d.comentario}
-                </div>
-
-            </div>
-        `;
-
-    });
-
-    html += `
-
-        <textarea
-            id="nuevoComentario-${idPublicacion}"
-            placeholder="Escribe un comentario..."
-            rows="3"
-        ></textarea>
-
-        <button
-            class="btn"
-            onclick="enviarComentario('${idPublicacion}')"
-        >
-            Enviar
-        </button>
-
-    `;
-
-    box.innerHTML = html;
-
-};
-
-window.enviarComentario = async (idPublicacion) => {
-
-    const input =
-        document.getElementById(
-            `nuevoComentario-${idPublicacion}`
-        );
-
-    const texto = input.value;
-
-    if(!texto.trim()) return;
-
-    await addDoc(
-        collection(db,"comentarios"),
-        {
-            publicacionId:idPublicacion,
-            usuario:usuario.nombre,
-            comentario:texto,
-            fecha:serverTimestamp()
-        }
-    );
-
-    abrirComentarios(idPublicacion);
-
-};
-
-window.verEntregas = async (idPublicacion) => {
-
-    const q = query(
-        collection(db,"entregas"),
-        where("publicacionId","==",idPublicacion)
-    );
-
-    const snap = await getDocs(q);
-
-    if(snap.empty){
-
-        alert("No hay entregas");
-        return;
-
-    }
-
-    let texto = "";
-
-    snap.forEach(docSnap => {
-
-        const d = docSnap.data();
-
-        texto += `
-Alumno: ${d.alumno}
-
-Entrega:
-${d.comentario}
-
----------------------
-
-`;
-
-    });
-
-    alert(texto);
-
-};
-
-window.entregarTarea = async (idPublicacion) => {
-
-    const entrega = prompt(
-        "Escribe tu entrega o pega un enlace:"
-    );
-
-    if(!entrega) return;
-
-    await addDoc(
-        collection(db,"entregas"),
-        {
-            publicacionId:idPublicacion,
-            alumno:usuario.nombre,
-            matricula:usuario.matricula,
-            comentario:entrega,
-            fecha:serverTimestamp()
-        }
-    );
-
-    alert("Tarea entregada");
-
-};
+    const x=rows.sort((a,b)=>(b.fecha?.toMillis?.()??0)-(a.fecha?.toMillis?.()??0))[0];
+    $(".modal").innerHTML=`<div class="modal-head"><h2>⭐ Mi entrega</h2><button class="close" data-close>×</button></div>
+      <div class="submission">
+        <div class="notice">Estado: <strong>${x.calificacion!=null?"Calificada":"Entregada"}</strong></div>
+        ${x.archivo?.url?`<a class="resource" href="${esc(x.archivo.url)}" target="_blank" rel="noopener">📄 ${esc(x.archivo.nombre||"Abrir archivo")}</a>`:""}
+        ${x.enlace?`<a class="resource" href="${esc(x.enlace)}" target="_blank" rel="noopener">🔗 Abrir mi enlace</a>`:""}
+        ${x.comentario?`<div class="content">${esc(x.comentario)}</div>`:""}
+        ${x.calificacion!=null?`<div class="grade-box" style="display:inline-block">🏆 Calificación: ${esc(x.calificacion)}/100</div>`:`<div class="deadline">⏳ Aún no ha sido calificada.</div>`}
+        ${x.retroalimentacion?`<div class="notice" style="margin-top:12px">💬 <strong>Retroalimentación del profesor:</strong><br>${esc(x.retroalimentacion)}</div>`:""}
+      </div>`;
+  }catch(e){
+    $(".modal").innerHTML=`<div class="modal-head"><h2>⭐ Mi entrega</h2><button class="close" data-close>×</button></div><div class="empty err">No se pudo cargar: ${esc(e?.message||e)}</div>`;
+  }
+}
+async function abrirComentarios(id){
+  abrirModal("💬 Comentarios",'<div class="empty">Cargando...</div>');
+  try{
+    const snap=await getDocs(query(collection(db,"comentarios"),where("publicacionId","==",id)));
+    const comments=snap.docs.map(d=>d.data());
+    $(".modal").innerHTML=`<div class="modal-head"><h2>💬 Comentarios</h2><button class="close" data-close>×</button></div>
+      <div>${comments.length?comments.map(c=>`<div class="submission"><strong>${esc(c.usuario||"Usuario")}</strong><div class="content">${esc(c.comentario||"")}</div></div>`).join(""):'<div class="empty">Sé el primero en comentar.</div>'}</div>
+      <div class="field" style="margin-top:15px"><label for="newComment">Tu comentario</label><textarea id="newComment" placeholder="Escribe un comentario..."></textarea></div>
+      <div id="commentStatus" class="status"></div><div class="actions"><button class="btn" id="sendComment">💬 Publicar comentario</button></div>`;
+    $("sendComment").addEventListener("click",async()=>{
+      const input=$("newComment"),status=$("commentStatus");if(!input.value.trim())return;
+      try{
+        await addDoc(collection(db,"comentarios"),{publicacionId:id,usuario:usuario.nombre,comentario:input.value.trim(),fecha:serverTimestamp()});
+        status.className="status ok";status.textContent="✓ Comentario publicado.";input.value="";
+        setTimeout(()=>abrirComentarios(id),300);
+      }catch(e){status.className="status err";status.textContent="No se pudo publicar: "+(e?.code?e.code+" — ":"")+e.message}
+    })
+  }catch(e){$(".modal").innerHTML=`<div class="modal-head"><h2>💬 Comentarios</h2><button class="close" data-close>×</button></div><div class="empty err">${esc(e.message)}</div>`}
+}
+window.addEventListener("beforeunload",()=>{if(stopPosts)stopPosts()});
+cargarAlumnos();
 </script>
-
 </body>
 </html>
