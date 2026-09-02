@@ -261,6 +261,15 @@ input{
 
         </button>
 
+        <button
+    class="btn-download"
+    style="background:#991b1b;margin-top:10px;"
+    onclick="eliminarMateriasCompletamente()">
+
+    🗑️ Eliminar materias antiguas
+
+</button>
+
     </div>
 
     <br>
@@ -403,12 +412,31 @@ async function cargarDatos(){
     const snap =
         await getDocs(collection(db,"alumnos"));
 
-    datosGlobales = snap.docs.map(doc => ({
-        id:doc.id,
-        ...doc.data()
-    }));
+    const materiasEliminadas = [
+        "algoritmos y pensamiento lógico",
+        "ciudadanía digital",
+        "emprendimiento digital",
+        "ia para niños y jóvenes"
+    ];
+
+    datosGlobales = snap.docs
+        .map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }))
+        .filter(alumno => {
+
+            const materia =
+                String(alumno.materia || "")
+                .trim()
+                .toLowerCase();
+
+            return !materiasEliminadas.includes(materia);
+
+        });
 
 }
+
 // ============================
 // CARGAR MATERIAS
 // ============================
@@ -416,30 +444,60 @@ async function cargarDatos(){
 async function cargarMaterias(){
 
     const snap = await getDocs(collection(db,"materias"));
-    console.log("Materias encontradas:", snap.size);
 
-snap.forEach(docu=>{
-    console.log(docu.id, docu.data());
-});
+    console.log("Materias encontradas:", snap.size);
 
     const select = document.getElementById("newMateria");
     const lista = document.getElementById("listaMaterias");
 
-    select.innerHTML="";
-    lista.innerHTML="";
+    select.innerHTML = "";
+    lista.innerHTML = "";
 
-    snap.forEach(docu=>{
+    // ==========================================
+    // MATERIAS QUE NO QUEREMOS MOSTRAR
+    // ==========================================
+
+    const materiasEliminadas = [
+        "algoritmos y pensamiento lógico",
+        "ciudadanía digital",
+        "emprendimiento digital",
+        "ia para niños y jóvenes"
+    ];
+
+    snap.forEach(docu => {
 
         const materia = docu.data();
 
-        // Agregar al selector
+        const nombreMateria = String(
+            materia.nombre || ""
+        ).trim();
+
+        // Comparar ignorando mayúsculas/minúsculas
+        const nombreNormalizado =
+            nombreMateria.toLowerCase();
+
+        // ==========================================
+        // SI ESTÁ EN LA LISTA, NO LA MOSTRAMOS
+        // ==========================================
+
+        if (materiasEliminadas.includes(nombreNormalizado)) {
+            return;
+        }
+
+        // ==========================================
+        // AGREGAR AL SELECTOR
+        // ==========================================
+
         select.innerHTML += `
-            <option value="${materia.nombre}">
-                ${materia.nombre}
+            <option value="${nombreMateria}">
+                ${nombreMateria}
             </option>
         `;
 
-        // Mostrar en la lista
+        // ==========================================
+        // MOSTRAR EN ADMINISTRAR MATERIAS
+        // ==========================================
+
         lista.innerHTML += `
             <div style="
                 display:flex;
@@ -452,7 +510,7 @@ snap.forEach(docu=>{
                 border-radius:10px;
             ">
 
-                <strong>${materia.nombre}</strong>
+                <strong>${nombreMateria}</strong>
 
                 <button
                     onclick="eliminarMateria('${docu.id}')"
@@ -539,6 +597,134 @@ window.eliminarMateria = async (id) => {
     );
 
     await cargarMaterias();
+
+};
+
+// ==========================================
+// ELIMINAR MATERIAS COMPLETAMENTE
+// ==========================================
+
+window.eliminarMateriasCompletamente = async () => {
+
+    const materiasEliminar = [
+        "algoritmos y pensamiento lógico",
+        "ciudadanía digital",
+        "emprendimiento digital",
+        "ia para niños y jóvenes"
+    ];
+
+    const confirmar = confirm(
+        "⚠️ ATENCIÓN\n\n" +
+        "Se eliminarán COMPLETAMENTE estas materias:\n\n" +
+        "• Algoritmos y pensamiento lógico\n" +
+        "• Ciudadanía digital\n" +
+        "• Emprendimiento digital\n" +
+        "• IA para niños y jóvenes\n\n" +
+        "También se eliminarán los registros de alumnos inscritos en ellas.\n\n" +
+        "Esta acción NO se puede deshacer.\n\n" +
+        "¿Deseas continuar?"
+    );
+
+    if (!confirmar) return;
+
+    try {
+
+        // ==========================================
+        // 1. ELIMINAR DOCUMENTOS DE "materias"
+        // ==========================================
+
+        const materiasSnap = await getDocs(
+            collection(db, "materias")
+        );
+
+        for (const materiaDoc of materiasSnap.docs) {
+
+            const nombre = String(
+                materiaDoc.data().nombre || ""
+            )
+            .trim()
+            .toLowerCase();
+
+            if (materiasEliminar.includes(nombre)) {
+
+                await deleteDoc(
+                    doc(db, "materias", materiaDoc.id)
+                );
+
+                console.log(
+                    "Materia eliminada:",
+                    materiaDoc.data().nombre
+                );
+            }
+        }
+
+
+        // ==========================================
+        // 2. ELIMINAR REGISTROS DE "alumnos"
+        // ==========================================
+
+        const alumnosSnap = await getDocs(
+            collection(db, "alumnos")
+        );
+
+        let eliminados = 0;
+
+        for (const alumnoDoc of alumnosSnap.docs) {
+
+            const materia = String(
+                alumnoDoc.data().materia || ""
+            )
+            .trim()
+            .toLowerCase();
+
+            if (materiasEliminar.includes(materia)) {
+
+                await deleteDoc(
+                    doc(db, "alumnos", alumnoDoc.id)
+                );
+
+                eliminados++;
+
+                console.log(
+                    "Registro de alumno eliminado:",
+                    alumnoDoc.id
+                );
+            }
+        }
+
+
+        // ==========================================
+        // 3. ACTUALIZAR LOS DATOS EN PANTALLA
+        // ==========================================
+
+        await cargarDatos();
+
+        await cargarMaterias();
+
+        llenarMaterias();
+
+        renderTabla(datosGlobales);
+
+
+        alert(
+            "✅ Materias eliminadas completamente.\n\n" +
+            "Registros de alumnos eliminados: " +
+            eliminados
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Error eliminando materias:",
+            error
+        );
+
+        alert(
+            "❌ Ocurrió un error al eliminar las materias.\n\n" +
+            error.message
+        );
+
+    }
 
 };
 
@@ -724,58 +910,97 @@ function llenarMaterias(){
 
     const filtro = document.getElementById("filtroMateria");
 
-    const materias = [...new Set(
-        datosGlobales
-            .map(a => a.materia)
-            .filter(Boolean)
-    )].sort();
+    const materiasEliminadas = [
+        "algoritmos y pensamiento lógico",
+        "ciudadanía digital",
+        "emprendimiento digital",
+        "ia para niños y jóvenes"
+    ];
 
+    // Obtener materias existentes
+    const materias = [
+        ...new Set(
+            datosGlobales
+                .map(a => String(a.materia || "").trim())
+                .filter(Boolean)
+                .filter(materia => 
+                    !materiasEliminadas.includes(
+                        materia.toLowerCase()
+                    )
+                )
+        )
+    ].sort((a,b) => a.localeCompare(b));
+
+    // Reiniciar selector
     filtro.innerHTML = `
         <option value="Todas">
             Todas las materias
         </option>
     `;
 
-    materias.forEach(m => {
+    // Agregar materias
+    materias.forEach(materia => {
 
-        filtro.innerHTML += `
-            <option value="${m}">
-                ${m}
-            </option>
-        `;
+        const option = document.createElement("option");
+
+        option.value = materia;
+        option.textContent = materia;
+
+        filtro.appendChild(option);
 
     });
 
 }
+
 window.filtrar = () => {
 
-    const texto =
+    const texto = String(
         document
         .getElementById("buscarMatricula")
-        .value
-        .toLowerCase();
+        .value || ""
+    )
+    .trim()
+    .toLowerCase();
 
-    const materia =
+    const materiaSeleccionada =
         document
         .getElementById("filtroMateria")
-        .value;
+        .value
+        .trim()
+        .toLowerCase();
 
-    const filtrados =
-        datosGlobales.filter(d => {
+    const filtrados = datosGlobales.filter(d => {
 
-            const coincideMatricula =
-                d.matricula
-                .toLowerCase()
-                .includes(texto);
+        // ==============================
+        // MATRÍCULA
+        // ==============================
 
-            const coincideMateria =
-                materia === "Todas"
-                || d.materia === materia;
+        const matricula =
+            String(d.matricula || "")
+            .trim()
+            .toLowerCase();
 
-            return coincideMatricula
-                && coincideMateria;
+        const coincideMatricula =
+            matricula.includes(texto);
 
-        });
+
+        // ==============================
+        // MATERIA
+        // ==============================
+
+        const materia =
+            String(d.materia || "")
+            .trim()
+            .toLowerCase();
+
+        const coincideMateria =
+            materiaSeleccionada === "todas"
+            || materia === materiaSeleccionada;
+
+
+        return coincideMatricula && coincideMateria;
+
+    });
 
     renderTabla(filtrados);
 
