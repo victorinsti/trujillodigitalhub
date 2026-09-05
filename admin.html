@@ -210,7 +210,25 @@
     <section id="stats" class="stats"></section>
     <section id="content" class="card"></section>
   </main>
+<script src="https://www.gstatic.com/firebasejs/12.10.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore-compat.js"></script>
 
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyBDAOW-qrvxTcJVM4QNWPQvrmbz8wcAQLM",
+        authDomain: "trujillo-digital-hub.firebaseapp.com",
+        projectId: "trujillo-digital-hub",
+        storageBucket: "trujillo-digital-hub.firebasestorage.app",
+        messagingSenderId: "162799375782",
+        appId: "1:162799375782:web:2beaa613fd6ab67"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    const db = firebase.firestore();
+
+    console.log("Firebase conectado en admin");
+</script>
   <script>
     const key = "tdh_store_data";
 
@@ -268,93 +286,213 @@
       }).format(value || 0);
     }
 
-    function renderStats() {
-      const orders = getState().orders;
-      const income = orders
-        .filter(order => order.status === "Pago confirmado")
-        .reduce((sum,order) => sum + order.total, 0);
+    async function renderStats() {
 
-      document.querySelector("#stats").innerHTML = `
-        <article class="stat">
-          Ingresos confirmados
-          <b>${money(income)}</b>
-        </article>
+    try {
 
-        <article class="stat">
-          Pedidos totales
-          <b>${orders.length}</b>
-        </article>
+        const snapshot = await db
+            .collection("pedidos")
+            .get();
 
-        <article class="stat">
-          Comprobantes por revisar
-          <b>${orders.filter(order => order.status === "Comprobante recibido").length}</b>
-        </article>
+        const orders = [];
 
-        <article class="stat">
-          Productos agotados
-          <b>${products.filter(product => !product.stock).length}</b>
-        </article>
-      `;
+        snapshot.forEach(doc => {
+            orders.push(doc.data());
+        });
+
+        const income = orders
+            .filter(order => order.status === "Pago confirmado")
+            .reduce((sum, order) => sum + Number(order.total || 0), 0);
+
+        const pendingProofs = orders
+            .filter(order => order.status === "Comprobante recibido")
+            .length;
+
+        const totalOrders = orders.length;
+
+        document.querySelector("#stats").innerHTML = `
+            <article class="stat">
+                Ingresos confirmados
+                <b>${money(income)}</b>
+            </article>
+
+            <article class="stat">
+                Pedidos totales
+                <b>${totalOrders}</b>
+            </article>
+
+            <article class="stat">
+                Comprobantes por revisar
+                <b>${pendingProofs}</b>
+            </article>
+
+            <article class="stat">
+                Productos agotados
+                <b>${products.filter(product => !product.stock).length}</b>
+            </article>
+        `;
+
+        console.log("Estadísticas actualizadas:", {
+            ingresos: income,
+            pedidos: totalOrders,
+            comprobantes: pendingProofs
+        });
+
+    } catch (error) {
+
+        console.error("Error cargando estadísticas:", error);
+
     }
+}
 
-    function showOrders() {
-      const orders = getState().orders;
+    async function showOrders() {
 
-      document.querySelector("#content").innerHTML = `
+    const content = document.querySelector("#content");
+
+    content.innerHTML = `
         <h2>Pedidos digitales</h2>
+        <p>Cargando pedidos...</p>
+    `;
 
-        <table>
-          <tr>
-            <th>Número</th>
-            <th>Cliente</th>
-            <th>Correo</th>
-            <th>Total</th>
-            <th>Comprobante</th>
-            <th>Estado</th>
-          </tr>
+    try {
 
-          ${
-            orders.length
-              ? orders.map(order => `
+        const snapshot = await db
+            .collection("pedidos")
+            .orderBy("createdAt", "desc")
+            .get();
+
+        const orders = [];
+
+        snapshot.forEach(doc => {
+            orders.push(doc.data());
+        });
+
+        content.innerHTML = `
+            <h2>Pedidos digitales</h2>
+
+            <table>
                 <tr>
-                  <td>${order.id}</td>
-                  <td>${order.customer.name} ${order.customer.lastName}</td>
-                  <td>${order.customer.email}</td>
-                  <td>${money(order.total)}</td>
-                  <td>${order.proof ? order.proof.name : "Sin comprobante"}</td>
-                  <td>
-                    <select onchange="updateOrder('${order.id}',this.value)">
-                      ${statuses.map(status => `
-                        <option ${status === order.status ? "selected" : ""}>
-                          ${status}
-                        </option>
-                      `).join("")}
-                    </select>
-                  </td>
+                    <th>Cliente</th>
+<th>WhatsApp</th>
+<th>Correo</th>
+                    <th>Total</th>
+                    <th>Comprobante</th>
+                    <th>Estado</th>
                 </tr>
-              `).join("")
-              : '<tr><td colspan="6">No hay pedidos todavía.</td></tr>'
-          }
-        </table>
-      `;
+
+                ${
+                    orders.length
+                    ? orders.map(order => `
+                        <tr>
+
+                            <td>${order.id}</td>
+
+<td>
+    ${order.customer?.name || ""}
+    ${order.customer?.lastName || ""}
+</td>
+
+<td>
+    ${
+        order.customer?.phone
+        ? `<a href="https://wa.me/52${order.customer.phone.replace(/\D/g, "")}" target="_blank">
+            📱 WhatsApp
+           </a>`
+        : "No proporcionado"
     }
+</td>
 
-    function updateOrder(id,status) {
-      const state = getState();
-      const order = state.orders.find(order => order.id === id);
+<td>
+    ${order.customer?.email || "No proporcionado"}
+</td>
 
-      if (!order) return;
+<td>
+    ${money(order.total)}
+</td>
 
-      order.status = status;
+                            <td>
+                                ${
+                                    order.proof
+                                    ? `<a href="${order.proof.url}" target="_blank">
+                                        Ver comprobante
+                                       </a>`
+                                    : "Sin comprobante"
+                                }
+                            </td>
 
-      if (status === "Pago confirmado") {
-        order.downloadEnabled = true;
-      }
+                            <td>
 
-      saveState(state);
-      renderStats();
-      showOrders();
+                                <select onchange="updateOrder('${order.id}', this.value)">
+
+                                    ${statuses.map(status => `
+                                        <option
+                                            value="${status}"
+                                            ${status === order.status ? "selected" : ""}
+                                        >
+                                            ${status}
+                                        </option>
+                                    `).join("")}
+
+                                </select>
+
+                            </td>
+
+                        </tr>
+                    `).join("")
+                    : '<tr><td colspan="6">No hay pedidos todavía.</td></tr>'
+                }
+
+            </table>
+        `;
+
+        console.log("Pedidos cargados desde Firebase:", orders.length);
+
+    } catch (error) {
+
+        console.error("Error cargando pedidos:", error);
+
+        content.innerHTML = `
+            <h2>Pedidos digitales</h2>
+
+            <p class="warning">
+                No se pudieron cargar los pedidos desde Firebase.
+            </p>
+        `;
     }
+}
+
+  async function updateOrder(id, status) {
+
+    try {
+
+        console.log("Actualizando pedido:", id);
+        console.log("Nuevo estado:", status);
+
+        await db
+            .collection("pedidos")
+            .doc(id)
+            .update({
+                status: status,
+                downloadEnabled: status === "Pago confirmado"
+            });
+
+        console.log("Pedido actualizado correctamente en Firebase");
+
+        await showOrders();
+        await renderStats();
+
+        alert("Estado actualizado correctamente");
+
+    } catch (error) {
+
+        console.error("ERROR AL ACTUALIZAR PEDIDO:", error);
+
+        alert(
+            "No se pudo actualizar el estado.\n\n" +
+            error.message
+        );
+    }
+}
 
     function showProducts() {
       document.querySelector("#content").innerHTML = `
@@ -434,8 +572,10 @@
       });
     }
 
-    renderStats();
-    showOrders();
+   renderStats();
+showOrders();
   </script>
+
+  
 </body>
 </html>

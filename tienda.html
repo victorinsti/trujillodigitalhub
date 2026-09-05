@@ -291,6 +291,7 @@
       <a href="#tienda">Tienda</a>
       <a href="#categorias">Categorías</a>
       <a href="#ofertas">Ofertas</a>
+      <a href="#consultar-pedido">Consultar pedido</a>
      <a href="index.html">Educación</a>
       <a href="#contacto">Contacto</a>
     </nav>
@@ -337,7 +338,37 @@
     </section>
   </footer>
 
-  <script>
+  <!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/12.10.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore-compat.js"></script>
+<script type="module">
+    import { enviarTelegram } from "./telegramtienda.js";
+
+    window.enviarTelegram = enviarTelegram;
+</script>
+
+
+
+<script>
+  // ==========================================
+// FIREBASE
+// ==========================================
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBDAOW-qrvxTcJVM4QNWPQvrmbz8wcAQLM",
+  authDomain: "trujillo-digital-hub.firebaseapp.com",
+  projectId: "trujillo-digital-hub",
+  storageBucket: "trujillo-digital-hub.firebasestorage.app",
+  messagingSenderId: "162799375782",
+  appId: "1:162799375782:web:2be9127bfeaa613fd6ab67"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const db = firebase.firestore();
+
+
+console.log("Firebase conectado correctamente");
     const products = [
      {
   id:"prompts-chatgpt",
@@ -936,6 +967,41 @@
             <a class="primary" href="#tienda?offers=1">Descubrir ofertas</a>
           </div>
         </section>
+
+        <section id="consultar-pedido" class="section dark">
+          <div class="form-card" style="max-width:650px;margin:auto;text-align:center;">
+            
+            <span class="eyebrow">SEGUIMIENTO DE PEDIDO</span>
+
+            <h2>Consulta tu pedido</h2>
+
+            <p class="muted">
+              Ingresa los últimos 4 números de tu referencia para consultar el estado de tu pago.
+            </p>
+
+            <div style="display:flex;gap:10px;margin-top:25px;">
+              <input
+                id="buscar-referencia"
+                type="text"
+                inputmode="numeric"
+                maxlength="4"
+                placeholder="Últimos 4 números"
+                style="flex:1;text-align:center;"
+              >
+
+              <button
+                class="primary"
+                id="buscar-pedido-btn"
+              >
+                Consultar
+              </button>
+            </div>
+
+            <div id="resultado-pedido" style="margin-top:25px;"></div>
+
+          </div>
+        </section>
+
       `;
     }
 
@@ -1098,7 +1164,7 @@
         </button>
       ` : `
         <div class="empty">
-          <img src="trubi.pbg" alt="TRUBI" onerror="this.style.display='none'">
+          <img src="trubi.png" alt="TRUBI" onerror="this.style.display='none'">
           <h3>Tu carrito está esperando algo increíble.</h3>
           <p class="muted">Explora productos para comenzar.</p>
           <a class="primary" href="#tienda">Explorar productos</a>
@@ -1115,7 +1181,7 @@
 
    function checkout() {
   const items = cartItems();
-
+ 
   if (!items.length) {
     location.hash = "#tienda";
     return;
@@ -1180,46 +1246,147 @@
     </section>
   `;
 
-  document.querySelector("#checkout-form").addEventListener("submit", event => {
+  document.querySelector("#checkout-form").addEventListener("submit", async event => {
+
     event.preventDefault();
 
-    const customer = Object.fromEntries(new FormData(event.target));
-    const state = getState();
-    const totals = cartTotals();
+    const button = event.target.querySelector("button");
+    button.disabled = true;
+    button.textContent = "Generando pedido...";
 
-    const order = {
-      id:`TDH-${new Date().getFullYear()}-${String(state.orders.length + 1).padStart(5,"0")}`,
-      createdAt:new Date().toISOString(),
-      customer,
-      items:cartItems().map(item => ({
-        id:item.id,
-        name:item.name,
-        price:item.price,
-        qty:item.qty,
-        type:"digital"
-      })),
-      total:totals.total,
-      status:"Pendiente de pago",
-      proof:null,
-      downloadEnabled:false
-    };
+    try {
 
-    state.orders.unshift(order);
-    state.cart = [];
-    saveState(state);
+       const formData = Object.fromEntries(new FormData(event.target));
 
-    location.hash = "#pedido/" + order.id;
-  });
+const customer = {
+    name: formData.name || "",
+    lastName: formData.lastName || "",
+    email: formData.email || "",
+    phone: formData.phone || "",
+    notes: formData.notes || ""
+};
+
+        const state = getState();
+        const totals = cartTotals();
+
+        // ==========================================
+        // GENERAR NÚMERO DE PEDIDO
+        // ==========================================
+
+        const orderId =
+            `TDH-${new Date().getFullYear()}-${Date.now()}`;
+
+        // ==========================================
+        // CREAR PEDIDO
+        // ==========================================
+
+        const order = {
+    id: orderId,
+    reference4: orderId.slice(-4),
+    createdAt: new Date().toISOString(),
+
+            customer: {
+                name: customer.name,
+                lastName: customer.lastName,
+                email: customer.email,
+                phone: customer.phone,
+                notes: customer.notes || ""
+            },
+
+            items: cartItems().map(item => ({
+                id: item.id,
+                name: item.name,
+                price: item.price,
+                qty: item.qty,
+                type: "digital"
+            })),
+
+            total: totals.total,
+
+            status: "Pendiente de pago",
+
+            proof: null,
+
+            downloadEnabled: false
+        };
+
+        // ==========================================
+        // GUARDAR EN FIRESTORE
+        // ==========================================
+
+        await db.collection("pedidos").doc(orderId).set(order);
+
+console.log("Pedido guardado en Firebase:", orderId);
+
+try {
+    await enviarTelegram(order);
+    console.log("Notificación enviada a Telegram");
+} catch (error) {
+    console.error("Error enviando Telegram:", error);
 }
+        // ==========================================
+        // GUARDAR LOCALMENTE
+        // Esto permite mostrar la página del pedido
+        // ==========================================
 
-    function orderPage(id) {
-      const order = getState().orders.find(order => order.id === id);
+        state.orders.unshift(order);
 
-      if (!order) {
-        document.querySelector("#app").innerHTML =
-          '<section class="section"><h2>Pedido no encontrado.</h2></section>';
-        return;
-      }
+        state.cart = [];
+
+        saveState(state);
+
+        // ==========================================
+        // IR A LA PÁGINA DEL PEDIDO
+        // ==========================================
+
+        location.hash = "#pedido/" + orderId;
+
+    } catch (error) {
+
+        console.error("Error creando pedido:", error);
+
+        toast(
+            "No se pudo crear el pedido. Intenta nuevamente."
+        );
+
+        button.disabled = false;
+        button.textContent = "Generar pedido";
+    }
+
+});
+}
+    async function orderPage(id) {
+      
+      let order;
+
+try {
+
+  const doc = await db
+    .collection("pedidos")
+    .doc(id)
+    .get();
+
+  if (!doc.exists) {
+
+    document.querySelector("#app").innerHTML =
+      '<section class="section"><h2>Pedido no encontrado.</h2></section>';
+
+    return;
+  }
+
+  order = doc.data();
+
+  console.log("Pedido cargado desde Firebase:", order.id);
+
+} catch (error) {
+
+  console.error("Error cargando pedido:", error);
+
+  document.querySelector("#app").innerHTML =
+    '<section class="section"><h2>No se pudo cargar el pedido.</h2></section>';
+
+  return;
+}
 
       const settings = getSettings();
 
@@ -1276,38 +1443,110 @@
       const button = document.querySelector("#proof-btn");
 
       if (button) {
-        button.addEventListener("click", () => {
-          const file = document.querySelector("#proof-file").files[0];
+       button.addEventListener("click", async () => {
 
-          if (!file) {
-            toast("Selecciona un comprobante.");
-            return;
-          }
+  const file = document.querySelector("#proof-file").files[0];
 
-          const types = ["image/jpeg","image/png","application/pdf"];
+  if (!file) {
+    toast("Selecciona un comprobante.");
+    return;
+  }
 
-          if (!types.includes(file.type) || file.size > 5 * 1024 * 1024) {
-            toast("Solo JPG, PNG o PDF de máximo 5 MB.");
-            return;
-          }
+  const types = [
+    "image/jpeg",
+    "image/png"
+  ];
 
-          const state = getState();
-          const savedOrder = state.orders.find(item => item.id === id);
+  if (!types.includes(file.type) || file.size > 5 * 1024 * 1024) {
+    toast("Solo JPG o PNG de máximo 5 MB.");
+    return;
+  }
 
-          savedOrder.proof = {
-            name:file.name,
-            type:file.type,
-            receivedAt:new Date().toISOString()
-          };
+  button.disabled = true;
+  button.textContent = "Subiendo comprobante...";
 
-          savedOrder.status = "Comprobante recibido";
-          saveState(state);
+  try {
 
-          toast("Comprobante recibido. Se revisará manualmente.");
-          orderPage(id);
-        });
+    const IMGBB_API_KEY = "e5fca8fd3a72f235075cfa08e1370ee3";
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    const response = await fetch(
+      `https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`,
+      {
+        method: "POST",
+        body: formData
       }
+    );
+
+    const result = await response.json();
+
+    if (!result.success) {
+      throw new Error("ImgBB no pudo subir el comprobante.");
     }
+
+    const imageURL = result.data.url;
+
+    console.log(
+      "Comprobante subido a ImgBB:",
+      imageURL
+    );
+
+    await db
+      .collection("pedidos")
+      .doc(id)
+      .update({
+        proof: {
+          name: file.name,
+          type: file.type,
+          size: file.size,
+          url: imageURL,
+          receivedAt: new Date().toISOString()
+        },
+        status: "Comprobante recibido"
+      });
+
+    const state = getState();
+
+    const savedOrder =
+      state.orders.find(item => item.id === id);
+
+    if (savedOrder) {
+
+      savedOrder.proof = {
+        name: file.name,
+        type: file.type,
+        size: file.size,
+        url: imageURL,
+        receivedAt: new Date().toISOString()
+      };
+
+      savedOrder.status = "Comprobante recibido";
+
+      saveState(state);
+    }
+
+    toast("Comprobante enviado correctamente.");
+
+    await orderPage(id);
+
+  } catch (error) {
+
+    console.error(
+      "Error subiendo comprobante:",
+      error
+    );
+
+    toast("No se pudo subir el comprobante.");
+
+    button.disabled = false;
+    button.textContent = "Enviar comprobante";
+  }
+
+});
+ }
+  }
 
     function admin() {
       const state = getState();
@@ -1465,6 +1704,104 @@
         toast("Datos bancarios guardados.");
       });
     }
+async function consultarPedido() {
+  const input = document.querySelector("#buscar-referencia");
+  const resultado = document.querySelector("#resultado-pedido");
+
+  const referencia = input.value.trim();
+
+  if (!/^\d{4}$/.test(referencia)) {
+    resultado.innerHTML = `
+      <div class="form-card">
+        <strong>⚠️ Referencia no válida</strong>
+        <p class="muted">Ingresa exactamente los últimos 4 números de tu pedido.</p>
+      </div>
+    `;
+    return;
+  }
+
+  resultado.innerHTML = `
+    <p class="muted">Buscando pedido...</p>
+  `;
+
+  try {
+    const snapshot = await db
+      .collection("pedidos")
+      .where("reference4", "==", referencia)
+      .get();
+
+    if (snapshot.empty) {
+      resultado.innerHTML = `
+        <div class="form-card">
+          <strong>❌ Pedido no encontrado</strong>
+          <p class="muted">
+            No encontramos un pedido con los últimos 4 números
+            <strong>${referencia}</strong>.
+          </p>
+        </div>
+      `;
+      return;
+    }
+
+    if (snapshot.size > 1) {
+      resultado.innerHTML = `
+        <div class="form-card">
+          <strong>⚠️ Hay más de un pedido</strong>
+          <p class="muted">
+            Encontramos varios pedidos que terminan en
+            <strong>${referencia}</strong>.
+            Contacta con nosotros para identificar el correcto.
+          </p>
+        </div>
+      `;
+      return;
+    }
+
+    const pedido = snapshot.docs[0].data();
+
+    resultado.innerHTML = `
+      <div class="form-card" style="text-align:left;">
+        <span class="eyebrow">PEDIDO ENCONTRADO</span>
+
+        <h3>Pedido ••••${referencia}</h3>
+
+        <p>
+          <strong>Estado:</strong>
+          <span>${pedido.status || "Pendiente de pago"}</span>
+        </p>
+
+        <p>
+          <strong>Total:</strong>
+          $${Number(pedido.total || 0).toFixed(2)} MXN
+        </p>
+
+        <p>
+          <strong>Fecha:</strong>
+          ${pedido.createdAt
+            ? new Date(pedido.createdAt).toLocaleString("es-MX")
+            : "No disponible"}
+        </p>
+      </div>
+    `;
+
+  } catch (error) {
+    console.error(error);
+
+    resultado.innerHTML = `
+      <div class="form-card">
+        <strong>❌ Error al consultar</strong>
+        <p class="muted">
+          No fue posible consultar el pedido. Intenta nuevamente.
+        </p>
+      </div>
+    `;
+  }
+}
+document.addEventListener("click", function(event) {
+  if (event.target.id === "buscar-pedido-btn") {
+    consultarPedido();
+  }
+});
 
     function route() {
       const hash = location.hash || "#inicio";
