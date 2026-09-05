@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Administración | TDH Store</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Space+Grotesk:wght@600;700&display=swap');
+
+    :root {
+      --bg:#07101f;
+      --panel:#0c1a2d;
+      --line:#203c5d;
+      --text:#f4f8ff;
+      --muted:#a7b8d0;
+      --blue:#2588ff;
+      --green:#5ee5a6;
+    }
+
+    * { box-sizing:border-box; }
+
+    body {
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font:15px Manrope,Arial,sans-serif;
+    }
+
+    button,input,select,textarea {
+      font:inherit;
+    }
+
+    button {
+      border:0;
+      cursor:pointer;
+    }
+
+    .header {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:18px max(22px,6vw);
+      border-bottom:1px solid var(--line);
+      background:#091629;
+    }
+
+    .brand {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:11px;
+      letter-spacing:1px;
+    }
+
+    .logo {
+      width:38px;
+      height:38px;
+      display:grid;
+      place-items:center;
+      border-radius:11px;
+      background:linear-gradient(135deg,#6cddff,#1760e9);
+      font:700 22px "Space Grotesk";
+    }
+
+    .admin {
+      max-width:1200px;
+      margin:auto;
+      padding:45px 22px;
+    }
+
+    h1,h2,h3 {
+      font-family:"Space Grotesk",sans-serif;
+    }
+
+    .eyebrow {
+      color:#70dcff;
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:1.2px;
+    }
+
+    .tabs {
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin:24px 0;
+    }
+
+    .tabs button,.primary {
+      padding:11px 15px;
+      border-radius:9px;
+      color:#fff;
+      background:#173b68;
+    }
+
+    .primary {
+      background:linear-gradient(135deg,#2996ff,#3467ed);
+      font-weight:800;
+    }
+
+    .stats {
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+    }
+
+    .stat,.card {
+      padding:20px;
+      border:1px solid var(--line);
+      border-radius:15px;
+      background:var(--panel);
+    }
+
+    .stat b {
+      display:block;
+      margin-top:8px;
+      font:700 27px "Space Grotesk";
+    }
+
+    .card {
+      margin-top:18px;
+      overflow:auto;
+    }
+
+    table {
+      width:100%;
+      border-collapse:collapse;
+    }
+
+    th,td {
+      padding:13px;
+      text-align:left;
+      border-bottom:1px solid var(--line);
+    }
+
+    select,input,textarea {
+      width:100%;
+      padding:10px;
+      border:1px solid #2a476b;
+      border-radius:8px;
+      color:#fff;
+      background:#0d1c30;
+    }
+
+    form {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    label {
+      display:grid;
+      gap:6px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .full {
+      grid-column:1 / -1;
+    }
+
+    .status {
+      color:var(--green);
+      font-weight:700;
+    }
+
+    .warning {
+      padding:13px;
+      border-radius:10px;
+      color:#b9d8ff;
+      background:#102845;
+    }
+
+    @media(max-width:780px) {
+      .stats { grid-template-columns:repeat(2,1fr); }
+      form { grid-template-columns:1fr; }
+      .full { grid-column:auto; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="header">
+    <div class="brand">
+      <div class="logo">T</div>
+      <div>TRUJILLO<br><b>DIGITAL HUB</b></div>
+    </div>
+
+    <a href="tienda.html" style="color:#70dcff;text-decoration:none">
+      Ver tienda
+    </a>
+  </header>
+
+  <main class="admin">
+    <span class="eyebrow">TDH STORE · ADMINISTRACIÓN</span>
+    <h1>Panel administrativo</h1>
+
+    <p class="warning">
+      Demo local: para producción, protege esta página mediante Firebase Authentication
+      y permisos de administrador.
+    </p>
+
+    <div class="tabs">
+      <button onclick="showOrders()">Pedidos</button>
+      <button onclick="showProducts()">Productos digitales</button>
+      <button onclick="showSettings()">Transferencia bancaria</button>
+    </div>
+
+    <section id="stats" class="stats"></section>
+    <section id="content" class="card"></section>
+  </main>
+
+  <script>
+    const key = "tdh_store_data";
+
+    const products = [
+  { name:"Pack de 100 Prompts para ChatGPT", price:50, stock:999 },
+  { name:"Kit Emprendedor Digital", price:150, stock:999 },
+  { name:"Calendario de Contenido 30 Días", price:80, stock:999 },
+  { name:"Pack de 100 Ideas de Contenido", price:50, stock:999 },
+  { name:"Kit IA para Estudiantes", price:50, stock:999 },
+  { name:"Control de Ventas en Excel", price:50, stock:999 },
+  { name:"Control de Gastos", price:50, stock:999 },
+  { name:"Control de Inventario en Excel", price:50, stock:999 },
+  { name:"Calculadora de Precios y Ganancias", price:50, stock:999 },
+  { name:"Pack de Prompts para Crear Contenido", price:50, stock:999 },
+  { name:"Kit Redes Sociales", price:150, stock:999 },
+  { name:"Guía para Vender por WhatsApp", price:80, stock:999 },
+  { name:"Cómo Crear un Negocio Digital Desde Cero", price:100, stock:999 },
+  { name:"IA para Emprendedores", price:100, stock:999 },
+  { name:"IA para Estudiantes", price:50, stock:999 },
+  { name:"Agenda Digital 2026-2027-2028", price:100, stock:999 },
+  { name:"Kit de Productividad Digital", price:100, stock:999 },
+  { name:"CV Profesional Editable", price:50, stock:999 },
+  { name:"Kit CV + Portafolio Profesional", price:150, stock:999 },
+  { name:"Plantilla de Plan de Negocios", price:100, stock:999 },
+  { name:"Plantilla de Presupuesto Empresarial", price:70, stock:999 },
+  { name:"CRM Básico en Excel", price:100, stock:999 },
+  { name:"Pack de Promociones para Redes Sociales", price:150, stock:999 },
+  { name:"Kit de Seguridad Digital", price:50, stock:999 },
+  { name:"HTML + CSS desde Cero", price:100, stock:999 },
+  { name:"Kit Programador Principiante", price:200, stock:999 }
+];
+
+    const statuses = [
+      "Pendiente de pago",
+      "Comprobante recibido",
+      "En revisión",
+      "Pago confirmado",
+      "Pago rechazado",
+      "Completado",
+      "Cancelado"
+    ];
+
+    function getState() {
+      return JSON.parse(localStorage.getItem(key) || '{"cart":[],"orders":[],"settings":{}}');
+    }
+
+    function saveState(data) {
+      localStorage.setItem(key, JSON.stringify(data));
+    }
+
+    function money(value) {
+      return new Intl.NumberFormat("es-MX", {
+        style:"currency",
+        currency:"MXN"
+      }).format(value || 0);
+    }
+
+    function renderStats() {
+      const orders = getState().orders;
+      const income = orders
+        .filter(order => order.status === "Pago confirmado")
+        .reduce((sum,order) => sum + order.total, 0);
+
+      document.querySelector("#stats").innerHTML = `
+        <article class="stat">
+          Ingresos confirmados
+          <b>${money(income)}</b>
+        </article>
+
+        <article class="stat">
+          Pedidos totales
+          <b>${orders.length}</b>
+        </article>
+
+        <article class="stat">
+          Comprobantes por revisar
+          <b>${orders.filter(order => order.status === "Comprobante recibido").length}</b>
+        </article>
+
+        <article class="stat">
+          Productos agotados
+          <b>${products.filter(product => !product.stock).length}</b>
+        </article>
+      `;
+    }
+
+    function showOrders() {
+      const orders = getState().orders;
+
+      document.querySelector("#content").innerHTML = `
+        <h2>Pedidos digitales</h2>
+
+        <table>
+          <tr>
+            <th>Número</th>
+            <th>Cliente</th>
+            <th>Correo</th>
+            <th>Total</th>
+            <th>Comprobante</th>
+            <th>Estado</th>
+          </tr>
+
+          ${
+            orders.length
+              ? orders.map(order => `
+                <tr>
+                  <td>${order.id}</td>
+                  <td>${order.customer.name} ${order.customer.lastName}</td>
+                  <td>${order.customer.email}</td>
+                  <td>${money(order.total)}</td>
+                  <td>${order.proof ? order.proof.name : "Sin comprobante"}</td>
+                  <td>
+                    <select onchange="updateOrder('${order.id}',this.value)">
+                      ${statuses.map(status => `
+                        <option ${status === order.status ? "selected" : ""}>
+                          ${status}
+                        </option>
+                      `).join("")}
+                    </select>
+                  </td>
+                </tr>
+              `).join("")
+              : '<tr><td colspan="6">No hay pedidos todavía.</td></tr>'
+          }
+        </table>
+      `;
+    }
+
+    function updateOrder(id,status) {
+      const state = getState();
+      const order = state.orders.find(order => order.id === id);
+
+      if (!order) return;
+
+      order.status = status;
+
+      if (status === "Pago confirmado") {
+        order.downloadEnabled = true;
+      }
+
+      saveState(state);
+      renderStats();
+      showOrders();
+    }
+
+    function showProducts() {
+      document.querySelector("#content").innerHTML = `
+        <h2>Productos digitales</h2>
+
+        <table>
+          <tr>
+            <th>Producto</th>
+            <th>Precio</th>
+            <th>Disponibilidad</th>
+          </tr>
+
+          ${products.map(product => `
+            <tr>
+              <td>${product.name}</td>
+              <td>${money(product.price)}</td>
+              <td class="status">${product.stock ? "Disponible" : "Agotado"}</td>
+            </tr>
+          `).join("")}
+        </table>
+
+        <p class="warning">
+          Para producción, guarda productos, archivos descargables e inventario
+          en Firestore y Firebase Storage.
+        </p>
+      `;
+    }
+
+    function showSettings() {
+      const settings = {
+        bank:"Banco DEMO",
+        holder:"Trujillo Digital Hub",
+        clabe:"000 000 000 000 000 000",
+        reference:"Usa tu número de pedido como concepto o referencia.",
+        ...getState().settings
+      };
+
+      document.querySelector("#content").innerHTML = `
+        <h2>Datos de transferencia</h2>
+
+        <form id="settings-form">
+          <label>
+            Banco
+            <input name="bank" value="${settings.bank}">
+          </label>
+
+          <label>
+            Titular
+            <input name="holder" value="${settings.holder}">
+          </label>
+
+          <label class="full">
+            CLABE
+            <input name="clabe" value="${settings.clabe}">
+          </label>
+
+          <label class="full">
+            Instrucciones de pago
+            <textarea name="reference" rows="4">${settings.reference}</textarea>
+          </label>
+
+          <button class="primary">Guardar datos bancarios</button>
+        </form>
+      `;
+
+      document.querySelector("#settings-form").addEventListener("submit", event => {
+        event.preventDefault();
+
+        const state = getState();
+        state.settings = {
+          ...state.settings,
+          ...Object.fromEntries(new FormData(event.target))
+        };
+
+        saveState(state);
+        alert("Datos bancarios guardados.");
+      });
+    }
+
+    renderStats();
+    showOrders();
+  </script>
+</body>
+</html>

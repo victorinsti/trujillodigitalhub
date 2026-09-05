@@ -1,0 +1,1515 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="TDH Store — tecnología, innovación y soluciones digitales.">
+  <title>TDH Store | Trujillo Digital Hub</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+    :root {
+      --bg:#07101f; --panel:#0d1a2d; --line:#203c5d;
+      --ink:#f4f8ff; --muted:#a7b8d0; --blue:#2588ff;
+      --cyan:#70dcff; --green:#5ee5a6; --red:#ff7185;
+    }
+
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      margin:0; background:var(--bg); color:var(--ink);
+      font:15px Manrope,Arial,sans-serif;
+    }
+
+    button,input,select,textarea { font:inherit; }
+    button { border:0; cursor:pointer; }
+    a { color:inherit; text-decoration:none; }
+
+    .header {
+      height:74px; padding:0 max(20px,6vw); display:flex; align-items:center;
+      gap:25px; position:sticky; top:0; z-index:50;
+      background:#07101ff2; border-bottom:1px solid #173054;
+      backdrop-filter:blur(14px);
+    }
+
+    .brand { display:flex; align-items:center; gap:10px; font-size:10px; letter-spacing:1px; line-height:1.1; }
+    .brand b { font-size:13px; }
+    .brand-mark {
+      width:36px; height:36px; display:grid; place-items:center;
+      border-radius:11px; background:linear-gradient(135deg,#6cddff,#1760e9);
+      font:700 22px "Space Grotesk"; box-shadow:0 0 25px #2588ff88;
+    }
+
+    nav { display:flex; gap:23px; margin:auto; color:var(--muted); }
+    nav a:hover { color:#fff; }
+
+    .header-actions { display:flex; gap:8px; }
+    .header-actions button,.menu {
+      padding:9px 12px; border-radius:10px; color:#fff; background:#11233d;
+    }
+
+    #cart-count {
+      display:inline-grid; place-items:center; min-width:18px; height:18px;
+      border-radius:50%; background:var(--blue); font-size:11px; font-style:normal;
+    }
+
+    .menu { display:none; }
+    .admin-link { border:1px solid #385a84!important; background:transparent!important; }
+
+    .hero {
+      min-height:570px; padding:80px max(22px,9vw);
+      display:grid; grid-template-columns:1.05fr .95fr; align-items:center;
+      overflow:hidden;
+      background:
+        radial-gradient(circle at 82% 38%,#1265d04c,transparent 28%),
+        linear-gradient(135deg,#09162a,#07101f 65%);
+    }
+
+    .eyebrow {
+      color:var(--cyan); font-weight:800; font-size:12px;
+      letter-spacing:1.4px; text-transform:uppercase;
+    }
+
+    h1,h2,h3 { font-family:"Space Grotesk",sans-serif; }
+    .hero h1 { max-width:700px; margin:18px 0; font-size:clamp(43px,6vw,76px); line-height:.98; }
+    .hero h1 em { color:var(--cyan); font-style:normal; }
+    .hero p { max-width:560px; color:var(--muted); font-size:17px; line-height:1.7; }
+
+    .actions { display:flex; gap:12px; margin-top:28px; }
+    .primary,.secondary {
+      display:inline-block; padding:13px 19px; border-radius:11px; font-weight:800;
+    }
+
+    .primary {
+      background:linear-gradient(135deg,#2996ff,#3467ed); color:#fff;
+      box-shadow:0 10px 25px #1264bd55;
+    }
+
+    .secondary { border:1px solid #315178; background:transparent; color:#e2efff; }
+
+    .trubi-stage { position:relative; height:440px; display:grid; place-items:center; }
+    .trubi-orb {
+      width:min(340px,72vw); aspect-ratio:1; border-radius:50%;
+      border:1px solid #4ac8ff77;
+      background:radial-gradient(circle,#217ed955,transparent 65%);
+      box-shadow:inset 0 0 60px #218ff333,0 0 90px #1374ed44;
+      animation:float 5s ease-in-out infinite;
+    }
+
+    .trubi-image {
+      position:absolute; max-width:100%; height:440px; object-fit:contain;
+      filter:drop-shadow(0 22px 30px #0009);
+      animation:float 5s ease-in-out infinite;
+    }
+
+    .trubi-placeholder {
+      position:absolute; padding:22px; border:1px dashed #6ddcff88;
+      border-radius:20px; background:#0b1d35e8; text-align:center;
+    }
+
+    @keyframes float {
+      50% { transform:translateY(-14px); }
+    }
+
+    .section { padding:75px max(22px,9vw); }
+    .dark { background:#09182b; }
+    .section h2 { margin:7px 0 25px; font-size:clamp(28px,4vw,43px); }
+    .section-head { display:flex; justify-content:space-between; align-items:end; gap:20px; }
+    .muted { color:var(--muted); }
+
+    .categories,.grid,.stats {
+      display:grid; grid-template-columns:repeat(4,1fr); gap:16px;
+    }
+
+    .category,.product,.stat,.form-card,.summary,.admin-card {
+      border:1px solid var(--line); border-radius:17px; background:#0c1a2d;
+    }
+
+    .category { padding:22px; transition:.25s; }
+    .category:hover,.product:hover { transform:translateY(-5px); border-color:#398cff; }
+    .category .icon { font-size:27px; }
+    .category h3 { margin:13px 0 5px; }
+    .category p { margin:0 0 10px; color:var(--muted); font-size:13px; }
+
+    .product { overflow:hidden; transition:.25s; }
+    .product-img {
+      height:175px; display:grid; place-items:center;
+      background:linear-gradient(135deg,#163963,#0b1d36);
+      color:#b6eaff; font:800 25px "Space Grotesk"; letter-spacing:2px;
+    }
+
+    .product-body { padding:17px; }
+    .product h3 { margin:10px 0 5px; font-size:16px; }
+    .badge {
+      display:inline-block; padding:5px 8px; border-radius:20px;
+      background:#1f70de; font-size:10px; font-weight:800;
+    }
+
+    .offer { background:#d84668; }
+    .price { font:700 20px "Space Grotesk"; }
+    .old { margin-left:6px; color:#8293a9; font-size:13px; text-decoration:line-through; }
+    .stock { color:var(--green); font-size:12px; }
+    .out { color:var(--red); }
+
+    .card-actions { display:flex; gap:8px; }
+    .card-actions button {
+      flex:1; padding:10px; border-radius:9px; color:#fff; background:#17477c;
+    }
+
+    .card-actions .view { background:#15243a; }
+
+    .catalog-tools { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:25px; }
+    input,select,textarea {
+      padding:12px; border:1px solid #2a476b; border-radius:9px;
+      background:#0d1c30; color:#fff;
+    }
+
+    .catalog-tools input { flex:1; min-width:210px; }
+
+    .promo {
+      padding:30px; border:1px solid #277bdb; border-radius:20px;
+      background:linear-gradient(110deg,#0d3265,#132552);
+      display:flex; justify-content:space-between; align-items:center; gap:20px;
+    }
+
+    .drawer {
+      position:fixed; top:0; right:0; z-index:100; width:min(410px,100%);
+      height:100dvh; padding:22px; overflow:auto; background:#0b192b;
+      transform:translateX(105%); transition:.3s;
+    }
+
+    .drawer.open { transform:none; }
+    .drawer-head { display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--line); }
+    .drawer-head button { color:#fff; background:none; font-size:30px; }
+    .shade { position:fixed; inset:0; z-index:90; display:none; background:#0009; }
+    .shade.show { display:block; }
+
+    .line-item {
+      display:grid; grid-template-columns:1fr auto; gap:12px;
+      padding:16px 0; border-bottom:1px solid var(--line);
+    }
+
+    .qty { display:flex; align-items:center; gap:8px; margin-top:8px; }
+    .qty button { width:26px; height:26px; border-radius:6px; background:#1a3454; color:#fff; }
+    .total { margin:20px 0; font:700 20px "Space Grotesk"; }
+
+    .empty { padding:45px 10px; text-align:center; }
+    .empty img { width:130px; height:130px; object-fit:cover; border-radius:50%; box-shadow:0 0 30px #2588ff77; }
+
+    .checkout {
+      max-width:1100px; margin:auto; display:grid;
+      grid-template-columns:1.25fr .75fr; gap:25px;
+    }
+
+    .form-card,.summary,.admin-card { padding:25px; }
+    form { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    label { display:grid; gap:6px; color:#b8c9dd; font-size:13px; }
+    .full { grid-column:1/-1; }
+
+    .row {
+      display:flex; justify-content:space-between; gap:10px;
+      padding:10px 0; border-bottom:1px solid #1b314e;
+    }
+
+    .success { max-width:720px; margin:auto; text-align:center; }
+    .check {
+      width:80px; height:80px; margin:auto; display:grid; place-items:center;
+      border-radius:50%; background:#153b44; color:var(--green); font-size:40px;
+    }
+
+    .admin { max-width:1200px; margin:auto; }
+    .admin-tabs { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
+    .admin-tabs button { padding:10px 13px; border-radius:9px; background:#142741; color:#fff; }
+    .stat { padding:18px; }
+    .stat b { display:block; margin-top:7px; font:700 26px "Space Grotesk"; }
+
+    table { width:100%; border-collapse:collapse; font-size:13px; }
+    th,td { padding:12px; text-align:left; border-bottom:1px solid var(--line); }
+
+    #toast {
+      position:fixed; right:20px; bottom:20px; z-index:200;
+      padding:12px 16px; border-radius:10px; background:#1b5c9c;
+      opacity:0; transform:translateY(15px); transition:.25s;
+    }
+
+    #toast.show { opacity:1; transform:none; }
+
+    footer {
+      display:grid; grid-template-columns:2fr 1fr 1fr; gap:30px;
+      padding:55px max(22px,9vw); background:#050b14; color:#aabbd0;
+    }
+
+    footer section { display:flex; flex-direction:column; gap:8px; }
+    footer h4 { margin:0; color:#fff; }
+
+    @media(max-width:800px) {
+      .header { height:66px; padding:0 16px; gap:10px; }
+      .menu { display:block; }
+      nav {
+        display:none; position:absolute; top:66px; left:0; right:0;
+        padding:18px; background:#0b192b; flex-direction:column;
+      }
+
+      .header.menu-open nav { display:flex; }
+      .admin-link { display:none!important; }
+      .hero { padding:60px 22px; grid-template-columns:1fr; text-align:center; }
+      .hero p { margin-inline:auto; }
+      .actions { justify-content:center; }
+      .trubi-stage { height:300px; }
+      .trubi-image { height:315px; }
+      .categories,.grid { grid-template-columns:repeat(2,1fr); }
+      .stats { grid-template-columns:repeat(2,1fr); }
+      .checkout { grid-template-columns:1fr; }
+      .section { padding:54px 22px; }
+      footer { grid-template-columns:1fr; }
+    }
+
+    @media(max-width:460px) {
+      .categories,.grid { grid-template-columns:1fr; }
+      .hero h1 { font-size:42px; }
+      .trubi-stage { height:240px; }
+      .trubi-image { height:250px; }
+      .header-actions button:first-child { display:none; }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="toast"></div>
+
+  <header class="header">
+    <a class="brand" href="#inicio">
+      <span class="brand-mark">T</span>
+      <span>TRUJILLO<br><b>DIGITAL HUB</b></span>
+    </a>
+
+    <button id="menu-btn" class="menu">☰</button>
+
+    <nav>
+      <a href="#inicio">Inicio</a>
+      <a href="#tienda">Tienda</a>
+      <a href="#categorias">Categorías</a>
+      <a href="#ofertas">Ofertas</a>
+     <a href="index.html">Educación</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+
+    <div class="header-actions">
+      <button id="search-btn">⌕</button>
+      <button id="cart-btn">🛒 <i id="cart-count">0</i></button>
+      
+    </div>
+  </header>
+
+  <main id="app"></main>
+
+  <aside id="drawer" class="drawer">
+    <div class="drawer-head">
+      <h2>Tu carrito</h2>
+      <button id="close-cart">×</button>
+    </div>
+    <div id="cart-content"></div>
+  </aside>
+
+  <div id="shade" class="shade"></div>
+
+  <footer id="contacto">
+    <section>
+      <div class="brand">
+        <span class="brand-mark">T</span>
+        <span>TRUJILLO<br><b>DIGITAL HUB</b></span>
+      </div>
+      <p>Soluciones digitales, tecnología e innovación.</p>
+    </section>
+
+    <section>
+      <h4>Explora</h4>
+      <a href="#tienda">Tienda</a>
+      <a href="#ofertas">Ofertas</a>
+      <a href="#contacto">Contacto</a>
+    </section>
+
+    <section>
+      <h4>Atención</h4>
+      <p>Trujillo Digital Hub<br>+52 922 127 3305</p>
+      <p>Tienda De Articulos</p>
+    </section>
+  </footer>
+
+  <script>
+    const products = [
+     {
+  id:"prompts-chatgpt",
+  name:"Pack de 100 Prompts para ChatGPT",
+  price:50,
+  oldPrice:100,
+  category:"Inteligencia Artificial",
+  stock:999,
+  featured:true,
+  new:true,
+  type:"digital",
+  sold:34,
+  description:"Colección de 100 prompts prácticos para utilizar ChatGPT en estudios, negocios, marketing, productividad y creación de contenido.",
+  features:["100 prompts","PDF descargable","Organizados por categorías","Uso ilimitado"]
+},
+
+{
+  id:"kit-emprendedor-digital",
+  name:"Kit Emprendedor Digital",
+  price:150,
+  oldPrice:400,
+  category:"Emprendimiento",
+  stock:999,
+  featured:true,
+  new:true,
+  type:"digital",
+  sold:21,
+  description:"Kit completo de herramientas digitales para comenzar, organizar y hacer crecer un negocio.",
+  features:["Plantillas empresariales","Control de ventas","Control de gastos","Prompts de IA","Calendario de contenido"]
+},
+
+{
+  id:"calendario-contenido-30",
+  name:"Calendario de Contenido 30 Días",
+  price:80,
+  oldPrice:150,
+  category:"Redes Sociales",
+  stock:999,
+  featured:true,
+  new:true,
+  type:"digital",
+  sold:28,
+  description:"Calendario práctico con ideas de contenido para mantener activas tus redes sociales durante 30 días.",
+  features:["30 días de contenido","Ideas de publicaciones","Objetivos de contenido","Formato PDF"]
+},
+
+{
+  id:"100-ideas-contenido",
+  name:"Pack de 100 Ideas de Contenido",
+  price:50,
+  oldPrice:100,
+  category:"Redes Sociales",
+  stock:999,
+  featured:false,
+  new:true,
+  type:"digital",
+  sold:42,
+  description:"Colección de 100 ideas de contenido para redes sociales pensadas para emprendedores y negocios.",
+  features:["100 ideas","Facebook","Instagram","TikTok"]
+},
+
+{
+  id:"kit-ia-estudiantes",
+  name:"Kit IA para Estudiantes",
+  price:50,
+  oldPrice:200,
+  category:"Estudiantes",
+  stock:999,
+  featured:true,
+  new:true,
+  type:"digital",
+  sold:31,
+  description:"Herramientas y prompts para aprovechar la inteligencia artificial como apoyo en el estudio y la productividad académica.",
+  features:["Prompts educativos","Guía de IA","Técnicas de estudio","Plantillas"]
+},
+
+{
+  id:"control-ventas-excel",
+  name:"Control de Ventas en Excel",
+  price:50,
+  oldPrice:200,
+  category:"Excel",
+  stock:999,
+  featured:true,
+  new:false,
+  type:"digital",
+  sold:25,
+  description:"Plantilla de Excel para registrar y controlar las ventas de tu negocio de forma sencilla y organizada.",
+  features:["Registro de ventas","Cálculos automáticos","Resumen de ingresos","Fácil de usar"]
+},
+
+{
+  id:"control-gastos",
+  name:"Control de Gastos",
+  price:50,
+  oldPrice:200,
+  category:"Excel",
+  stock:999,
+  featured:false,
+  new:true,
+  type:"digital",
+  sold:19,
+  description:"Organiza tus gastos personales o empresariales y conoce fácilmente en qué estás utilizando tu dinero.",
+  features:["Registro de gastos","Categorías","Totales automáticos","Plantilla Excel"]
+},
+
+{
+  id:"control-inventario",
+  name:"Control de Inventario en Excel",
+  price:50,
+  oldPrice:200,
+  category:"Excel",
+  stock:999,
+  featured:true,
+  new:false,
+  type:"digital",
+  sold:17,
+  description:"Administra productos, existencias, entradas y salidas mediante una plantilla de inventario sencilla.",
+  features:["Control de stock","Entradas y salidas","Alertas de inventario","Excel editable"]
+},
+
+{
+  id:"calculadora-ganancias",
+  name:"Calculadora de Precios y Ganancias",
+  price:100,
+  oldPrice:500,
+  category:"Emprendimiento",
+  stock:999,
+  featured:true,
+  new:false,
+  type:"digital",
+  sold:23,
+  description:"Calcula precios de venta, costos, ganancias y márgenes para tomar mejores decisiones en tu negocio.",
+  features:["Cálculo de costos","Margen de ganancia","Precio sugerido","Excel editable"]
+},
+
+{
+  id:"prompts-contenido",
+  name:"Pack de Prompts para Crear Contenido",
+  price:50,
+  oldPrice:230,
+  category:"Inteligencia Artificial",
+  stock:999,
+  featured:true,
+  new:true,
+  type:"digital",
+  sold:37,
+  description:"Prompts especializados para crear publicaciones, videos, captions, campañas e ideas de contenido con IA.",
+  features:["Prompts para redes","Prompts para videos","Prompts para captions","Guía rápida"]
+},
+
+{
+  id:"kit-redes-sociales",
+  name:"Kit Redes Sociales",
+  price:150,
+  oldPrice:400,
+  category:"Redes Sociales",
+  stock:999,
+  featured:true,
+  new:true,
+  type:"digital",
+  sold:29,
+  description:"Paquete completo para organizar y mejorar la presencia digital de tu negocio en redes sociales.",
+  features:["Calendario de contenido","Ideas de publicaciones","Prompts","Estrategias","Plantillas"]
+},
+
+
+{
+  id:"guia-vender-whatsapp",
+  name:"Guía para Vender por WhatsApp",
+  price:80,
+  oldPrice:150,
+  category:"Emprendimiento",
+  stock:999,
+  featured:true,
+  new:false,
+  type:"digital",
+  sold:27,
+  description:"Guía práctica para utilizar WhatsApp como herramienta de ventas y mejorar la atención de tus clientes.",
+  features:["Proceso de venta","Atención al cliente","Mensajes de venta","Estrategias"]
+},
+
+{
+  id:"negocio-digital-cero",
+  name:"Cómo Crear un Negocio Digital Desde Cero",
+  price:100,
+  oldPrice:300,
+  category:"Emprendimiento",
+  stock:999,
+  featured:true,
+  new:true,
+  type:"digital",
+  sold:35,
+  description:"Guía práctica para desarrollar una idea de negocio digital, crear una oferta y comenzar a conseguir clientes.",
+  features:["Guía paso a paso","Ideas de negocio","Creación de oferta","Primeros clientes"]
+},
+
+{
+  id:"ia-emprendedores",
+  name:"IA para Emprendedores",
+  price:100,
+  oldPrice:500,
+  category:"Inteligencia Artificial",
+  stock:999,
+  featured:true,
+  new:true,
+  type:"digital",
+  sold:32,
+  description:"Aprende a utilizar inteligencia artificial para ahorrar tiempo, crear contenido y mejorar procesos de tu negocio.",
+  features:["Guía de IA","Prompts empresariales","Productividad","Casos prácticos"]
+},
+
+{
+  id:"ia-estudiantes",
+  name:"IA para Estudiantes",
+  price:50,
+  oldPrice:150,
+  category:"Estudiantes",
+  stock:999,
+  featured:false,
+  new:true,
+  type:"digital",
+  sold:26,
+  description:"Guía sencilla para aprender a utilizar inteligencia artificial como herramienta de apoyo para estudiar y organizar información.",
+  features:["Guía para estudiantes","Prompts","Productividad","Técnicas de estudio"]
+},
+
+{
+  id:"agenda-digital",
+  name:"Agenda Digital 2026-2027-2028",
+  price:100,
+  oldPrice:300,
+  category:"Productividad",
+  stock:999,
+  featured:true,
+  new:true,
+  type:"digital",
+  sold:41,
+  description:"Agenda digital moderna para organizar días, semanas, objetivos, pendientes y actividades.",
+  features:["Agenda anual","Planificador mensual","Planificador semanal","Metas"]
+},
+
+{
+  id:"kit-productividad",
+  name:"Kit de Productividad Digital",
+  price:100,
+  oldPrice:650,
+  category:"Productividad",
+  stock:999,
+  featured:false,
+  new:true,
+  type:"digital",
+  sold:22,
+  description:"Conjunto de herramientas digitales para organizar tareas, objetivos, hábitos y proyectos.",
+  features:["Planificador de tareas","Seguimiento de objetivos","Control de hábitos","Organización de proyectos"]
+},
+
+{
+  id:"cv-profesional",
+  name:"CV Profesional Editable",
+  price:50,
+  oldPrice:150,
+  category:"Diseño",
+  stock:999,
+  featured:true,
+  new:false,
+  type:"digital",
+  sold:38,
+  description:"Plantilla moderna y profesional para crear un currículum atractivo y destacar tu experiencia.",
+  features:["Diseño profesional","Editable","Secciones organizadas","Formato digital"]
+},
+
+{
+  id:"kit-cv-portafolio",
+  name:"Kit CV + Portafolio Profesional",
+  price:150,
+  oldPrice:400,
+  category:"Diseño",
+  stock:999,
+  featured:true,
+  new:true,
+  type:"digital",
+  sold:24,
+  description:"Paquete profesional para presentar tu experiencia, habilidades y proyectos de manera atractiva.",
+  features:["Plantilla CV","Plantilla portafolio","Diseño profesional","Editable"]
+},
+
+{
+  id:"plan-negocios",
+  name:"Plantilla de Plan de Negocios",
+  price:100,
+  oldPrice:200,
+  category:"Emprendimiento",
+  stock:999,
+  featured:false,
+  new:false,
+  type:"digital",
+  sold:16,
+  description:"Plantilla estructurada para desarrollar y organizar una idea empresarial de manera profesional.",
+  features:["Modelo de negocio","Objetivos","Análisis de mercado","Plan de acción"]
+},
+
+{
+  id:"presupuesto-empresarial",
+  name:"Plantilla de Presupuesto Empresarial",
+  price:70,
+  oldPrice:100,
+  category:"Excel",
+  stock:999,
+  featured:false,
+  new:false,
+  type:"digital",
+  sold:13,
+  description:"Herramienta para organizar ingresos, gastos y presupuesto de un pequeño negocio.",
+  features:["Ingresos","Gastos","Presupuesto","Cálculos automáticos"]
+},
+
+{
+  id:"crm-excel",
+  name:"CRM Básico en Excel",
+  price:100,
+  oldPrice:600,
+  category:"Excel",
+  stock:999,
+  featured:true,
+  new:true,
+  type:"digital",
+  sold:15,
+  description:"Organiza clientes, contactos, seguimiento y oportunidades de venta desde una plantilla sencilla.",
+  features:["Base de clientes","Seguimiento","Contactos","Oportunidades de venta"]
+},
+
+{
+  id:"promociones-redes",
+  name:"Pack de Promociones para Redes Sociales",
+  price:150,
+  oldPrice:300,
+  category:"Diseño",
+  stock:999,
+  featured:true,
+  new:false,
+  type:"digital",
+  sold:20,
+  description:"Plantillas editables para crear promociones, descuentos, ofertas y campañas atractivas.",
+  features:["Promociones","Descuentos","Ofertas","Plantillas editables"]
+},
+
+{
+  id:"kit-seguridad-digital",
+  name:"Kit de Seguridad Digital",
+  price:50,
+  oldPrice:150,
+  category:"Tecnología",
+  stock:999,
+  featured:false,
+  new:true,
+  type:"digital",
+  sold:18,
+  description:"Guía práctica para aprender las principales medidas de seguridad para proteger cuentas, dispositivos y datos.",
+  features:["Seguridad de cuentas","Contraseñas seguras","Protección de dispositivos","Buenas prácticas"]
+},
+
+{
+  id:"html-css-cero",
+  name:"HTML + CSS desde Cero",
+  price:100,
+  oldPrice:300,
+  category:"Programación",
+  stock:999,
+  featured:true,
+  new:true,
+  type:"digital",
+  sold:30,
+  description:"Guía práctica para aprender los fundamentos de HTML y CSS y comenzar a crear páginas web.",
+  features:["HTML básico","CSS básico","Ejercicios","Proyectos prácticos"]
+},
+
+{
+  id:"kit-programador",
+  name:"Kit Programador Principiante",
+  price:200,
+  oldPrice:500,
+  category:"Programación",
+  stock:999,
+  featured:true,
+  new:true,
+  type:"digital",
+  sold:21,
+  description:"Paquete de recursos para quienes están comenzando en programación y quieren practicar mediante ejercicios y proyectos.",
+  features:["Guías de programación","Ejercicios","Cheatsheets","Proyectos prácticos","Recursos"]
+}
+    
+];
+    const categories = [
+      ["Tecnología","Dispositivos para tu estación digital","◈"],
+      ["Accesorios","Complementos que hacen la diferencia","◌"],
+      ["Productos digitales","Recursos disponibles al confirmar pago","▣"],
+      ["Software","Herramientas para crear y avanzar","⌘"]
+    ];
+
+    const bank = {
+      bank:"BBVA",
+      holder:"Victor Samuel Medina Trujillo",
+      clabe:"012 180 01561648518 7",
+      reference:"Usa tu número de pedido como concepto o referencia."
+    };
+
+    const key = "tdh_store_data";
+
+    function getState() {
+      return JSON.parse(localStorage.getItem(key) || '{"cart":[],"orders":[],"settings":{}}');
+    }
+
+    function saveState(data) {
+      localStorage.setItem(key, JSON.stringify(data));
+    }
+
+    function getSettings() {
+      return { ...bank, ...getState().settings };
+    }
+
+    function money(value) {
+      return new Intl.NumberFormat("es-MX", {
+        style:"currency",
+        currency:"MXN"
+      }).format(value);
+    }
+
+    function toast(message) {
+      const element = document.querySelector("#toast");
+      element.textContent = message;
+      element.classList.add("show");
+      setTimeout(() => element.classList.remove("show"), 2400);
+    }
+
+    function cartItems() {
+      const state = getState();
+      return state.cart.map(item => {
+        const product = products.find(product => product.id === item.id);
+        return product ? { ...product, qty:item.qty } : null;
+      }).filter(Boolean);
+    }
+
+    function cartTotals() {
+      const items = cartItems();
+      const subtotal = items.reduce((total,item) => total + item.price * item.qty, 0);
+      return { subtotal, total:subtotal };
+    }
+
+    function addToCart(id) {
+      const state = getState();
+      const product = products.find(item => item.id === id);
+
+      if (!product || product.stock <= 0) {
+        toast("Este producto está agotado.");
+        return;
+      }
+
+      const item = state.cart.find(item => item.id === id);
+
+      if (item) {
+        item.qty = Math.min(item.qty + 1, product.stock);
+      } else {
+        state.cart.push({ id, qty:1 });
+      }
+
+      saveState(state);
+      renderCart();
+      toast("Producto agregado al carrito.");
+    }
+
+    function changeQty(id, amount) {
+      const state = getState();
+      const item = state.cart.find(item => item.id === id);
+      const product = products.find(product => product.id === id);
+
+      if (!item || !product) return;
+
+      item.qty = Math.max(0, Math.min(product.stock, item.qty + amount));
+      state.cart = state.cart.filter(item => item.qty > 0);
+      saveState(state);
+      renderCart();
+    }
+
+    function productCard(product) {
+      const discount = product.oldPrice
+        ? Math.round((1 - product.price / product.oldPrice) * 100)
+        : 0;
+
+      return `
+        <article class="product">
+          <div class="product-img">
+            ${product.type === "digital" ? "DIGITAL" : "TDH"}
+          </div>
+
+          <div class="product-body">
+            ${product.new ? '<span class="badge">NUEVO</span>' : ""}
+            ${discount ? `<span class="badge offer">-${discount}%</span>` : ""}
+
+            <h3>${product.name}</h3>
+
+            <div class="price">
+              ${money(product.price)}
+              ${product.oldPrice ? `<span class="old">${money(product.oldPrice)}</span>` : ""}
+            </div>
+
+            <p class="stock ${product.stock ? "" : "out"}">
+              ${product.stock ? "● Disponible" : "● Agotado"}
+            </p>
+
+            <div class="card-actions">
+              <button onclick="addToCart('${product.id}')" ${!product.stock ? "disabled" : ""}>
+                Agregar
+              </button>
+              <button class="view" onclick="location.hash='#producto/${product.id}'">
+                Detalles
+              </button>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function home() {
+      document.querySelector("#app").innerHTML = `
+        <section id="inicio" class="hero">
+          <div>
+            <span class="eyebrow">TDH STORE · TECNOLOGÍA QUE AVANZA</span>
+            <h1>Tecnología que encuentras.<br><em>Soluciones</em> que disfrutas.</h1>
+            <p>
+              Una selección de productos, recursos y herramientas digitales
+              para crear, conectar y avanzar.
+            </p>
+
+            <div class="actions">
+              <a class="primary" href="#tienda">Explorar tienda</a>
+              <a class="secondary" href="#ofertas">Ver ofertas</a>
+            </div>
+          </div>
+
+          <div class="trubi-stage">
+            <div class="trubi-orb"></div>
+            <img
+              class="trubi-image"
+              src="trubi.png"
+              alt="TRUBI, mascota virtual de Trujillo Digital Hub"
+              onerror="this.style.display='none'; document.querySelector('.trubi-placeholder').style.display='block';"
+            >
+            <div class="trubi-placeholder" style="display:none">
+              <strong>TRUBI</strong><br>
+              Coloca la imagen en:<br>
+              <b>assets/trubi.png</b>
+            </div>
+          </div>
+        </section>
+
+        <section id="categorias" class="section">
+          <span class="eyebrow">ENCUENTRA TU PRÓXIMO IMPULSO</span>
+          <h2>Explora por categoría</h2>
+
+          <div class="categories">
+            ${categories.map(category => `
+              <a class="category" href="#tienda?category=${encodeURIComponent(category[0])}">
+                <span class="icon">${category[2]}</span>
+                <h3>${category[0]}</h3>
+                <p>${category[1]}</p>
+              </a>
+            `).join("")}
+          </div>
+        </section>
+
+        <section class="section dark">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">SELECCIÓN TDH</span>
+              <h2>Productos destacados</h2>
+            </div>
+            <a href="#tienda" class="secondary">Ver todo</a>
+          </div>
+
+          <div class="grid">
+            ${products.filter(product => product.featured).map(productCard).join("")}
+          </div>
+        </section>
+
+        <section id="ofertas" class="section">
+          <div class="promo">
+            <div>
+              <span class="eyebrow">OFERTAS DEMO</span>
+              <h2>Menos costo. Más posibilidades.</h2>
+              <p class="muted">
+                Precios y productos de prueba listos para explorar el flujo de compra.
+              </p>
+            </div>
+
+            <a class="primary" href="#tienda?offers=1">Descubrir ofertas</a>
+          </div>
+        </section>
+      `;
+    }
+
+    function catalog() {
+      const params = new URLSearchParams(location.hash.split("?")[1] || "");
+      const selectedCategory = params.get("category") || "";
+      const onlyOffers = params.has("offers");
+
+      document.querySelector("#app").innerHTML = `
+        <section class="section">
+          <span class="eyebrow">CATÁLOGO TDH</span>
+          <h2>Todo lo que necesitas, en un solo lugar.</h2>
+
+          <div class="catalog-tools">
+            <input id="search" placeholder="Buscar productos">
+            <select id="category-filter">
+              <option value="">Todas las categorías</option>
+              ${categories.map(category => `
+                <option ${selectedCategory === category[0] ? "selected" : ""}>
+                  ${category[0]}
+                </option>
+              `).join("")}
+            </select>
+
+            <select id="sort">
+              <option value="relevance">Relevancia</option>
+              <option value="new">Más recientes</option>
+              <option value="low">Precio: menor a mayor</option>
+              <option value="high">Precio: mayor a menor</option>
+              <option value="sold">Más vendidos</option>
+            </select>
+          </div>
+
+          <div id="catalog-grid" class="grid"></div>
+        </section>
+      `;
+
+      let list = [...products];
+
+      if (selectedCategory) {
+        list = list.filter(product => product.category === selectedCategory);
+      }
+
+      if (onlyOffers) {
+        list = list.filter(product => product.oldPrice);
+      }
+
+      function renderProducts() {
+        const search = document.querySelector("#search").value.toLowerCase();
+        const category = document.querySelector("#category-filter").value;
+        const sort = document.querySelector("#sort").value;
+
+        let filtered = list.filter(product =>
+          product.name.toLowerCase().includes(search) &&
+          (!category || product.category === category)
+        );
+
+        if (sort === "low") filtered.sort((a,b) => a.price - b.price);
+        if (sort === "high") filtered.sort((a,b) => b.price - a.price);
+        if (sort === "new") filtered.sort((a,b) => b.new - a.new);
+        if (sort === "sold") filtered.sort((a,b) => b.sold - a.sold);
+
+        document.querySelector("#catalog-grid").innerHTML =
+          filtered.map(productCard).join("") ||
+          '<p class="muted">No encontramos productos con esos filtros.</p>';
+      }
+
+      document.querySelector("#search").addEventListener("input", renderProducts);
+      document.querySelector("#category-filter").addEventListener("change", renderProducts);
+      document.querySelector("#sort").addEventListener("change", renderProducts);
+
+      renderProducts();
+    }
+
+    function productDetail(id) {
+      const product = products.find(product => product.id === id);
+
+      if (!product) {
+        location.hash = "#tienda";
+        return;
+      }
+
+      const related = products
+        .filter(item => item.category === product.category && item.id !== product.id)
+        .slice(0,3);
+
+      document.querySelector("#app").innerHTML = `
+        <section class="section">
+          <a class="muted" href="#tienda">← Volver a tienda</a>
+
+          <div class="checkout" style="margin-top:20px">
+            <div class="product-img" style="height:390px;border-radius:18px">
+              ${product.type === "digital" ? "RECURSO DIGITAL" : "TDH PRODUCT"}
+            </div>
+
+            <div>
+              <span class="badge">${product.type === "digital" ? "DIGITAL" : "DEMO"}</span>
+              <h2>${product.name}</h2>
+              <div class="price">${money(product.price)}</div>
+              <p class="stock ${product.stock ? "" : "out"}">
+                ${product.stock ? "● Disponible" : "● Agotado"}
+              </p>
+              <p class="muted">${product.description}</p>
+
+              <h3>Características</h3>
+              <ul>${product.features.map(feature => `<li>${feature}</li>`).join("")}</ul>
+
+              <div class="actions">
+                <button class="primary" onclick="addToCart('${product.id}')" ${!product.stock ? "disabled" : ""}>
+                  Agregar al carrito
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section dark">
+          <h2>También te puede interesar</h2>
+          <div class="grid">${related.map(productCard).join("")}</div>
+        </section>
+      `;
+    }
+
+    function renderCart() {
+      const items = cartItems();
+      const totals = cartTotals();
+
+      document.querySelector("#cart-count").textContent =
+        items.reduce((total,item) => total + item.qty, 0);
+
+      document.querySelector("#cart-content").innerHTML = items.length ? `
+        ${items.map(item => `
+          <div class="line-item">
+            <div>
+              <b>${item.name}</b>
+              <small class="muted">${money(item.price)} c/u</small>
+
+              <div class="qty">
+                <button onclick="changeQty('${item.id}',-1)">−</button>
+                <span>${item.qty}</span>
+                <button onclick="changeQty('${item.id}',1)">+</button>
+                <button onclick="changeQty('${item.id}',-999)">Eliminar</button>
+              </div>
+            </div>
+
+            <b>${money(item.price * item.qty)}</b>
+          </div>
+        `).join("")}
+
+        <div class="total">
+          Total <span style="float:right">${money(totals.total)}</span>
+        </div>
+
+        <a class="primary" style="display:block;text-align:center" href="#checkout">
+          Ir al checkout
+        </a>
+
+        <button class="secondary" style="width:100%;margin-top:10px" onclick="clearCart()">
+          Vaciar carrito
+        </button>
+      ` : `
+        <div class="empty">
+          <img src="trubi.pbg" alt="TRUBI" onerror="this.style.display='none'">
+          <h3>Tu carrito está esperando algo increíble.</h3>
+          <p class="muted">Explora productos para comenzar.</p>
+          <a class="primary" href="#tienda">Explorar productos</a>
+        </div>
+      `;
+    }
+
+    function clearCart() {
+      const state = getState();
+      state.cart = [];
+      saveState(state);
+      renderCart();
+    }
+
+   function checkout() {
+  const items = cartItems();
+
+  if (!items.length) {
+    location.hash = "#tienda";
+    return;
+  }
+
+  const totals = cartTotals();
+
+  document.querySelector("#app").innerHTML = `
+    <section class="section">
+      <span class="eyebrow">CHECKOUT DIGITAL</span>
+      <h2>Finaliza tu pedido</h2>
+      <h4>El envió de tu pedido puede tardar hasta 7 horas</h4>
+      <div class="checkout">
+        <div class="form-card">
+          <form id="checkout-form">
+            <label>Nombre*
+              <input name="name" required>
+            </label>
+
+            <label>Apellidos*
+              <input name="lastName" required>
+            </label>
+
+            <label>Correo electrónico*
+              <input name="email" type="email" required>
+            </label>
+
+            <label>Teléfono*
+              <input name="phone" required>
+            </label>
+
+            <label class="full">Notas del pedido
+              <textarea name="notes" rows="3"
+                placeholder="Información adicional opcional"></textarea>
+            </label>
+
+            <div class="full">
+              <b>Transferencia bancaria</b>
+              <p class="muted">
+                Al confirmar el pago, recibirás acceso a tus productos digitales.
+              </p>
+              <button class="primary">Generar pedido</button>
+            </div>
+          </form>
+        </div>
+
+        <aside class="summary">
+          <h3>Resumen del pedido</h3>
+
+          ${items.map(item => `
+            <div class="row">
+              <span>${item.qty} × ${item.name}</span>
+              <b>${money(item.price * item.qty)}</b>
+            </div>
+          `).join("")}
+
+          <div class="total">
+            Total <span style="float:right">${money(totals.total)}</span>
+          </div>
+        </aside>
+      </div>
+    </section>
+  `;
+
+  document.querySelector("#checkout-form").addEventListener("submit", event => {
+    event.preventDefault();
+
+    const customer = Object.fromEntries(new FormData(event.target));
+    const state = getState();
+    const totals = cartTotals();
+
+    const order = {
+      id:`TDH-${new Date().getFullYear()}-${String(state.orders.length + 1).padStart(5,"0")}`,
+      createdAt:new Date().toISOString(),
+      customer,
+      items:cartItems().map(item => ({
+        id:item.id,
+        name:item.name,
+        price:item.price,
+        qty:item.qty,
+        type:"digital"
+      })),
+      total:totals.total,
+      status:"Pendiente de pago",
+      proof:null,
+      downloadEnabled:false
+    };
+
+    state.orders.unshift(order);
+    state.cart = [];
+    saveState(state);
+
+    location.hash = "#pedido/" + order.id;
+  });
+}
+
+    function orderPage(id) {
+      const order = getState().orders.find(order => order.id === id);
+
+      if (!order) {
+        document.querySelector("#app").innerHTML =
+          '<section class="section"><h2>Pedido no encontrado.</h2></section>';
+        return;
+      }
+
+      const settings = getSettings();
+
+      document.querySelector("#app").innerHTML = `
+        <section class="section">
+          <div class="success form-card">
+            <div class="check">✓</div>
+
+            <h1>¡Pedido recibido!</h1>
+            <p class="muted">TRUBI estará pendiente de que todo salga bien.</p>
+            <h2>${order.id}</h2>
+
+            <p>Utiliza tu número de pedido como concepto o referencia de la transferencia.</p>
+
+            <div class="summary" style="text-align:left">
+              <div class="row">
+                <span>Monto a transferir</span>
+                <b>${money(order.total)}</b>
+              </div>
+
+              <div class="row">
+                <span>Banco</span>
+                <b>${settings.bank}</b>
+              </div>
+
+              <div class="row">
+                <span>Titular</span>
+                <b>${settings.holder}</b>
+              </div>
+
+              <div class="row">
+                <span>CLABE</span>
+                <b>${settings.clabe}</b>
+              </div>
+
+              <p class="muted">${settings.reference}</p>
+            </div>
+
+            <h3>Sube tu comprobante de transferencia</h3>
+            <p class="muted">JPG, PNG o PDF · máximo 5 MB. El pago no se confirma automáticamente.</p>
+
+            ${
+              order.proof
+                ? `<p class="stock">● ${order.status}: ${order.proof.name}</p>`
+                : `
+                  <input id="proof-file" type="file" accept="image/jpeg,image/png,application/pdf">
+                  <button id="proof-btn" class="primary">Enviar comprobante</button>
+                `
+            }
+          </div>
+        </section>
+      `;
+
+      const button = document.querySelector("#proof-btn");
+
+      if (button) {
+        button.addEventListener("click", () => {
+          const file = document.querySelector("#proof-file").files[0];
+
+          if (!file) {
+            toast("Selecciona un comprobante.");
+            return;
+          }
+
+          const types = ["image/jpeg","image/png","application/pdf"];
+
+          if (!types.includes(file.type) || file.size > 5 * 1024 * 1024) {
+            toast("Solo JPG, PNG o PDF de máximo 5 MB.");
+            return;
+          }
+
+          const state = getState();
+          const savedOrder = state.orders.find(item => item.id === id);
+
+          savedOrder.proof = {
+            name:file.name,
+            type:file.type,
+            receivedAt:new Date().toISOString()
+          };
+
+          savedOrder.status = "Comprobante recibido";
+          saveState(state);
+
+          toast("Comprobante recibido. Se revisará manualmente.");
+          orderPage(id);
+        });
+      }
+    }
+
+    function admin() {
+      const state = getState();
+      const orders = state.orders;
+      const revenue = orders
+        .filter(order => order.status === "Pago confirmado")
+        .reduce((total,order) => total + order.total, 0);
+
+      document.querySelector("#app").innerHTML = `
+        <section class="section">
+          <div class="admin">
+            <span class="eyebrow">PANEL ADMINISTRATIVO · DEMO LOCAL</span>
+            <h2>Control de la tienda</h2>
+
+            <div class="admin-tabs">
+              <button onclick="adminOrders()">Pedidos</button>
+              <button onclick="adminProducts()">Productos</button>
+              <button onclick="adminSettings()">Configuración</button>
+            </div>
+
+            <div class="stats">
+              <div class="stat">Ingresos<b>${money(revenue)}</b></div>
+              <div class="stat">Pedidos<b>${orders.length}</b></div>
+              <div class="stat">Por revisar<b>${orders.filter(order => order.status === "Comprobante recibido").length}</b></div>
+              <div class="stat">Sin stock<b>${products.filter(product => !product.stock).length}</b></div>
+            </div>
+
+            <div id="admin-area" class="admin-card" style="margin-top:18px"></div>
+          </div>
+        </section>
+      `;
+
+      adminOrders();
+    }
+
+    function adminOrders() {
+      const orders = getState().orders;
+      const statuses = [
+        "Pendiente de pago",
+        "Comprobante recibido",
+        "En revisión",
+        "Pago confirmado",
+        "Pago rechazado",
+        "Preparando pedido",
+        "Enviado",
+        "Completado",
+        "Cancelado"
+      ];
+
+      document.querySelector("#admin-area").innerHTML = `
+        <h3>Pedidos</h3>
+
+        <table>
+          <tr>
+            <th>Número</th>
+            <th>Cliente</th>
+            <th>Total</th>
+            <th>Estado</th>
+          </tr>
+
+          ${
+            orders.length
+              ? orders.map(order => `
+                <tr>
+                  <td>${order.id}</td>
+                  <td>${order.customer.name} ${order.customer.lastName}</td>
+                  <td>${money(order.total)}</td>
+                  <td>
+                    <select onchange="updateStatus('${order.id}',this.value)">
+                      ${statuses.map(status => `
+                        <option ${status === order.status ? "selected" : ""}>${status}</option>
+                      `).join("")}
+                    </select>
+                  </td>
+                </tr>
+              `).join("")
+              : '<tr><td colspan="4">Aún no hay pedidos.</td></tr>'
+          }
+        </table>
+      `;
+    }
+
+    function updateStatus(id,status) {
+      const state = getState();
+      const order = state.orders.find(order => order.id === id);
+
+      if (order) {
+        order.status = status;
+        saveState(state);
+        toast("Estado actualizado.");
+      }
+    }
+
+    function adminProducts() {
+      document.querySelector("#admin-area").innerHTML = `
+        <h3>Inventario de productos DEMO</h3>
+
+        <table>
+          <tr>
+            <th>Producto</th>
+            <th>Categoría</th>
+            <th>Precio</th>
+            <th>Inventario</th>
+          </tr>
+
+          ${products.map(product => `
+            <tr>
+              <td>${product.name}</td>
+              <td>${product.category}</td>
+              <td>${money(product.price)}</td>
+              <td>${product.stock}</td>
+            </tr>
+          `).join("")}
+        </table>
+      `;
+    }
+
+    function adminSettings() {
+      const settings = getSettings();
+
+      document.querySelector("#admin-area").innerHTML = `
+        <h3>Datos de transferencia</h3>
+
+        <form id="settings-form">
+          <label>Banco
+            <input name="bank" value="${settings.bank}">
+          </label>
+
+          <label>Titular
+            <input name="holder" value="${settings.holder}">
+          </label>
+
+          <label class="full">CLABE
+            <input name="clabe" value="${settings.clabe}">
+          </label>
+
+          <label class="full">Instrucciones
+            <textarea name="reference">${settings.reference}</textarea>
+          </label>
+
+          <button class="primary">Guardar configuración</button>
+        </form>
+      `;
+
+      document.querySelector("#settings-form").addEventListener("submit", event => {
+        event.preventDefault();
+
+        const state = getState();
+        state.settings = {
+          ...state.settings,
+          ...Object.fromEntries(new FormData(event.target))
+        };
+
+        saveState(state);
+        toast("Datos bancarios guardados.");
+      });
+    }
+
+    function route() {
+      const hash = location.hash || "#inicio";
+
+      if (hash.startsWith("#tienda")) catalog();
+      else if (hash.startsWith("#producto/")) productDetail(hash.split("/")[1]);
+      else if (hash === "#checkout") checkout();
+      else if (hash.startsWith("#pedido/")) orderPage(hash.split("/")[1]);
+      else if (hash === "#admin") admin();
+      else home();
+
+      renderCart();
+      document.querySelector("#drawer").classList.remove("open");
+      document.querySelector("#shade").classList.remove("show");
+    }
+
+    document.querySelector("#cart-btn").addEventListener("click", () => {
+      renderCart();
+      document.querySelector("#drawer").classList.add("open");
+      document.querySelector("#shade").classList.add("show");
+    });
+
+    document.querySelector("#close-cart").addEventListener("click", () => {
+      document.querySelector("#drawer").classList.remove("open");
+      document.querySelector("#shade").classList.remove("show");
+    });
+
+    document.querySelector("#shade").addEventListener("click", () => {
+      document.querySelector("#drawer").classList.remove("open");
+      document.querySelector("#shade").classList.remove("show");
+    });
+
+    document.querySelector("#menu-btn").addEventListener("click", () => {
+      document.querySelector(".header").classList.toggle("menu-open");
+    });
+
+    document.querySelector("#search-btn").addEventListener("click", () => {
+      location.hash = "#tienda";
+      setTimeout(() => document.querySelector("#search")?.focus(), 100);
+    });
+
+    
+
+    window.addEventListener("hashchange", route);
+    route();
+  </script>
+</body>
+</html>
