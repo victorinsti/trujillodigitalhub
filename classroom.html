@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>TDH Classroom</title>
-<script src="https://meet.jit.si/external_api.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -109,7 +108,7 @@ label{display:block;font-size:.82rem;color:#cbd5e1;margin:0 0 6px;font-weight:60
         </div>
         <div class="field"><label for="resourceUrl">Enlace de apoyo (opcional)</label><input id="resourceUrl" type="url" placeholder="https://..."></div>
         <div class="actions"><button class="btn" id="publishBtn">✨ Publicar en Classroom</button><button class="btn secondary" id="testFirebaseBtn" type="button">🔌 Probar conexión</button></div>
-        <div class="notice" style="margin-top:16px;background:linear-gradient(135deg,#172554,#312e81);border:1px solid #4f46e555">🎥 <strong>Clase en vivo:</strong> inicia una videollamada de la materia seleccionada y tus alumnos podrán entrar directamente desde este Classroom.</div>
+        <div class="notice" style="margin-top:16px;background:linear-gradient(135deg,#172554,#312e81);border:1px solid #4f46e555">🎥 <strong>Clase en vivo:</strong> inicia una sala de videollamada y tus alumnos podrán entrar desde este Classroom. La reunión se abrirá en una pestaña independiente para evitar la limitación de 5 minutos de la incrustación demo de meet.jit.si.</div>
         <div class="actions"><button class="btn green" id="startLiveBtn" type="button">🔴 Iniciar clase en vivo</button><button class="btn red hidden" id="stopLiveBtn" type="button">⏹ Finalizar clase</button></div>
         <div id="liveStatus" class="status"></div>
         <div id="publishStatus" class="status"></div>
@@ -356,25 +355,48 @@ async function finalizarClase(id){
 function entrarEnClase(postId){
   const p=livePost&&livePost.id===postId?livePost:null;
   if(!p||!p.jitsiRoom)return;
-  if(jitsiApi){try{jitsiApi.dispose()}catch{}jitsiApi=null}
-  abrirModal("🎥 "+(p.titulo||"Clase en vivo"),`<div class="notice" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span style="flex:1">Estás entrando a la clase de <strong>${esc(claseActual)}</strong>. Permite cámara y micrófono cuando el navegador lo solicite.</span><button type="button" class="fullscreen-btn" id="toggleMeetFullscreen">⛶ Pantalla completa</button></div><div id="meetContainer" class="meet-shell"></div><div id="meetStatus" class="status ok">Conectando con la videollamada…</div>`,"live");
-  const options={
-    roomName:p.jitsiRoom,
-    width:"100%",height:"100%",parentNode:document.getElementById("meetContainer"),
-    lang:"es",
-    userInfo:{displayName:usuario.nombre||"Participante"},
-    configOverwrite:{startWithAudioMuted:false,startWithVideoMuted:false,prejoinPageEnabled:true,disableAPNS:true},
-    interfaceConfigOverwrite:{MOBILE_APP_PROMO:false,TILE_VIEW_MAX_COLUMNS:4}
-  };
-  try{
-    if(typeof JitsiMeetExternalAPI!=="function")throw new Error("La API de videollamada no terminó de cargar. Recarga la página e inténtalo de nuevo.");
-    jitsiApi=new JitsiMeetExternalAPI("meet.jit.si",options);
-    jitsiApi.addListener("videoConferenceJoined",()=>{const s=$("meetStatus");if(s){s.className="status ok";s.textContent="✓ Conectado a la clase en vivo."}});
-    jitsiApi.addListener("videoConferenceLeft",()=>{const s=$("meetStatus");if(s)s.textContent="Has salido de la videollamada."});
-    jitsiApi.addListener("cameraError",()=>{const s=$("meetStatus");if(s){s.className="status err";s.textContent="⚠️ No se pudo acceder a la cámara. Puedes continuar con audio."}});
-  }catch(e){
-    console.error(e);const s=$("meetStatus");if(s){s.className="status err";s.textContent="❌ "+(e?.message||e)}
-  }
+
+  const roomUrl=`https://meet.jit.si/${encodeURIComponent(p.jitsiRoom)}`;
+
+  abrirModal("🎥 "+(p.titulo||"Clase en vivo"),`
+    <div class="notice">
+      <strong>Clase de ${esc(claseActual)}</strong><br>
+      La videollamada se abrirá en una nueva pestaña. Permite cámara y micrófono cuando el navegador lo solicite.
+    </div>
+
+    <div class="card" style="margin:0;background:#081426">
+      <div class="section-title">Acceso a la videollamada</div>
+      <div class="content" style="margin:8px 0">
+        🔴 <strong>La clase está activa.</strong><br>
+        Haz clic en <strong>Entrar a la videollamada</strong> para abrir la sala.
+      </div>
+      <div class="actions">
+        <button class="btn green" id="openMeetBtn" type="button">🎥 Entrar a la videollamada</button>
+        <button class="btn secondary" id="copyMeetBtn" type="button">🔗 Copiar enlace</button>
+      </div>
+      <div id="meetStatus" class="status ok"></div>
+    </div>
+  `,"live");
+
+  $("openMeetBtn")?.addEventListener("click",()=>{
+    const win=window.open(roomUrl,"_blank","noopener,noreferrer");
+    const s=$("meetStatus");
+    if(win){
+      if(s){s.className="status ok";s.textContent="✓ Videollamada abierta en una nueva pestaña."}
+    }else{
+      if(s){s.className="status err";s.textContent="⚠️ El navegador bloqueó la nueva pestaña. Permite ventanas emergentes para este sitio."}
+    }
+  });
+
+  $("copyMeetBtn")?.addEventListener("click",async()=>{
+    const s=$("meetStatus");
+    try{
+      await navigator.clipboard.writeText(roomUrl);
+      if(s){s.className="status ok";s.textContent="✓ Enlace copiado. Puedes compartirlo por WhatsApp."}
+    }catch{
+      if(s){s.className="status err";s.textContent="No se pudo copiar automáticamente. Abre la videollamada y copia el enlace desde el navegador."}
+    }
+  });
 }
 
 function abrirModal(title,body,kind=""){
@@ -401,7 +423,7 @@ function abrirModal(title,body,kind=""){
 }
 async function cerrarModal(){
   try{if(document.fullscreenElement) await document.exitFullscreen()}catch{}
-  if(jitsiApi){try{jitsiApi.dispose()}catch{}jitsiApi=null}
+  jitsiApi=null;
   $("modalRoot").classList.add("hidden");$("modalRoot").innerHTML="";
 }
 $("modalRoot").addEventListener("click",e=>{if(e.target.dataset.close!==undefined||e.target.classList.contains("modal-wrap"))cerrarModal()});
