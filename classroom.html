@@ -123,8 +123,8 @@ label{display:block;font-size:.82rem;color:#cbd5e1;margin:0 0 6px;font-weight:60
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, getDocs, addDoc, updateDoc, doc, query, where, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, where, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
 const firebaseConfig={
   apiKey:"AIzaSyCQa5lpfZ2owUu47CBO6Pe5-wOymUX7wa0",
@@ -134,10 +134,9 @@ const firebaseConfig={
 };
 const app=initializeApp(firebaseConfig);
 const db=getFirestore(app);
-const SUPABASE_URL="https://gilmauyvyjuycewsmhoe.supabase.co";
-const SUPABASE_KEY="sb_publishable_MEGPZox3P9-0ybdiJ8Jmng_dTJG_sUY";
-const supabase=createClient(SUPABASE_URL,SUPABASE_KEY);
-const SUPABASE_BUCKET="classroom";
+const storage=getStorage(app);
+// Las entregas ahora usan Firebase Storage del mismo proyecto que Classroom.
+const STORAGE_FOLDER="classroom_entregas";
 const usuario=JSON.parse(localStorage.getItem("usuarioTDH"))||{nombre:"Invitado",rol:"alumno",matricula:""};
 let alumnosData=[],claseActual="",stopPosts=null,livePost=null,jitsiApi=null;
 const $=selector=>selector.startsWith("#")||(!selector.includes(".")&&!selector.includes("["))?document.getElementById(selector):document.querySelector(selector);
@@ -180,6 +179,7 @@ function cargarPublicaciones(){
   const q=query(collection(db,"classroom_posts"),where("clase","==",claseActual));
   stopPosts=onSnapshot(q,snap=>{
     const posts=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.fecha?.toMillis?.()??0)-(a.fecha?.toMillis?.()??0));
+    window._tdhPosts=posts;
     renderPosts(posts)
   },err=>$("feed").innerHTML=`<div class="empty err">No se pudieron cargar las publicaciones: ${esc(err.message)}</div>`)
 }
@@ -200,12 +200,16 @@ function renderPosts(posts){
       <div class="post-head"><div><div class="post-title">${icons[type]||"📢"} ${esc(p.titulo||type)}</div><div class="meta">${esc(p.autor||"Profesor")} · ${fecha(p.fecha)||"Publicado recientemente"}</div></div><span class="badge ${badge}">${esc(type)}</span></div>
       <div class="content">${esc(p.contenido||"")}</div>
       ${p.fechaLimite?`<div class="deadline ${overdue?"overdue":""}">⏰ Fecha límite: ${esc(fecha(p.fechaLimite))}${overdue?" · Vencida":""}</div>`:""}
-      ${p.calificacion?`<div class="deadline" style="margin-top:10px">🎯 Valor: <strong>${esc(p.calificacion)} puntos</strong></div>`:""}
+      ${p.calificacion!=null&&p.calificacion!==""?`<div class="deadline" style="margin-top:10px">🎯 Valor: <strong>${esc(p.calificacion)} puntos</strong></div>`:""}
       ${p.recursoUrl?`<a class="resource" href="${esc(p.recursoUrl)}" target="_blank" rel="noopener">🔗 Abrir material de apoyo</a>`:""}
       <div class="actions">
         ${usuario.rol!=="admin"&&(type==="Tarea"||type==="Actividad"||type==="Proyecto")?`<button class="btn green" data-action="deliver" data-id="${p.id}">📎 Entregar trabajo</button>`:""}
         <button class="btn secondary" data-action="comments" data-id="${p.id}">💬 Comentarios</button>
-        ${usuario.rol==="admin"?`<button class="btn yellow" data-action="deliveries" data-id="${p.id}">📂 Ver entregas y calificar</button>`:
+        ${usuario.rol==="admin"?`
+          <button class="btn yellow" data-action="deliveries" data-id="${p.id}">📂 Ver entregas y calificar</button>
+          <button class="btn secondary" data-action="editpost" data-id="${p.id}">✏️ Editar</button>
+          <button class="btn red" data-action="deletepost" data-id="${p.id}">🗑️ Eliminar</button>
+        `:
         `<button class="btn secondary" data-action="mydelivery" data-id="${p.id}">⭐ Mi entrega</button>`}
       </div>
       <div id="comments-${p.id}" class="comment-box hidden"></div>
@@ -281,6 +285,8 @@ $("feed").addEventListener("click",e=>{
   if(b.dataset.action==="deliveries")abrirEntregas(b.dataset.id);
   if(b.dataset.action==="comments")abrirComentarios(b.dataset.id);
   if(b.dataset.action==="mydelivery")abrirMiEntrega(b.dataset.id);
+  if(b.dataset.action==="editpost")abrirEditarPublicacion(b.dataset.id);
+  if(b.dataset.action==="deletepost")eliminarPublicacion(b.dataset.id);
   if(b.dataset.action==="joinlive")entrarEnClase(b.dataset.id);
   if(b.dataset.action==="stoplive")finalizarClase(b.dataset.id);
 });
@@ -430,7 +436,8 @@ $("modalRoot").addEventListener("click",e=>{if(e.target.dataset.close!==undefine
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("modalRoot")&&!$("modalRoot").classList.contains("hidden"))cerrarModal()});
 
 function abrirEntrega(id){
-  abrirModal("📎 Entregar trabajo",`<div class="notice">Puedes entregar una imagen, un PDF, un enlace o combinar varias opciones.</div>
+  abrirModal("📎 Entregar trabajo",`
+    <div class="notice">Puedes entregar una imagen o PDF, un enlace, un comentario o combinar varias opciones.</div>
     <div class="field"><label for="deliveryFile">Imagen o PDF</label><input id="deliveryFile" type="file" accept="image/*,application/pdf"></div>
     <div class="field"><label for="deliveryLink">Enlace</label><input id="deliveryLink" type="url" placeholder="Google Drive, Canva, GitHub, OneDrive..."></div>
     <div class="field"><label for="deliveryComment">Comentario para el profesor</label><textarea id="deliveryComment" placeholder="Agrega una descripción o nota sobre tu trabajo..."></textarea></div>
@@ -441,76 +448,168 @@ function abrirEntrega(id){
       <div id="uploadText" class="small" style="margin-top:6px">Preparando archivo...</div>
     </div>
     <div id="deliveryStatus" class="status"></div>
-    <div class="actions"><button class="btn green" id="sendDelivery">🚀 Enviar entrega</button><button class="btn secondary" id="testStorage">🔌 Probar Storage</button><button class="btn secondary" data-close>Cancelar</button></div>`);
+    <div class="actions">
+      <button class="btn green" id="sendDelivery">🚀 Enviar entrega</button>
+      <button class="btn secondary" data-close>Cancelar</button>
+    </div>
+  `);
   $("sendDelivery").addEventListener("click",()=>enviarEntrega(id));
-
-  $("testStorage").addEventListener("click",async()=>{
-    const s=$("deliveryStatus"),b=$("testStorage");
-    b.disabled=true;b.textContent="Probando…";
-    s.className="status ok";s.textContent="Probando Supabase Storage…";
-    try{
-      const probe=new Blob(["TDH Supabase Storage OK"],{type:"text/plain"});
-      const ruta=`__tdh_test__/${Date.now()}.txt`;
-      const result=await Promise.race([
-        supabase.storage.from(SUPABASE_BUCKET).upload(ruta,probe,{contentType:"text/plain",upsert:false}),
-        new Promise((_,reject)=>setTimeout(()=>reject(new Error("Supabase Storage no respondió en 10 segundos.")),10000))
-      ]);
-      if(result.error)throw result.error;
-      s.className="status ok";s.textContent="✓ Supabase Storage funciona correctamente.";
-    }catch(e){
-      s.className="status err";s.textContent="❌ Supabase Storage: "+(e?.message||e);
-    }finally{b.disabled=false;b.textContent="🔌 Probar Storage"}
-  });
 }
 
 async function enviarEntrega(id){
   const status=$("deliveryStatus"),file=$("deliveryFile").files[0],link=$("deliveryLink").value.trim(),comment=$("deliveryComment").value.trim();
-  if(!file&&!link&&!comment){status.className="status err";status.textContent="Agrega un archivo, un enlace o un comentario.";return}
-  if(file&&(file.size>10*1024*1024)){status.className="status err";status.textContent="El archivo supera el límite de 10 MB.";return}
-  if(file&&!(file.type.startsWith("image/")||file.type==="application/pdf")){status.className="status err";status.textContent="Solo se permiten imágenes y PDF.";return}
-  const btn=$("sendDelivery");btn.disabled=true;btn.textContent="Subiendo...";
+  if(!file&&!link&&!comment){
+    status.className="status err";
+    status.textContent="Agrega un archivo, un enlace o un comentario.";
+    return;
+  }
+  if(file&&(file.size>10*1024*1024)){
+    status.className="status err";
+    status.textContent="El archivo supera el límite de 10 MB.";
+    return;
+  }
+  if(file&&!(file.type.startsWith("image/")||file.type==="application/pdf")){
+    status.className="status err";
+    status.textContent="Solo se permiten imágenes y PDF.";
+    return;
+  }
+
+  const btn=$("sendDelivery");
+  btn.disabled=true;
+  btn.textContent="Subiendo...";
   try{
     let archivo=null;
+
     if(file){
       const progressWrap=$("uploadProgress"),bar=$("uploadBar"),uploadText=$("uploadText");
       progressWrap.classList.remove("hidden");
-      bar.style.width="5%";
-      uploadText.textContent="Conectando con Supabase Storage…";
+      bar.style.width="10%";
+      uploadText.textContent="Conectando con Firebase Storage…";
 
       const safe=file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
-      const ruta=`entregas/${String(usuario.matricula||"sin-matricula")}/${Date.now()}_${safe}`;
-      bar.style.width="20%";
+      const matricula=String(usuario.matricula||"sin-matricula").replace(/[^a-zA-Z0-9_-]/g,"_");
+      const ruta=`${STORAGE_FOLDER}/${matricula}/${Date.now()}_${safe}`;
+      const fileRef=storageRef(storage,ruta);
+
+      bar.style.width="25%";
       uploadText.textContent="Subiendo archivo…";
+      const snapshot=await uploadBytes(fileRef,file,{contentType:file.type||"application/octet-stream"});
 
-      const result=await Promise.race([
-        supabase.storage.from(SUPABASE_BUCKET).upload(ruta,file,{
-          contentType:file.type||"application/octet-stream",
-          upsert:false
-        }),
-        new Promise((_,reject)=>setTimeout(()=>reject(new Error("Supabase Storage no respondió en 20 segundos.")),20000))
-      ]);
-
-      if(result.error)throw result.error;
       bar.style.width="80%";
-      uploadText.textContent="Archivo subido. Generando enlace…";
-
-      const {data:urlData}=supabase.storage.from(SUPABASE_BUCKET).getPublicUrl(ruta);
-      if(!urlData?.publicUrl)throw new Error("No se pudo generar la URL pública.");
+      uploadText.textContent="Generando enlace seguro…";
+      const downloadUrl=await getDownloadURL(snapshot.ref);
 
       bar.style.width="100%";
       uploadText.textContent="Archivo listo. Guardando entrega…";
-      archivo={nombre:file.name,tipo:file.type,tamano:file.size,url:urlData.publicUrl,ruta};
+      archivo={nombre:file.name,tipo:file.type,tamano:file.size,url:downloadUrl,ruta};
     }
-    await addDoc(collection(db,"entregas"),{publicacionId:id,alumno:usuario.nombre,matricula:String(usuario.matricula||""),comentario:comment,enlace:link||null,archivo,calificacion:null,retroalimentacion:"",fecha:serverTimestamp()});
-    status.className="status ok";status.textContent="✓ Entrega enviada correctamente.";
-    btn.textContent="Entrega enviada";btn.disabled=true;
-  }catch(e){console.error(e);status.className="status err";
-    let msg=(e?.code?e.code+" — ":"")+e.message;
-    if(e?.code==="storage/unauthorized") msg="Supabase Storage rechazó el archivo (storage/unauthorized). Hay que revisar las reglas de Storage.";
-    if(e?.code==="storage/unknown") msg="Supabase Storage no pudo completar la subida. Revisa Storage y la conexión.";
-    status.textContent="❌ "+msg;
-    btn.disabled=false;btn.textContent="🚀 Enviar entrega";
-    $("uploadProgress")?.classList.add("hidden")}
+
+    await addDoc(collection(db,"entregas"),{
+      publicacionId:id,
+      alumno:usuario.nombre,
+      matricula:String(usuario.matricula||""),
+      comentario:comment,
+      enlace:link||null,
+      archivo,
+      calificacion:null,
+      retroalimentacion:"",
+      fecha:serverTimestamp()
+    });
+
+    status.className="status ok";
+    status.textContent="✓ Entrega enviada correctamente.";
+    btn.textContent="Entrega enviada ✓";
+  }catch(e){
+    console.error("Error entregando trabajo:",e);
+    status.className="status err";
+    let msg=e?.message||String(e);
+    if(e?.code==="storage/unauthorized") msg="Firebase Storage rechazó el archivo. Revisa las reglas de Storage.";
+    if(e?.code==="storage/unknown") msg="Firebase Storage no pudo completar la subida.";
+    if(e?.code==="storage/retry-limit-exceeded") msg="Se agotó el tiempo de subida. Comprueba tu conexión.";
+    status.textContent="❌ No se pudo enviar: "+msg;
+    btn.disabled=false;
+    btn.textContent="🚀 Enviar entrega";
+    $("uploadProgress")?.classList.add("hidden");
+  }
+}
+
+function abrirEditarPublicacion(id){
+  const post=window._tdhPosts?.find(p=>p.id===id);
+  if(!post){
+    // Si no está en caché, no se puede editar de forma segura.
+    showStatus("No se encontró la publicación para editar.");
+    return;
+  }
+
+  const dueValue=post.fechaLimite?String(post.fechaLimite).slice(0,16):"";
+  abrirModal("✏️ Editar publicación",`
+    <div class="notice">Puedes cambiar el título, instrucciones, fecha límite, puntos y material de apoyo.</div>
+    <div class="field"><label for="editPostType">Tipo</label>
+      <select id="editPostType">
+        ${["Anuncio","Tarea","Actividad","Proyecto","Examen","Calificación"].map(x=>`<option value="${x}" ${post.tipo===x?"selected":""}>${x}</option>`).join("")}
+      </select>
+    </div>
+    <div class="field"><label for="editPostTitle">Título</label><input id="editPostTitle" value="${esc(post.titulo||"")}"></div>
+    <div class="field"><label for="editPostContent">Instrucciones</label><textarea id="editPostContent">${esc(post.contenido||"")}</textarea></div>
+    <div class="two">
+      <div class="field"><label for="editDueDate">Fecha límite</label><input id="editDueDate" type="datetime-local" value="${esc(dueValue)}"></div>
+      <div class="field"><label for="editGrade">Puntos máximos</label><input id="editGrade" type="number" min="0" max="100" value="${esc(post.calificacion??"")}"></div>
+    </div>
+    <div class="field"><label for="editResourceUrl">Material de apoyo (enlace)</label><input id="editResourceUrl" type="url" value="${esc(post.recursoUrl||"")}" placeholder="https://..."></div>
+    <div id="editStatus" class="status"></div>
+    <div class="actions">
+      <button class="btn yellow" id="saveEdit">💾 Guardar cambios</button>
+      <button class="btn secondary" data-close>Cancelar</button>
+    </div>
+  `);
+
+  $("saveEdit").addEventListener("click",async()=>{
+    const btn=$("saveEdit"),status=$("editStatus");
+    const data={
+      tipo:$("editPostType").value,
+      titulo:$("editPostTitle").value.trim(),
+      contenido:$("editPostContent").value.trim(),
+      fechaLimite:$("editDueDate").value||null,
+      calificacion:$("editGrade").value.trim()||null,
+      recursoUrl:$("editResourceUrl").value.trim()||null,
+      editadoEn:serverTimestamp(),
+      editadoPor:usuario.nombre||"Profesor"
+    };
+    if(!data.titulo||!data.contenido){
+      status.className="status err";
+      status.textContent="Título e instrucciones son obligatorios.";
+      return;
+    }
+    btn.disabled=true;btn.textContent="Guardando…";
+    try{
+      await updateDoc(doc(db,"classroom_posts",id),data);
+      status.className="status ok";
+      status.textContent="✓ Cambios guardados correctamente.";
+      setTimeout(cerrarModal,500);
+    }catch(e){
+      console.error(e);
+      status.className="status err";
+      status.textContent="❌ No se pudo editar: "+(e?.message||e);
+      btn.disabled=false;btn.textContent="💾 Guardar cambios";
+    }
+  });
+}
+
+async function eliminarPublicacion(id){
+  if(usuario.rol!=="admin")return;
+  const post=window._tdhPosts?.find(p=>p.id===id);
+  if(!post)return;
+  const confirmar=confirm(`¿Eliminar "${post.titulo||"esta publicación"}"?\n\nEsta acción eliminará la tarea/publicación de Classroom.`);
+  if(!confirmar)return;
+
+  try{
+    await deleteDoc(doc(db,"classroom_posts",id));
+    // Las entregas existentes se conservan para no perder trabajos de alumnos.
+    showStatus("✓ Publicación eliminada correctamente.",true);
+  }catch(e){
+    console.error(e);
+    showStatus("❌ No se pudo eliminar: "+(e?.message||e),false);
+  }
 }
 
 async function abrirEntregas(id){
