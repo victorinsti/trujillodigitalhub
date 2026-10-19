@@ -1,4 +1,4 @@
-const BOT_TOKEN = "8815025321:AAEmTdvVSgTyv3of4ZChV4IqmLAIv3Gf5iY";
+const BOT_TOKEN = "8928441762:AAGO7JuDWYnU1sOcJ2FXY6jAl3EpFS5bgIs";
 const CHAT_ID = "8661934309";
 
 export async function enviarTelegram(datos){
@@ -22,7 +22,7 @@ ${datos.correo || "No proporcionado"}
 
 
 💻 Programa:
-IMSULSO DIGITAL ADULTOS
+Emprende con IA: de una idea a tu primer negocio digital
 
 📅 Fecha:
 ${fecha.toLocaleDateString("es-MX")}
