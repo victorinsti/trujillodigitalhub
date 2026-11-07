@@ -831,3 +831,86 @@ section{
     background:#25D366;
     color:white;
 }
+.evaluador-section {
+    padding: 70px 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.evaluador-card {
+    width: 100%;
+    max-width: 650px;
+    padding: 40px;
+    border-radius: 25px;
+    text-align: center;
+    background: linear-gradient(135deg, #101d31, #172c48);
+    border: 1px solid rgba(0, 210, 255, .4);
+    box-shadow: 0 15px 45px rgba(0, 180, 255, .12);
+    color: white;
+}
+
+.evaluador-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+.evaluador-label {
+    color: #00d9ff;
+    font-size: 12px;
+    letter-spacing: 3px;
+    font-weight: 700;
+}
+
+.evaluador-card h2 {
+    font-size: 27px;
+    margin: 18px 0 10px;
+}
+
+.evaluador-card p {
+    color: #b9c9dc;
+    line-height: 1.6;
+}
+
+.evaluador-clave {
+    margin: 28px 0;
+    padding: 22px 10px;
+    border: 1px solid #d9b66f;
+    border-radius: 15px;
+    background: rgba(255,255,255,.04);
+}
+
+.evaluador-clave span {
+    display: block;
+    color: #d9b66f;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+}
+
+.evaluador-clave h3 {
+    color: white;
+    font-size: clamp(23px, 5vw, 34px);
+    margin: 12px 0 0;
+    letter-spacing: 1px;
+}
+
+.evaluador-card h4 {
+    font-size: 17px;
+}
+
+.evaluador-footer {
+    border-top: 1px solid #40516a;
+    padding-top: 18px;
+    margin-top: 25px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 11px;
+    color: #b9c9dc;
+}
+
+@media(max-width: 500px) {
+    .evaluador-card {
+        padding: 25px 18px;
+    }
+}
