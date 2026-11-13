@@ -1,0 +1,1039 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Doble Certificación CONOCER | Trujillo Digital Hub</title>
+
+<meta name="description" content="Doble certificación EC0217.01 y EC0301. Alineación, evaluación y gestión de certificados. Trujillo Digital Hub.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #080d18;
+  --surface: #111b2c;
+  --surface2: #17243a;
+  --gold: #d9b66d;
+  --cyan: #21d6c5;
+  --white: #f8fafc;
+  --muted: #a8b3c5;
+  --border: rgba(255,255,255,.10);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'Inter', sans-serif;
+  line-height: 1.7;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.container {
+  width: min(1150px, 92%);
+  margin: auto;
+}
+
+/* HEADER */
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(8,13,24,.96);
+  backdrop-filter: blur(15px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav {
+  min-height: 78px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.brand {
+  font-family: 'Space Grotesk';
+  font-weight: 700;
+  font-size: 19px;
+}
+
+.brand span {
+  color: var(--cyan);
+}
+
+.nav-links {
+  display: flex;
+  gap: 22px;
+  align-items: center;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.nav-links a:hover {
+  color: var(--cyan);
+}
+
+.btn {
+  display: inline-block;
+  padding: 13px 23px;
+  background: linear-gradient(135deg,var(--gold),#f0d59a);
+  color: #101827;
+  font-weight: 800;
+  border-radius: 9px;
+  transition: .3s;
+  border: none;
+  cursor: pointer;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(217,182,109,.2);
+}
+
+.btn-cyan {
+  background: var(--cyan);
+  color: #07131b;
+}
+
+
+/* LOGOS INSTITUCIONALES */
+
+.logos {
+  width: 100%;
+  max-width: 1050px;
+  margin: 45px auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  align-items: center;
+}
+
+.logo-card {
+  width: 100%;
+  height: 180px;
+  background: #ffffff;
+  border: 2px solid rgba(217,182,109,.6);
+  border-radius: 18px;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 12px 35px rgba(0,0,0,.3);
+  overflow: hidden;
+}
+
+.logo-card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 140px;
+  object-fit: contain;
+}
+
+.logo-fallback {
+  color: #17243a;
+  font-size: 17px;
+  font-weight: 800;
+  text-align: center;
+}
+
+@media(max-width:650px) {
+  .logos {
+    grid-template-columns: 1fr;
+    max-width: 280px;
+    gap: 18px;
+  }
+
+  .logo-card {
+    height: 145px;
+  }
+}
+
+
+/* HERO */
+
+.hero {
+  padding: 85px 0 75px;
+  text-align: center;
+  background:
+    radial-gradient(ellipse at 50% 0%,rgba(33,214,197,.13),transparent 55%),
+    radial-gradient(ellipse at 80% 80%,rgba(217,182,109,.08),transparent 40%);
+}
+
+.tag {
+  display: inline-block;
+  padding: 8px 17px;
+  border: 1px solid rgba(33,214,197,.4);
+  color: var(--cyan);
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.hero h1 {
+  font-family: 'Space Grotesk';
+  font-size: clamp(35px,6vw,67px);
+  line-height: 1.12;
+  margin: 25px auto 12px;
+}
+
+.hero h1 span {
+  color: var(--gold);
+}
+
+.codes {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin: 25px 0;
+}
+
+.code {
+  border: 1px solid var(--gold);
+  padding: 12px 24px;
+  border-radius: 9px;
+  color: var(--gold);
+  font-size: 19px;
+  font-weight: 800;
+}
+
+.hero p {
+  color: var(--muted);
+  max-width: 750px;
+  margin: 20px auto;
+  font-size: 17px;
+}
+
+.hero .btn {
+  margin-top: 18px;
+}
+
+/* STATS */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 15px;
+  margin-top: -20px;
+}
+
+.stat {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  padding: 24px 10px;
+  text-align: center;
+}
+
+.stat h2 {
+  color: var(--gold);
+  font-size: 30px;
+}
+
+.stat p {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* SECTIONS */
+
+section.content {
+  padding: 85px 0;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 45px;
+}
+
+.section-title span {
+  color: var(--cyan);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.section-title h2 {
+  font-family: 'Space Grotesk';
+  font-size: clamp(27px,4vw,40px);
+  margin: 10px 0;
+}
+
+.section-title p {
+  color: var(--muted);
+  max-width: 720px;
+  margin: auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 22px;
+}
+
+.card {
+  background: linear-gradient(145deg,var(--surface),#101a2b);
+  border: 1px solid var(--border);
+  padding: 30px;
+  border-radius: 16px;
+  transition: .3s;
+}
+
+.card:hover {
+  border-color: rgba(33,214,197,.5);
+  transform: translateY(-4px);
+}
+
+.card-number {
+  color: var(--gold);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.card h3 {
+  font-size: 21px;
+  line-height: 1.4;
+  margin: 15px 0;
+}
+
+.card p {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.card ul {
+  padding-left: 20px;
+  margin-top: 15px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.card li {
+  margin: 8px 0;
+}
+
+.highlight {
+  color: var(--cyan);
+}
+
+/* PROCESO */
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 15px;
+}
+
+.step {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 25px 18px;
+  border-radius: 13px;
+}
+
+.step strong {
+  color: var(--gold);
+  font-size: 28px;
+}
+
+.step h3 {
+  margin: 10px 0;
+  font-size: 17px;
+}
+
+.step p {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* INSTITUCIONES */
+
+.institution {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 28px;
+  border-radius: 15px;
+  text-align: center;
+}
+
+.institution h3 {
+  color: var(--gold);
+  margin: 12px 0;
+}
+
+.institution p {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+/* PRICE */
+
+.price-section {
+  background:
+    radial-gradient(ellipse at center,rgba(217,182,109,.12),transparent 65%);
+  text-align: center;
+  padding: 85px 20px;
+}
+
+.price-section h2 {
+  font-family: 'Space Grotesk';
+  font-size: 34px;
+}
+
+.price {
+  color: var(--gold);
+  font-size: clamp(45px,7vw,75px);
+  font-weight: 800;
+  margin: 15px 0;
+}
+
+.price-section p {
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+/* FORM */
+
+.form-section {
+  max-width: 700px;
+  margin: auto;
+  background: var(--surface);
+  padding: 35px;
+  border-radius: 17px;
+  border: 1px solid var(--border);
+}
+
+.form-section h2 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.form-section p {
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 14px;
+  background: #0b1423;
+  border: 1px solid var(--border);
+  color: white;
+  border-radius: 8px;
+  font-family: inherit;
+  outline: none;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--cyan);
+}
+
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.form-section button {
+  width: 100%;
+}
+
+/* FOOTER */
+
+footer {
+  border-top: 1px solid var(--border);
+  padding: 35px 15px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+footer strong {
+  color: var(--cyan);
+}
+
+.footer-key {
+  margin-top: 10px;
+  color: var(--gold);
+  font-weight: 700;
+}
+
+.disclaimer {
+  color: #8290a4;
+  font-size: 12px;
+  max-width: 850px;
+  margin: 30px auto 0;
+  text-align: center;
+  line-height: 1.8;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:850px) {
+  .nav-links {
+    display: none;
+  }
+
+  .stats {
+    grid-template-columns: repeat(2,1fr);
+  }
+
+  .steps {
+    grid-template-columns: repeat(2,1fr);
+  }
+}
+
+@media(max-width:600px) {
+  section.content {
+    padding: 60px 0;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .steps {
+    grid-template-columns: 1fr;
+  }
+
+  .logo-card {
+    width: 135px;
+    height: 85px;
+  }
+
+  .form-section {
+    padding: 23px;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="container nav">
+    <a href="https://trujillodigitalhub.com/" class="brand">
+      TRUJILLO <span>DIGITAL HUB</span>
+    </a>
+
+    <nav class="nav-links">
+        <a href="index.html">Inicio</a>
+      <a href="#certificaciones">Certificaciones</a>
+      <a href="#proceso">Proceso</a>
+      <a href="#organismos">Organismos</a>
+      <a href="#inversion">Inversión</a>
+      <a href="#registro" class="btn">Inscribirme</a>
+       <a href="/index.html" >Salir</a>
+       </a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- PORTADA -->
+
+<section class="hero">
+  <div class="container">
+
+    <span class="tag">
+      CONVOCATORIA DE DOBLE CERTIFICACIÓN
+    </span>
+
+    <!-- LOGOTIPOS INSTITUCIONALES -->
+
+    <div class="logos">
+
+      <div class="logo-card">
+        <img src="/assets/logo ev independiente.png"
+             alt="Red CONOCER"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <div class="logo-fallback" style="display:none">
+          RED CONOCER
+        </div>
+      </div>
+
+      <div class="logo-card">
+        <img src="/assets/logo grupo becas.jpg"
+             alt="Grupo Becas para la Educación"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <div class="logo-fallback" style="display:none">
+          GRUPO BECAS PARA LA EDUCACIÓN
+        </div>
+      </div>
+
+      <div class="logo-card">
+        <img src="/LOGO OFICIAL TRUJILLO DIGITAL HUB.png"
+             alt="Trujillo Digital Hub"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <div class="logo-fallback" style="display:none">
+          TRUJILLO DIGITAL HUB
+        </div>
+      </div>
+
+    </div>
+
+    <h1>
+      DOBLE <span>CERTIFICACIÓN</span>
+    </h1>
+
+    <div class="codes">
+      <div class="code">EC0217.01</div>
+      <div class="code">EC0301</div>
+    </div>
+
+    <p>
+      Fortalece tu perfil profesional en formación de capital humano.
+      Prepárate para diseñar e impartir cursos de capacitación,
+      desarrollar instrumentos de evaluación y demostrar tus competencias.
+    </p>
+
+    <a href="#registro" class="btn">
+      SOLICITAR INFORMACIÓN
+    </a>
+
+    <p style="font-size:12px;margin-top:25px">
+      SISTEMA NACIONAL DE COMPETENCIAS · EVALUACIÓN DE COMPETENCIAS
+    </p>
+
+  </div>
+</section>
+
+<!-- ESTADÍSTICAS -->
+
+<div class="container">
+  <div class="stats">
+
+    <div class="stat">
+      <h2>02</h2>
+      <p>Estándares de competencia</p>
+    </div>
+
+    <div class="stat">
+      <h2>02</h2>
+      <p>Procesos de evaluación</p>
+    </div>
+
+    <div class="stat">
+      <h2>02</h2>
+      <p>Certificados </p>
+    </div>
+
+    <div class="stat">
+      <h2>$3,500</h2>
+      <p>Inversión total MXN</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- CERTIFICACIONES -->
+
+<section class="content" id="certificaciones">
+  <div class="container">
+
+    <div class="section-title">
+      <span>FORMACIÓN Y COMPETENCIAS</span>
+      <h2>Conoce las certificaciones</h2>
+      <p>
+        Dos estándares que fortalecen tus capacidades para diseñar
+        e impartir procesos de capacitación.
+      </p>
+    </div>
+
+    <div class="grid">
+
+      <article class="card">
+        <span class="card-number">ESTÁNDAR 01 · EC0217.01</span>
+
+        <h3>
+          Impartición de cursos de formación del capital humano
+          de manera presencial grupal
+        </h3>
+
+        <p>
+          Demuestra tu competencia para preparar, conducir y evaluar
+          sesiones de capacitación presenciales y grupales.
+        </p>
+
+        <ul>
+          <li>Preparación de sesiones de capacitación.</li>
+          <li>Conducción de grupos.</li>
+          <li>Facilitación del aprendizaje.</li>
+          <li>Evaluación de sesiones y participantes.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <span class="card-number">ESTÁNDAR 02 · EC0301</span>
+
+        <h3>
+          Diseño de cursos de formación del capital humano de manera
+          presencial grupal, sus instrumentos de evaluación y
+          manuales del curso
+        </h3>
+
+        <p>
+          Demuestra tu competencia para estructurar cursos,
+          diseñar instrumentos de evaluación y elaborar manuales.
+        </p>
+
+        <ul>
+          <li>Diseño de objetivos de aprendizaje.</li>
+          <li>Estructuración de contenidos.</li>
+          <li>Elaboración de instrumentos de evaluación.</li>
+          <li>Diseño de manuales del curso.</li>
+        </ul>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- BENEFICIOS -->
+
+<section class="content" style="background:#0c1422">
+  <div class="container">
+
+    <div class="section-title">
+      <span>DESARROLLO PROFESIONAL</span>
+      <h2>¿Qué puedes fortalecer?</h2>
+    </div>
+
+    <div class="grid">
+
+      <article class="card">
+        <span class="card-number">01</span>
+        <h3>Diseño de capacitación</h3>
+        <p>
+          Desarrolla propuestas formativas, contenidos,
+          materiales y herramientas de evaluación.
+        </p>
+      </article>
+
+      <article class="card">
+        <span class="card-number">02</span>
+        <h3>Impartición de cursos</h3>
+        <p>
+          Fortalece tus habilidades para facilitar el aprendizaje
+          y conducir sesiones de formación.
+        </p>
+      </article>
+
+      <article class="card">
+        <span class="card-number">03</span>
+        <h3>Reconocimiento de competencias</h3>
+        <p>
+          Obtén la posibilidad de acreditar tus competencias
+          mediante los procesos de evaluación correspondientes.
+        </p>
+      </article>
+
+      <article class="card">
+        <span class="card-number">04</span>
+        <h3>Desarrollo profesional</h3>
+        <p>
+          Enriquece tu trayectoria y fortalece tu perfil
+          en el ámbito de la capacitación.
+        </p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- PROCESO -->
+
+<section class="content" id="proceso">
+  <div class="container">
+
+    <div class="section-title">
+      <span>RUTA DE CERTIFICACIÓN</span>
+      <h2>¿Cómo funciona el proceso?</h2>
+      <p>
+        Acompañamiento durante las etapas de alineación,
+        evaluación y gestión de certificación.
+      </p>
+    </div>
+
+    <div class="steps">
+
+      <div class="step">
+        <strong>01</strong>
+        <h3>Registro</h3>
+        <p>
+          Solicitud de información, requisitos y documentación.
+        </p>
+      </div>
+
+      <div class="step">
+        <strong>02</strong>
+        <h3>Alineación</h3>
+        <p>
+          Preparación y orientación sobre los estándares
+          y sus evidencias.
+        </p>
+      </div>
+
+      <div class="step">
+        <strong>03</strong>
+        <h3>Evaluación</h3>
+        <p>
+          Presentación de desempeños, productos y conocimientos
+          correspondientes.
+        </p>
+      </div>
+
+      <div class="step">
+        <strong>04</strong>
+        <h3>Dictamen y gestión</h3>
+        <p>
+          Revisión de resultados y gestión del certificado
+          cuando corresponda.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ORGANISMOS -->
+
+<section class="content" id="organismos" style="background:#0c1422">
+  <div class="container">
+
+    <div class="section-title">
+      <span>IDENTIDAD Y PARTICIPACIÓN</span>
+      <h2>¿Quiénes participan?</h2>
+      <p>
+        Identificación de las entidades y del responsable
+        de la atención y evaluación del participante.
+      </p>
+    </div>
+
+    <div class="grid">
+
+      <div class="institution">
+        <h3>RED CONOCER</h3>
+        <p>
+          Red de Prestadores de Servicios del Sistema Nacional
+          de Competencias.
+        </p>
+      </div>
+
+      <div class="institution">
+        <h3>GRUPO BECAS PARA LA EDUCACIÓN</h3>
+        <p>
+          Organismo Certificador · Clave OC157-24.
+        </p>
+      </div>
+
+      <div class="institution">
+        <h3>TRUJILLO DIGITAL HUB</h3>
+        <p>
+          Atención, orientación y servicios de evaluación
+          de competencias conforme al proceso correspondiente.
+        </p>
+      </div>
+
+      <div class="institution">
+        <h3>EVALUADOR INDEPENDIENTE</h3>
+        <p>
+          Responsable de los procesos de evaluación
+          conforme a los estándares correspondientes.
+          <br><br>
+          <strong class="highlight">EI0172-OC157-24</strong>
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- INVERSIÓN -->
+
+<section class="price-section" id="inversion">
+
+  <span class="tag">PAQUETE DE DOBLE CERTIFICACIÓN</span>
+
+  <h2 style="margin-top:25px">
+    Una inversión en tu desarrollo profesional
+  </h2>
+
+  <div class="price">$3,500 MXN</div>
+
+  <p>
+    EC0217.01 + EC0301
+  </p>
+
+  <p>
+    Alineación + Evaluación de ambos estándares +
+    Gestión de certificados, sujeto a resultados favorables
+    y cumplimiento de requisitos.
+  </p>
+
+  <a href="#registro" class="btn">
+    QUIERO PARTICIPAR
+  </a>
+
+</section>
+
+<!-- FORMULARIO -->
+
+<section class="content" id="registro">
+
+  <div class="container">
+
+    <div class="form-section">
+
+      <h2>Solicita tu lugar</h2>
+
+      <p>
+        Completa tus datos y nuestro equipo se pondrá
+        en contacto contigo.
+      </p>
+
+      <form id="formulario">
+
+        <input
+          type="text"
+          id="nombre"
+          placeholder="Nombre completo"
+          required
+        >
+
+        <input
+          type="tel"
+          id="telefono"
+          placeholder="Número de WhatsApp"
+          required
+        >
+
+        <input
+          type="email"
+          id="correo"
+          placeholder="Correo electrónico (opcional)"
+        >
+
+        <select id="experiencia" required>
+          <option value="">¿Tienes experiencia en capacitación?</option>
+          <option>Imparto cursos</option>
+          <option>Diseño cursos</option>
+          <option>Ambas actividades</option>
+          <option>Estoy comenzando</option>
+        </select>
+
+        <textarea
+          id="comentarios"
+          placeholder="Comentarios o dudas (opcional)"
+        ></textarea>
+
+        <button type="submit" class="btn btn-cyan">
+          ENVIAR SOLICITUD POR WHATSAPP
+        </button>
+
+      </form>
+
+    </div>
+
+    <div class="disclaimer">
+      La obtención de los certificados está condicionada al resultado
+      favorable de cada evaluación, al cumplimiento de los requisitos
+      establecidos y a los procesos de dictamen y emisión correspondientes.
+      La alineación no garantiza un resultado competente.
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+<footer>
+
+  <div style="font-size:21px;font-weight:800">
+    TRUJILLO <strong>DIGITAL HUB</strong>
+  </div>
+
+  <p>
+    Formación · Tecnología · Desarrollo de competencias
+  </p>
+
+  <p class="footer-key">
+    Clave del Evaluador Independiente: EI0172-OC157-24
+  </p>
+
+  <p style="margin-top:15px">
+    WhatsApp: 922 208 1087
+  </p>
+
+  <p style="margin-top:15px">
+    © 2026 Victor Trujillo. Todos los derechos reservados.
+  </p>
+
+</footer>
+
+<script>
+
+document.getElementById("formulario").addEventListener("submit", function(e) {
+
+  e.preventDefault();
+
+  const nombre = document.getElementById("nombre").value.trim();
+  const telefono = document.getElementById("telefono").value.trim();
+  const correo = document.getElementById("correo").value.trim() || "No proporcionado";
+  const experiencia = document.getElementById("experiencia").value;
+  const comentarios = document.getElementById("comentarios").value.trim() || "Sin comentarios";
+
+  const mensaje = `
+SOLICITUD DE DOBLE CERTIFICACIÓN
+
+EC0217.01 + EC0301
+
+Nombre: ${nombre}
+WhatsApp: ${telefono}
+Correo: ${correo}
+Experiencia: ${experiencia}
+Comentarios: ${comentarios}
+
+Inversión: $3,500 MXN
+
+Me gustaría recibir información sobre el proceso de certificación.
+  `;
+
+  const url = "https://wa.me/529222081087?text=" + encodeURIComponent(mensaje);
+
+  window.open(url, "_blank");
+
+});
+
+</script>
+
+</body>
+</html>
